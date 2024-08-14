@@ -1,0 +1,31 @@
+﻿.card {
+    text-align: center;
+    border-radius: 1rem;
+    width: 18rem;
+    margin: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Desktop and tablet styling */
+@media (min-width: 768px) {
+    .card {
+        opacity: 0.9;
+    }
+
+    .card:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Mobile styling */
+@media (max-width: 767px) {
+    .card {
+        /* Remove opacity on mobile devices */
+        opacity: 1;
+    }
+
+    .card:active {
+        transform: scale(1.1);
+    }
+}
