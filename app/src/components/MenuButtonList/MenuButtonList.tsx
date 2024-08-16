@@ -8,8 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface MenuButton {
     text: string;
-    icon: IconDefinition; // Could be a string for class names or JSX.Element for a component
+    icon: IconDefinition;
     color: string;
+    link: string;
 }
 
 interface MenuButtonListProps {
@@ -26,6 +27,7 @@ const MenuButtonList: React.FC<MenuButtonListProps> = ({ menuButtons }) => {
                             text={menuButton.text}
                             icon={menuButton.icon}
                             color={menuButton.color}
+                            link={menuButton.link}
                         />
                     </div>
                 ))}

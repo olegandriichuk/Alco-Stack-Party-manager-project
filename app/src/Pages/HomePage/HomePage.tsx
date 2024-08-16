@@ -24,9 +24,9 @@ const HomePage: React.FC = () => {
     ];
 
     const menuButtons = [
-        { text: 'Profile', icon: faUser, color: '#1dd958' },
-        { text: 'Join', icon: faCake, color: '#5b7ff0' },
-        { text: 'Create', icon: faUsers, color: '#ce5659' },
+        { text: 'Profile', icon: faUser, color: '#1dd958', link: '/profile' },
+        { text: 'Join', icon: faCake, color: '#5b7ff0', link: '/join' },
+        { text: 'Create', icon: faUsers, color: '#ce5659', link: '/create' }
     ];
 
     return (
