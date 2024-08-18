@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./ProfileCard.css";
+import {Link} from "react-router-dom";
 
 interface Address {
     Country: string;
@@ -27,8 +28,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Email, 
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         width: '90%',
+        borderRadius: '20px',
 
     };
+    const LinkStyle: React.CSSProperties = {
+        textDecoration: 'none',
+        color: 'black',
+    }
 
     return (
         <div className="card" style={profileCardStyle}>
@@ -44,13 +50,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Email, 
                     <h5 className="card-title">{UserName}</h5>
                 </div>
                 <div className="card-text">
-                    <button className="btn btn-primary m-2 bg-dark">Edit Profile</button>
+                    <Link to={"/profile/edit"} style={LinkStyle}>
+                        <button className="btn btn-primary m-2 bg-dark">Edit Profile</button>
+                    </Link>
                     <ul className="list-unstyled">
-                        <li>Name : {name}</li>
+                        <li>Name :&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;{name}</li>
                         <li>Surname : {Surname}</li>
-                        <li>Phone : {Phone}</li>
-                        <li>Email : {Email}</li>
-                        <li>Address : {Address.Street}, {Address.Town}, {Address.Country}, {Address.ZipCode}</li>
+                        <li>Phone :&nbsp;&nbsp;&nbsp;&nbsp; {Phone}</li>
+                        <li>Email :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {Email}</li>
+                        <li>Address :&nbsp; {Address.Street}, {Address.Town}, {Address.Country}, {Address.ZipCode}</li>
                     </ul>
                 </div>
             </div>
