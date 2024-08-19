@@ -4,6 +4,8 @@ import WelcomePage from "../Pages/WelcomePage/WelcomePage.tsx";
 import App from "../App.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import EditProfilePage from "../Pages/EditProfilePage/EditProfilePage.tsx";
+import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
+import ProtectedRoute from "./ProtectedRoutes.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -11,30 +13,52 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: "/",
-                element: <HomePage />,
+                path: "/login",
+                element: <LoginPage />,
+            },
+            {
+                path: "/home",
+                element: (
+                    <ProtectedRoute>
+                        <HomePage />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/welcome",
-                element: <WelcomePage />,
+                element: (
+                    <ProtectedRoute>
+                        <WelcomePage />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/profile",
-                element: <ProfilePage />
+                element: (
+                    <ProtectedRoute>
+                        <ProfilePage />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/profile/edit",
-                element: <EditProfilePage
-                    UserName="johndoe"
-                    name="John"
-                    Surname="Doe"
-                    Phone="+1234567890"
-                    Email="email@example.com"
-                    Address={{Country: "Country", Town: "Town", Street: "Street", ZipCode: "ZipCode"}}
-                    photoUrl="https://randomuser.me/api/portraits/men/3.jpg"
-                    formBackgroundUrl="https://images.cloudflareapps.com/ZAotxLiSkmDIeCENOzgQ_background-3.jpeg"
-                />
-            }
-        ]
-    }
+                element: (
+                    <ProtectedRoute>
+                        <EditProfilePage
+                            UserName="johndoe"
+                            name="John"
+                            Surname="Doe"
+                            Phone="+1234567890"
+                            Email="email@example.com"
+                            Address={{ Country: "Country", Town: "Town", Street: "Street", ZipCode: "ZipCode" }}
+                            photoUrl="https://randomuser.me/api/portraits/men/3.jpg"
+                            formBackgroundUrl="https://images.cloudflareapps.com/ZAotxLiSkmDIeCENOzgQ_background-3.jpeg"
+                        />
+                    </ProtectedRoute>
+                ),
+            },
+        ],
+    },
 ]);
+
+export default router;
