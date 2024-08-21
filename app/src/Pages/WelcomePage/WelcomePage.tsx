@@ -18,7 +18,7 @@ const WelcomePage: React.FC = () => {
                     />
                 </div>
                 <Link
-                    to="/" // Path to the homepage route
+                    to="/home" // Path to the homepage route
                     className="p-2"
                     aria-label="Go to Homepage" // Accessibility feature
                 >

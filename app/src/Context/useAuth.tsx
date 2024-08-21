@@ -1,5 +1,5 @@
 ﻿import { createContext, useEffect, useState } from "react";
-import { UserProfile } from "../Models/User";
+import {Address, UserProfile} from "../Models/User";
 import { useNavigate } from "react-router-dom";
 import { loginAPI, registerAPI } from "../Services/AuthService";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import axios from "axios";
 type UserContextType = {
     user: UserProfile | null;
     token: string | null;
-    registerUser: (email: string, username: string, password: string) => void;
+    registerUser: (email: string, username: string, password: string, name: string, Surname: string, Phone: string, Address: Address, photoUrl: string, formBackgroundUrl: string) => void;
     loginUser: (username: string, password: string) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
@@ -38,14 +38,20 @@ export const UserProvider = ({ children }: Props) => {
         setIsReady(true);
     }, []);
 
-    const registerUser = async (email: string, username: string, password: string) => {
+    const registerUser = async (email: string, username: string, password: string, name: string, Surname: string, Phone: string, Address: Address, photoUrl: string, formBackgroundUrl: string) => {
         try {
-            const res = await registerAPI(email, username, password);
+            const res = await registerAPI(email, username, password, name, Surname, Phone, Address, photoUrl, formBackgroundUrl);
             if (res) {
                 const token = res.data.token;
                 const userObj = {
                     userName: res.data.userName,
                     email: res.data.email,
+                    name: res.data.name,
+                    Surname: res.data.Surname,
+                    Phone: res.data.Phone,
+                    Address: res.data.Address,
+                    photoUrl: res.data.photoUrl,
+                    formBackgroundUrl: res.data.formBackgroundUrl,
                 };
 
                 localStorage.setItem("token", token);
@@ -78,7 +84,7 @@ export const UserProvider = ({ children }: Props) => {
                 setToken(token);
                 setUser(userObj);
 
-                toast.success("Login successful!");
+                // toast.success("Login successful!");
                 navigate("/home");
             }
         } catch {
