@@ -23,7 +23,7 @@ const ProfilePage: React.FC = () => {
                         height="80"
                     />
                 </div>
-                <Link to={"/"} className="p-2" aria-label="Go to Home Page">
+                <Link to={"/home"} className="p-2" aria-label="Go to Home Page">
                     <FontAwesomeIcon icon={faHome} size="2x" color="black" />
                 </Link>
             </div>
