@@ -5,6 +5,7 @@ import { Address } from "../Models/User.tsx";
 
 const api = "http://localhost:5131/api/";
 
+
 export const loginAPI = async (username: string, password: string) => {
     try {
         const data = await axios.post<UserProfileToken>(api + "account/login", {
@@ -17,44 +18,40 @@ export const loginAPI = async (username: string, password: string) => {
     }
 };
 
+
+// Adjust the function signature to include new parameters
 export const registerAPI = async (
     email: string,
     username: string,
     password: string,
-    name: string,
-    Surname: string,
-    Phone: string,
-    Address: Address,
-    photoUrl: string,
-    formBackgroundUrl: string
+    firstName: string,
+    lastName: string,
+    phone: string,
+    address: Address,
+    photo: string,
+    bio: string,
+    formBackgroundUrl: string,
+    gender: number, // Assuming gender is an enum index
+    dateOfBirth: string // New parameter for date of birth
 ) => {
     try {
-        const data = await axios.post<UserProfileToken>(api + "account/register", {
+        // Post request with all parameters
+        const data = await axios.post<UserProfileToken>(`${api}account/register`, {
             email: email,
             username: username,
             password: password,
-            name: name,
-            Surname: Surname,
-            Phone: Phone,
-            Address: Address,
-            photoUrl: photoUrl,
+            firstName: firstName,
+            lastName: lastName,
+            phone: phone,
+            address: address,
+            photo: photo,
+            bio: bio,
             formBackgroundUrl: formBackgroundUrl,
+            gender: gender,
+            dateOfBirth: dateOfBirth
         });
         return data;
     } catch (error) {
-        handleError(error);
+        handleError(error); // Ensure handleError is defined or import it if it's from another file
     }
 };
-
-// export const getUserProfileAPI = async (token: string) => {
-//     try {
-//         const data = await axios.get<UserProfileToken>(api + "account/profile", {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             },
-//         });
-//         return data;
-//     } catch (error) {
-//         handleError(error);
-//     }
-// };

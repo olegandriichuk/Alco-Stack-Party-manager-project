@@ -4,71 +4,81 @@ import * as Yup from "yup";
 import { useAuth } from "../../Context/useAuth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
-// import { RegisterFormsInputs } from "../../Models/User.tsx";
+import {Address, DateOfBirth} from "../../Models/User";
 
-// Define validation schema
+
 export type RegisterFormsInputs = {
     email: string;
     userName: string;
     password: string;
-    name?: string; // Optional if not required
-    surname?: string; // Optional if not required
-    phone?: string; // Optional if not required
-    address: {
-        Country?: string;
-        Town?: string;
-        Street?: string;
-        ZipCode?: string;
-    };
-    photoUrl?: string; // Optional if not required
-    formBackgroundUrl?: string; // Optional if not required
+    firstName?: string;
+    lastName?: string;
+    gender?: number; // Assuming gender is an enum or a number
+    dateOfBirth?: DateOfBirth;
+    address?: Address;
+    phone?: string;
+    photo?: string;
+    formBackgroundUrl?: string;
+    bio?: string;
 };
+
 
 // Update validation schema
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
     userName: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
-    name: Yup.string().optional(),
-    surname: Yup.string().optional(),
-    phone: Yup.string().optional(),
+    firstName: Yup.string().optional(),
+    lastName: Yup.string().optional(),
+    gender: Yup.number().optional(),
+    dateOfBirth: Yup.object().shape({
+        year: Yup.number().required("Year is required"),
+        month: Yup.number().required("Month is required"),
+        day: Yup.number().required("Day is required"),
+        dayOfWeek: Yup.string().required("Day of week is required")
+    }).optional(),
     address: Yup.object().shape({
-        Country: Yup.string().optional(),
-        Town: Yup.string().optional(),
-        Street: Yup.string().optional(),
-        ZipCode: Yup.string().optional(),
-    }),
-    photoUrl: Yup.string().url("Invalid URL").optional(),
-    formBackgroundUrl: Yup.string().url("Invalid URL").optional(),
+        StreetAddress: Yup.string().optional(),
+        City: Yup.string().optional(),
+        PostalCode: Yup.string().optional(),
+        Country: Yup.string().optional()
+    }).optional(),
+    phone: Yup.string().optional(),
+    photo: Yup.string().optional(),
+    formBackgroundUrl: Yup.string().optional(),
+    bio: Yup.string().optional()
 });
+
+
 
 const RegisterPage = () => {
     const { registerUser } = useAuth();
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors }
     } = useForm<RegisterFormsInputs>({ resolver: yupResolver(validationSchema) });
 
     const handleRegister = (form: RegisterFormsInputs) => {
-        if (form.email && form.userName && form.password) {
-            registerUser(
-                form.email,
-                form.userName,
-                form.password,
-                form.name || "", // Ensure default empty string for optional values
-                form.surname || "",
-                form.phone || "",
-                form.address || { Country: "", Town: "", Street: "", ZipCode: "" },
-                form.photoUrl || "",
-                form.formBackgroundUrl || ""
-            );
-        }
+        registerUser(
+            form.email,
+            form.userName,
+            form.password,
+            form.firstName || "",
+            form.lastName || "",
+            form.phone || "",
+            form.address || { StreetAddress: "", City: "", PostalCode: "", Country: "" },
+            form.photo || "",
+            form.bio || "",
+            form.formBackgroundUrl || "",
+            form.gender || 0,
+            form.dateOfBirth || { year: 0, month: 0, day: 0, dayOfWeek: "" }
+        );
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100">
-            <div className="card w-100 max-w-md">
+        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="card w-100 max-w-md m-3">
                 <div className="card-body p-5">
                     <h1 className="card-title mb-4 text-center">Create your account</h1>
                     <form onSubmit={handleSubmit(handleRegister)}>
@@ -87,10 +97,10 @@ const RegisterPage = () => {
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="username" className="form-label">Username</label>
+                            <label htmlFor="userName" className="form-label">Username</label>
                             <input
                                 type="text"
-                                id="username"
+                                id="userName"
                                 autoComplete="username"
                                 className={`form-control ${errors.userName ? 'is-invalid' : ''}`}
                                 placeholder="Username"
@@ -115,53 +125,137 @@ const RegisterPage = () => {
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">Name</label>
+                            <label htmlFor="firstName" className="form-label">First Name</label>
                             <input
                                 type="text"
-                                id="name"
-                                autoComplete="name"
-                                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                placeholder="Name"
-                                {...register("name")}
+                                id="firstName"
+                                autoComplete="given-name"
+                                className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                                placeholder="First Name"
+                                {...register("firstName")}
                             />
-                            {errors.name && (
-                                <div className="invalid-feedback">{errors.name.message}</div>
+                            {errors.firstName && (
+                                <div className="invalid-feedback">{errors.firstName.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="surname" className="form-label">Surname</label>
+                            <label htmlFor="lastName" className="form-label">Last Name</label>
                             <input
                                 type="text"
-                                id="surname"
-                                autoComplete="surname"
-                                className={`form-control ${errors.surname ? 'is-invalid' : ''}`}
-                                placeholder="Surname"
-                                {...register("surname")}
+                                id="lastName"
+                                autoComplete="family-name"
+                                className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                                placeholder="Last Name"
+                                {...register("lastName")}
                             />
-                            {errors.surname && (
-                                <div className="invalid-feedback">{errors.surname.message}</div>
+                            {errors.lastName && (
+                                <div className="invalid-feedback">{errors.lastName.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="phone" className="form-label">Phone</label>
+                            <label htmlFor="gender" className="form-label">Gender</label>
                             <input
-                                type="text"
-                                id="phone"
-                                autoComplete="phone"
-                                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                placeholder="Phone"
-                                {...register("phone")}
+                                type="number"
+                                id="gender"
+                                autoComplete="gender"
+                                className={`form-control ${errors.gender ? 'is-invalid' : ''}`}
+                                placeholder="Gender"
+                                {...register("gender")}
                             />
-                            {errors.phone && (
-                                <div className="invalid-feedback">{errors.phone.message}</div>
+                            {errors.gender && (
+                                <div className="invalid-feedback">{errors.gender.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="country" className="form-label">Country</label>
+                            <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+                            <div className="d-flex gap-2">
+                                <input
+                                    type="number"
+                                    id="dateOfBirthYear"
+                                    autoComplete="bday-year"
+                                    className={`form-control ${errors.dateOfBirth?.year ? 'is-invalid' : ''}`}
+                                    placeholder="Year"
+                                    {...register("dateOfBirth.year")}
+                                />
+                                <input
+                                    type="number"
+                                    id="dateOfBirthMonth"
+                                    autoComplete="bday-month"
+                                    className={`form-control ${errors.dateOfBirth?.month ? 'is-invalid' : ''}`}
+                                    placeholder="Month"
+                                    {...register("dateOfBirth.month")}
+                                />
+                                <input
+                                    type="number"
+                                    id="dateOfBirthDay"
+                                    autoComplete="bday-day"
+                                    className={`form-control ${errors.dateOfBirth?.day ? 'is-invalid' : ''}`}
+                                    placeholder="Day"
+                                    {...register("dateOfBirth.day")}
+                                />
+                                <input
+                                    type="number"
+                                    id="dateOfBirthDayOfWeek"
+                                    autoComplete="bday-dayOfWeek"
+                                    className={`form-control ${errors.dateOfBirth?.dayOfWeek ? 'is-invalid' : ''}`}
+                                    placeholder="Day of Week"
+                                    {...register("dateOfBirth.dayOfWeek")}
+                                />
+                            </div>
+                            {errors.dateOfBirth && (
+                                <div className="invalid-feedback">
+                                    {errors.dateOfBirth.year?.message || errors.dateOfBirth.month?.message || errors.dateOfBirth.day?.message || errors.dateOfBirth.dayOfWeek?.message}
+                                </div>
+                            )}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="addressStreetAddress" className="form-label">Street Address</label>
                             <input
                                 type="text"
-                                id="country"
-                                autoComplete="country"
+                                id="addressStreetAddress"
+                                autoComplete="addressStreetAddress"
+                                className={`form-control ${errors.address?.StreetAddress ? 'is-invalid' : ''}`}
+                                placeholder="Street Address"
+                                {...register("address.StreetAddress")}
+                            />
+                            {errors.address?.StreetAddress && (
+                                <div className="invalid-feedback">{errors.address.StreetAddress.message}</div>
+                            )}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="addressCity" className="form-label">City</label>
+                            <input
+                                type="text"
+                                id="addressCity"
+                                autoComplete="addressCity"
+                                className={`form-control ${errors.address?.City ? 'is-invalid' : ''}`}
+                                placeholder="City"
+                                {...register("address.City")}
+                            />
+                            {errors.address?.City && (
+                                <div className="invalid-feedback">{errors.address.City.message}</div>
+                            )}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="addressPostalCode" className="form-label">Postal Code</label>
+                            <input
+                                type="text"
+                                id="addressPostalCode"
+                                autoComplete="addressPostalCode"
+                                className={`form-control ${errors.address?.PostalCode ? 'is-invalid' : ''}`}
+                                placeholder="Postal Code"
+                                {...register("address.PostalCode")}
+                            />
+                            {errors.address?.PostalCode && (
+                                <div className="invalid-feedback">{errors.address.PostalCode.message}</div>
+                            )}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="addressCountry" className="form-label">Country</label>
+                            <input
+                                type="text"
+                                id="addressCountry"
+                                autoComplete="addressCountry"
                                 className={`form-control ${errors.address?.Country ? 'is-invalid' : ''}`}
                                 placeholder="Country"
                                 {...register("address.Country")}
@@ -171,59 +265,17 @@ const RegisterPage = () => {
                             )}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="town" className="form-label">Town</label>
+                            <label htmlFor="photo" className="form-label">Photo URL</label>
                             <input
                                 type="text"
-                                id="town"
-                                autoComplete="town"
-                                className={`form-control ${errors.address?.Town ? 'is-invalid' : ''}`}
-                                placeholder="Town"
-                                {...register("address.Town")}
-                            />
-                            {errors.address?.Town && (
-                                <div className="invalid-feedback">{errors.address.Town.message}</div>
-                            )}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="street" className="form-label">Street</label>
-                            <input
-                                type="text"
-                                id="street"
-                                autoComplete="street"
-                                className={`form-control ${errors.address?.Street ? 'is-invalid' : ''}`}
-                                placeholder="Street"
-                                {...register("address.Street")}
-                            />
-                            {errors.address?.Street && (
-                                <div className="invalid-feedback">{errors.address.Street.message}</div>
-                            )}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="zipCode" className="form-label">Zip Code</label>
-                            <input
-                                type="text"
-                                id="zipCode"
-                                autoComplete="zipCode"
-                                className={`form-control ${errors.address?.ZipCode ? 'is-invalid' : ''}`}
-                                placeholder="Zip Code"
-                                {...register("address.ZipCode")}
-                            />
-                            {errors.address?.ZipCode && (
-                                <div className="invalid-feedback">{errors.address.ZipCode.message}</div>
-                            )}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="photoUrl" className="form-label">Photo URL</label>
-                            <input
-                                type="text"
-                                id="photoUrl"
-                                autoComplete="photoUrl"
-                                className={`form-control ${errors.photoUrl ? 'is-invalid' : ''}`}
+                                id="photo"
+                                autoComplete="photo"
+                                className={`form-control ${errors.photo ? 'is-invalid' : ''}`}
                                 placeholder="Photo URL"
-                                {...register("photoUrl")}
+                                {...register("photo")}
                             />
-                            {errors.photoUrl && (
-                                <div className="invalid-feedback">{errors.photoUrl.message}</div>
+                            {errors.photo && (
+                                <div className="invalid-feedback">{errors.photo.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
@@ -238,6 +290,20 @@ const RegisterPage = () => {
                             />
                             {errors.formBackgroundUrl && (
                                 <div className="invalid-feedback">{errors.formBackgroundUrl.message}</div>
+                            )}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="bio" className="form-label">Bio</label>
+                            <input
+                                type="text"
+                                id="bio"
+                                autoComplete="bio"
+                                className={`form-control ${errors.bio ? 'is-invalid' : ''}`}
+                                placeholder="Bio"
+                                {...register("bio")}
+                            />
+                            {errors.bio && (
+                                <div className="invalid-feedback">{errors.bio.message}</div>
                             )}
                         </div>
                         <button type="submit" className="btn btn-primary w-100">Sign up</button>
