@@ -3,9 +3,10 @@ import HomePage from "../Pages/HomePage/HomePage.tsx";
 import WelcomePage from "../Pages/WelcomePage/WelcomePage.tsx";
 import App from "../App.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
-import EditProfilePage from "../Pages/EditProfilePage/EditProfilePage.tsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import ProtectedRoute from "./ProtectedRoutes.tsx";
+import ProfileEditRoute from "./ProfileEditRoute"; // Import the newly created component
+import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -13,8 +14,12 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: "/login",
+                path: "/",
                 element: <LoginPage />,
+            },
+            {
+                path: "/register",
+                element: <RegisterPage />,
             },
             {
                 path: "/home",
@@ -42,20 +47,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/profile/edit",
-                element: (
-                    <ProtectedRoute>
-                        <EditProfilePage
-                            UserName="johndoe"
-                            name="John"
-                            Surname="Doe"
-                            Phone="+1234567890"
-                            Email="email@example.com"
-                            Address={{ Country: "Country", Town: "Town", Street: "Street", ZipCode: "ZipCode" }}
-                            photoUrl="https://randomuser.me/api/portraits/men/3.jpg"
-                            formBackgroundUrl="https://images.cloudflareapps.com/ZAotxLiSkmDIeCENOzgQ_background-3.jpeg"
-                        />
-                    </ProtectedRoute>
-                ),
+                element: <ProfileEditRoute />, // Use the component that provides dynamic user data
             },
         ],
     },

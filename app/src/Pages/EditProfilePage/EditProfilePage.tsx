@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from "../../Context/useAuth";
 
 interface Address {
     Country: string;
@@ -24,10 +25,10 @@ interface ProfileCardProps {
 }
 
 const EditProfilePage: React.FC<ProfileCardProps> = (props) => {
+    const { logout } = useAuth(); // Get the logout function from context
+
     return (
-        <div
-            className="container-fluid p-0 d-flex flex-column align-items-center"
-        >
+        <div className="container-fluid p-0 d-flex flex-column align-items-center">
             <div className="d-flex justify-content-between align-items-center w-100 p-3">
                 <div>
                     <img
@@ -91,7 +92,13 @@ const EditProfilePage: React.FC<ProfileCardProps> = (props) => {
                         </div>
                         <div className="d-flex justify-content-between">
                             <button type="submit" className="btn btn-primary">Save Changes</button>
-                            <button type="reset" className="btn btn-secondary">Reset</button>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={logout} // Trigger the logout function on click
+                            >
+                                Logout
+                            </button>
                         </div>
                     </form>
                 </div>
