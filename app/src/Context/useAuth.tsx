@@ -1,21 +1,10 @@
 ﻿import { createContext, useEffect, useState } from "react";
-import { Address, UserProfile, DateOfBirth } from "../Models/User";
+import {Address, UserProfile} from "../Models/User";
 import { useNavigate } from "react-router-dom";
 import { loginAPI, registerAPI } from "../Services/AuthService";
 import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
-
-function formatDateOfBirth(dateOfBirth: DateOfBirth): string {
-    const { year, month, day } = dateOfBirth;
-
-    // Ensure month and day are two digits by padding with zeros if necessary
-    const monthString = month.toString().padStart(2, '0');
-    const dayString = day.toString().padStart(2, '0');
-
-    return `${year}-${monthString}-${dayString}`;
-}
-
 
 type UserContextType = {
     user: UserProfile | null;
@@ -26,18 +15,21 @@ type UserContextType = {
         password: string,
         firstName?: string,
         lastName?: string,
-        phone?: string,
+        phoneNumber?: string,
         address?: Address,
         photo?: string,
         bio?: string,
         formBackgroundUrl?: string,
         gender?: number,
-        dateOfBirth?: DateOfBirth
+        dateOfBirth?: string
     ) => void;
+    updateUser: (UserProfile: UserProfile) => void;
     loginUser: (username: string, password: string) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
 };
+
+
 
 type Props = { children: React.ReactNode };
 
@@ -68,15 +60,15 @@ export const UserProvider = ({ children }: Props) => {
         password: string,
         firstName: string = "",
         lastName: string = "",
-        phone: string = "",
+        phoneNumber: string = "",
         address: Address = {},
         photo: string = "",
         bio: string = "",
         formBackgroundUrl: string = "",
         gender: number = 0,
-        dateOfBirth: DateOfBirth = { year: 0, month: 0, day: 0, dayOfWeek: "" }
+        dateOfBirth: string = ""
     ) => {
-        const formattedDateOfBirth = formatDateOfBirth(dateOfBirth);
+
 
         const userObj = {
             email,
@@ -84,13 +76,13 @@ export const UserProvider = ({ children }: Props) => {
             password,
             firstName,
             lastName,
-            phone,
+            phoneNumber,
             address,
             photo,
             bio,
             formBackgroundUrl,
             gender,
-            dateOfBirth: formattedDateOfBirth,
+            dateOfBirth
         };
 
         console.group("API Request Data: Register User");
@@ -105,13 +97,13 @@ export const UserProvider = ({ children }: Props) => {
                 password,
                 firstName,
                 lastName,
-                phone,
+                phoneNumber,
                 address,
                 photo,
                 bio,
                 formBackgroundUrl,
                 gender,
-                formattedDateOfBirth
+                dateOfBirth
             );
 
             console.group("API Response Data: Register User");
@@ -119,20 +111,20 @@ export const UserProvider = ({ children }: Props) => {
             console.groupEnd();
 
             if (res) {
-                const { token, username, email, firstName, lastName, phone, address, photo, formBackgroundUrl, bio, gender, dateOfBirth } = res.data;
+                const { token, userName, email, firstName, lastName, phoneNumber, address, photo, formBackgroundUrl, bio, gender, dateOfBirth } = res.data;
 
                 const userObj = {
-                    userName: username,
+                    userName: userName,
                     email: email,
-                    name: firstName ?? "",
-                    surname: lastName ?? "",
-                    phone: phone ?? "",
+                    firstName: firstName ?? "",
+                    lastName: lastName ?? "",
+                    phoneNumber: phoneNumber ?? "",
                     address: address ?? {},
-                    photoUrl: photo ?? "",
+                    photo: photo ?? "",
                     formBackgroundUrl: formBackgroundUrl ?? "",
                     bio: bio ?? "",
                     gender: gender ?? 0,
-                    dateOfBirth: dateOfBirth ?? { year: 0, month: 0, day: 0, dayOfWeek: "" }
+                    dateOfBirth: dateOfBirth ?? ""
                 };
 
                 localStorage.setItem("token", token);
@@ -166,8 +158,17 @@ export const UserProvider = ({ children }: Props) => {
             if (res) {
                 const token = res.data.token;
                 const userObj = {
-                    userName: res.data.username,
+                    userName: res.data.userName,
                     email: res.data.email,
+                    firstName: res.data.firstName ?? "",
+                    lastName: res.data.lastName ?? "",
+                    phoneNumber: res.data.phoneNumber ?? "",
+                    address: res.data.address ?? {},
+                    photo: res.data.photo ?? "",
+                    formBackgroundUrl: res.data.formBackgroundUrl ?? "",
+                    bio: res.data.bio ?? "",
+                    gender: res.data.gender ?? 2,
+                    dateOfBirth: res.data.dateOfBirth ?? ""
                 };
 
                 localStorage.setItem("token", token);
@@ -175,6 +176,9 @@ export const UserProvider = ({ children }: Props) => {
 
                 setToken(token);
                 setUser(userObj);
+                console.log("UserObj");
+                console.log(userObj);
+
 
                 navigate("/home");
             }
@@ -182,6 +186,12 @@ export const UserProvider = ({ children }: Props) => {
             toast.warning("Server error occurred");
             console.error("Login error:", error);
         }
+    };
+
+    const updateUser = (user: UserProfile) => {
+
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
     };
 
     const isLoggedIn = () => {
@@ -197,7 +207,7 @@ export const UserProvider = ({ children }: Props) => {
     };
 
     return (
-        <UserContext.Provider value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}>
+        <UserContext.Provider value={{ loginUser, updateUser, user, token, logout, isLoggedIn, registerUser }}>
             {isReady ? children : null}
         </UserContext.Provider>
     );

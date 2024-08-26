@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { useAuth } from "../../Context/useAuth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
-import {Address, DateOfBirth} from "../../Models/User";
-
+import { Address } from "../../Models/User";
+import { DatePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
 
 export type RegisterFormsInputs = {
     email: string;
@@ -13,15 +14,14 @@ export type RegisterFormsInputs = {
     password: string;
     firstName?: string;
     lastName?: string;
-    gender?: number; // Assuming gender is an enum or a number
-    dateOfBirth?: DateOfBirth;
+    gender?: number;
+    dateOfBirth?: string; // Ensure dateOfBirth is a string in ISO 8601 format
     address?: Address;
-    phone?: string;
+    phoneNumber?: string;
     photo?: string;
     formBackgroundUrl?: string;
     bio?: string;
 };
-
 
 // Update validation schema
 const validationSchema = Yup.object().shape({
@@ -31,50 +31,55 @@ const validationSchema = Yup.object().shape({
     firstName: Yup.string().optional(),
     lastName: Yup.string().optional(),
     gender: Yup.number().optional(),
-    dateOfBirth: Yup.object().shape({
-        year: Yup.number().required("Year is required"),
-        month: Yup.number().required("Month is required"),
-        day: Yup.number().required("Day is required"),
-        dayOfWeek: Yup.string().required("Day of week is required")
-    }).optional(),
+    dateOfBirth: Yup.string().matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Date of Birth must be in YYYY-MM-DD format"
+    ).optional(),
     address: Yup.object().shape({
-        StreetAddress: Yup.string().optional(),
-        City: Yup.string().optional(),
-        PostalCode: Yup.string().optional(),
-        Country: Yup.string().optional()
+        streetAddress: Yup.string().optional(),
+        city: Yup.string().optional(),
+        postalCode: Yup.string().optional(),
+        country: Yup.string().optional()
     }).optional(),
-    phone: Yup.string().optional(),
+    phoneNumber: Yup.string().optional(),
     photo: Yup.string().optional(),
     formBackgroundUrl: Yup.string().optional(),
     bio: Yup.string().optional()
 });
-
-
 
 const RegisterPage = () => {
     const { registerUser } = useAuth();
     const {
         register,
         handleSubmit,
+        setValue,
+        watch,
         formState: { errors }
     } = useForm<RegisterFormsInputs>({ resolver: yupResolver(validationSchema) });
 
     const handleRegister = (form: RegisterFormsInputs) => {
+        // Convert dateOfBirth to ISO 8601 format if it's provided
+        const formattedDateOfBirth = form.dateOfBirth ? new Date(form.dateOfBirth).toISOString().split('T')[0] : undefined;
+
         registerUser(
             form.email,
             form.userName,
             form.password,
             form.firstName || "",
             form.lastName || "",
-            form.phone || "",
-            form.address || { StreetAddress: "", City: "", PostalCode: "", Country: "" },
+            form.phoneNumber || "",
+            form.address || { streetAddress: "", city: "", postalCode: "", country: "" },
             form.photo || "",
             form.bio || "",
             form.formBackgroundUrl || "",
             form.gender || 0,
-            form.dateOfBirth || { year: 0, month: 0, day: 0, dayOfWeek: "" }
+            formattedDateOfBirth // Send formatted date
         );
     };
+
+    const dateOfBirth = watch('dateOfBirth');
+    // Convert dateOfBirth to a Date object if it's a valid date string
+    const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
 
     return (
         <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -153,6 +158,20 @@ const RegisterPage = () => {
                             )}
                         </div>
                         <div className="mb-3">
+                            <label htmlFor="phone" className="form-label">Phone</label>
+                            <input
+                                type="text"
+                                id="phone"
+                                autoComplete="phone"
+                                className={`form-control ${errors.phoneNumber ? 'is-invalid' : ''}`}
+                                placeholder="Phone"
+                                {...register("phoneNumber")}
+                            />
+                            {errors.phoneNumber && (
+                                <div className="invalid-feedback">{errors.phoneNumber.message}</div>
+                            )}
+                        </div>
+                        <div className="mb-3">
                             <label htmlFor="gender" className="form-label">Gender</label>
                             <input
                                 type="number"
@@ -168,44 +187,15 @@ const RegisterPage = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
-                            <div className="d-flex gap-2">
-                                <input
-                                    type="number"
-                                    id="dateOfBirthYear"
-                                    autoComplete="bday-year"
-                                    className={`form-control ${errors.dateOfBirth?.year ? 'is-invalid' : ''}`}
-                                    placeholder="Year"
-                                    {...register("dateOfBirth.year")}
-                                />
-                                <input
-                                    type="number"
-                                    id="dateOfBirthMonth"
-                                    autoComplete="bday-month"
-                                    className={`form-control ${errors.dateOfBirth?.month ? 'is-invalid' : ''}`}
-                                    placeholder="Month"
-                                    {...register("dateOfBirth.month")}
-                                />
-                                <input
-                                    type="number"
-                                    id="dateOfBirthDay"
-                                    autoComplete="bday-day"
-                                    className={`form-control ${errors.dateOfBirth?.day ? 'is-invalid' : ''}`}
-                                    placeholder="Day"
-                                    {...register("dateOfBirth.day")}
-                                />
-                                <input
-                                    type="number"
-                                    id="dateOfBirthDayOfWeek"
-                                    autoComplete="bday-dayOfWeek"
-                                    className={`form-control ${errors.dateOfBirth?.dayOfWeek ? 'is-invalid' : ''}`}
-                                    placeholder="Day of Week"
-                                    {...register("dateOfBirth.dayOfWeek")}
-                                />
-                            </div>
+                            <DatePicker
+                                format="yyyy-MM-dd"
+                                value={dateOfBirthValue}
+                                onChange={(date) => setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)}
+                                placeholder="Select Date"
+                                style={{width: '100%'}}
+                            />
                             {errors.dateOfBirth && (
-                                <div className="invalid-feedback">
-                                    {errors.dateOfBirth.year?.message || errors.dateOfBirth.month?.message || errors.dateOfBirth.day?.message || errors.dateOfBirth.dayOfWeek?.message}
-                                </div>
+                                <div className="invalid-feedback">{errors.dateOfBirth.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
@@ -214,12 +204,12 @@ const RegisterPage = () => {
                                 type="text"
                                 id="addressStreetAddress"
                                 autoComplete="addressStreetAddress"
-                                className={`form-control ${errors.address?.StreetAddress ? 'is-invalid' : ''}`}
+                                className={`form-control ${errors.address?.streetAddress ? 'is-invalid' : ''}`}
                                 placeholder="Street Address"
-                                {...register("address.StreetAddress")}
+                                {...register("address.streetAddress")}
                             />
-                            {errors.address?.StreetAddress && (
-                                <div className="invalid-feedback">{errors.address.StreetAddress.message}</div>
+                            {errors.address?.streetAddress && (
+                                <div className="invalid-feedback">{errors.address.streetAddress.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
@@ -228,12 +218,12 @@ const RegisterPage = () => {
                                 type="text"
                                 id="addressCity"
                                 autoComplete="addressCity"
-                                className={`form-control ${errors.address?.City ? 'is-invalid' : ''}`}
+                                className={`form-control ${errors.address?.city ? 'is-invalid' : ''}`}
                                 placeholder="City"
-                                {...register("address.City")}
+                                {...register("address.city")}
                             />
-                            {errors.address?.City && (
-                                <div className="invalid-feedback">{errors.address.City.message}</div>
+                            {errors.address?.city && (
+                                <div className="invalid-feedback">{errors.address.city.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
@@ -242,12 +232,12 @@ const RegisterPage = () => {
                                 type="text"
                                 id="addressPostalCode"
                                 autoComplete="addressPostalCode"
-                                className={`form-control ${errors.address?.PostalCode ? 'is-invalid' : ''}`}
+                                className={`form-control ${errors.address?.postalCode ? 'is-invalid' : ''}`}
                                 placeholder="Postal Code"
-                                {...register("address.PostalCode")}
+                                {...register("address.postalCode")}
                             />
-                            {errors.address?.PostalCode && (
-                                <div className="invalid-feedback">{errors.address.PostalCode.message}</div>
+                            {errors.address?.postalCode && (
+                                <div className="invalid-feedback">{errors.address.postalCode.message}</div>
                             )}
                         </div>
                         <div className="mb-3">
@@ -256,12 +246,12 @@ const RegisterPage = () => {
                                 type="text"
                                 id="addressCountry"
                                 autoComplete="addressCountry"
-                                className={`form-control ${errors.address?.Country ? 'is-invalid' : ''}`}
+                                className={`form-control ${errors.address?.country ? 'is-invalid' : ''}`}
                                 placeholder="Country"
-                                {...register("address.Country")}
+                                {...register("address.country")}
                             />
-                            {errors.address?.Country && (
-                                <div className="invalid-feedback">{errors.address.Country.message}</div>
+                            {errors.address?.country && (
+                                <div className="invalid-feedback">{errors.address.country.message}</div>
                             )}
                         </div>
                         <div className="mb-3">

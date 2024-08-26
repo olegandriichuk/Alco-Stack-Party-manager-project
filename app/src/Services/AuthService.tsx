@@ -12,6 +12,7 @@ export const loginAPI = async (username: string, password: string) => {
             username: username,
             password: password,
         });
+        console.log(data);
         return data;
     } catch (error) {
         handleError(error);
@@ -31,11 +32,10 @@ export const registerAPI = async (
     photo: string,
     bio: string,
     formBackgroundUrl: string,
-    gender: number, // Assuming gender is an enum index
-    dateOfBirth: string // New parameter for date of birth
+    gender: number,
+    dateOfBirth: string
 ) => {
     try {
-        // Post request with all parameters
         const data = await axios.post<UserProfileToken>(`${api}account/register`, {
             email: email,
             username: username,
@@ -52,6 +52,6 @@ export const registerAPI = async (
         });
         return data;
     } catch (error) {
-        handleError(error); // Ensure handleError is defined or import it if it's from another file
+        handleError(error);
     }
 };
