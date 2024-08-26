@@ -17,11 +17,13 @@ namespace AlcoStack.Controllers;
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<User> _signinManager;
-        public UserController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
+        private readonly ILogger<UserController> _logger;
+        public UserController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ILogger<UserController> logger)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signinManager = signInManager;
+            _logger = logger;
         }
 
         [HttpPost("login")]
@@ -30,7 +32,7 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
             if (user == null) return Unauthorized("Invalid username!");
 
@@ -43,7 +45,18 @@ namespace AlcoStack.Controllers;
                 {
                     UserName = user.UserName,
                     Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Token = _tokenService.CreateToken(user),
+                    Gender = user.Gender,
+                    DateOfBirth = user.DateOfBirth,
+                    Address = AddressMapper.MapToDto(user.Address),
+                    Phone = user.PhoneNumber,
+                    Photo = user.Photo,
+                    Bio = user.Bio,
+                    CreatedDate = user.CreatedDate,
+                    UpdatedDate = user.UpdatedDate,
+                    FormBackgroundUrl = user.FormBackgroundUrl
                 }
             );
         } 
@@ -67,7 +80,8 @@ namespace AlcoStack.Controllers;
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName
+                LastName = registerDto.LastName,
+                FormBackgroundUrl = registerDto.FormBackgroundUrl
             };
 
             try
@@ -93,28 +107,33 @@ namespace AlcoStack.Controllers;
                     {
                         StreetAddress = registerDto.Address.StreetAddress,
                         City = registerDto.Address.City,
-                        State = registerDto.Address.State,
                         Country = registerDto.Address.Country,
-                        PostalCode = registerDto.Address.PostalCode
+                        PostalCode = registerDto.Address.PostalCode,
+                        UserName = registerDto.Username
                     };
                     user.Address = address;
                 }
+                
+                await _userManager.UpdateAsync(user);
 
                 var token = _tokenService.CreateToken(user);
 
                 var newUserDto = new NewUserDto
                 {
                     UserName = user.UserName,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
                     Email = user.Email,
                     Token = token,
-                    // Address = user.Address.MapToModel(),
+                    Address = AddressMapper.MapToDto(user.Address),
                     DateOfBirth = user.DateOfBirth,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
                     Phone = user.PhoneNumber,
                     Photo = user.Photo,
                     Bio = user.Bio,
-                    Gender = user.Gender
+                    Gender = user.Gender,
+                    FormBackgroundUrl = user.FormBackgroundUrl
                 };
 
                 return Ok(newUserDto);
@@ -157,7 +176,7 @@ namespace AlcoStack.Controllers;
         public async Task<IActionResult> GetCurrentUser()
         {
             var username = User.GetUsername();
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
             
             if (user == null)
                 return NotFound();
@@ -165,36 +184,66 @@ namespace AlcoStack.Controllers;
             return Ok(user);
         }
         
-        [HttpPut("{username}")]
-        public async Task<IActionResult> UpdateUser(string username, [FromBody] UpdateUserDto userDto)
+        [HttpPut("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto userDto)
         {
+            
+            _logger.LogInformation("Received token: {Token}", Request.Headers["Authorization"]);
+
+            try
+            {
+                var username = User.GetUsername();
+                // Additional logging
+                _logger.LogInformation("Username from token: {Username}", username);
+
+                // Your existing code...
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error during token validation: {Exception}", ex);
+                return StatusCode(500, "Internal server error");
+            }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
-            
-            if (user == null)
-                return NotFound();
-            
-            user.FirstName = userDto.FirstName;
-            user.LastName = userDto.LastName;
-            user.Bio = userDto.Bio;
-            user.DateOfBirth = userDto.DateOfBirth;
-            user.Photo = userDto.Photo;
-            user.PhoneNumber = userDto.Phone;
+            var username1 = User.GetUsername();
+            var currentUser = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username1);
+    
+            if (currentUser == null)
+                return Unauthorized();
+    
+            // Ensure the email in the DTO matches the current user's email
+            if (currentUser.Email != userDto.Email)
+                return Forbid();
+    
+            // Update username if it has changed
+            if (currentUser.UserName != userDto.Username)
+            {
+                var setUsernameResult = await _userManager.SetUserNameAsync(currentUser, userDto.Username);
+                if (!setUsernameResult.Succeeded)
+                    return BadRequest(setUsernameResult.Errors);
+            }
+    
+            currentUser.FirstName = userDto.FirstName;
+            currentUser.LastName = userDto.LastName;
+            currentUser.Bio = userDto.Bio;
+            currentUser.DateOfBirth = userDto.DateOfBirth;
+            currentUser.Photo = userDto.Photo;
+            currentUser.PhoneNumber = userDto.Phone;
+            currentUser.Gender = userDto.Gender;
             if (userDto.Address != null)
             {
-                user.Address.StreetAddress = userDto.Address.StreetAddress;
-                user.Address.City = userDto.Address.City;
-                user.Address.State = userDto.Address.State;
-                user.Address.PostalCode = userDto.Address.PostalCode;
+                currentUser.Address.StreetAddress = userDto.Address.StreetAddress;
+                currentUser.Address.City = userDto.Address.City;
+                currentUser.Address.PostalCode = userDto.Address.PostalCode;
+                currentUser.Address.Country = userDto.Address.Country;
             }
-            
-            var result = await _userManager.UpdateAsync(user);
-            
+    
+            var result = await _userManager.UpdateAsync(currentUser);
+    
             if (result.Succeeded)
-                return Ok(user);
-            
+                return Ok(currentUser);
+    
             return StatusCode(500, result.Errors);
         }
         

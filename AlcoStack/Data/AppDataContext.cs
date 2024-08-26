@@ -16,10 +16,17 @@ namespace AlcoStack.Data
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
+
+            // Configure one-to-one relationship
+            modelBuilder.Entity<User>()
                 .HasOne(u => u.Address)
-                .WithOne()
-                .HasForeignKey<Address>(up => up.UserName)
+                .WithOne(a => a.User)
+                .HasForeignKey<Address>(a => a.UserName)
+                .HasPrincipalKey<User>(u => u.UserName)
                 .OnDelete(DeleteBehavior.Cascade);
+
             
             List<IdentityRole> roles = new List<IdentityRole>
             {

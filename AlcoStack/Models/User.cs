@@ -14,6 +14,8 @@ public class User : IdentityUser
     public Address? Address { get; set; }
     public string? Photo { get; set; }
     public string? Bio { get; set; }
+    
+    public string? FormBackgroundUrl { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime UpdatedDate { get; set; } = DateTime.Now; 
 }

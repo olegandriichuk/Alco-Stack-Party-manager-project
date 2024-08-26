@@ -33,11 +33,11 @@ public class UserRepository : IUserRepository
         existingUser.DateOfBirth = user.DateOfBirth;
         existingUser.Photo = user.Photo;
         existingUser.PhoneNumber = user.Phone;
+        existingUser.FormBackgroundUrl = user.FormBackgroundUrl;
         if (user.Address != null)
         {
             existingUser.Address.StreetAddress = user.Address.StreetAddress;
             existingUser.Address.City = user.Address.City;
-            existingUser.Address.State = user.Address.State;
             existingUser.Address.PostalCode = user.Address.PostalCode;
             
         }
