@@ -36,3 +36,8 @@ export type UserProfile = {
     bio?: string;
     formBackgroundUrl?: string;
 };
+
+export type UserPhoto = {
+    photo?: string;
+    formBackgroundUrl?: string;
+};

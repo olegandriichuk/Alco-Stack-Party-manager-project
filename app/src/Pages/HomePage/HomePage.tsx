@@ -7,6 +7,7 @@ import React from 'react';
 import PartyButtonList from '../../components/PartyButtonList/PartyButtonList';
 import {Link} from "react-router-dom";
 
+
 const HomePage: React.FC = () => {
     const parties = [
         { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
@@ -34,7 +35,7 @@ const HomePage: React.FC = () => {
             <div className="d-flex justify-content-between align-items-center w-100">
                 <div>
                     <img
-                        src={Disco} // Adjust the path to your party icon
+                        src={Disco}
                         alt="Party Icon"
                         width="80"
                         height="80"

@@ -11,7 +11,7 @@ type UserContextType = {
     token: string | null;
     registerUser: (
         email: string,
-        username: string,
+        userName: string,
         password: string,
         firstName?: string,
         lastName?: string,
@@ -143,10 +143,10 @@ export const UserProvider = ({ children }: Props) => {
     };
 
     const loginUser = async (username: string, password: string) => {
-        console.group("API Request Data: Login User");
-        console.log("Endpoint: /login");
-        console.log("Payload:", { username, password });
-        console.groupEnd();
+        // console.group("API Request Data: Login User");
+        // console.log("Endpoint: /login");
+        // console.log("Payload:", { username, password });
+        // console.groupEnd();
 
         try {
             const res = await loginAPI(username, password);

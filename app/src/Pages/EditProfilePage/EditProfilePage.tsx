@@ -1,4 +1,5 @@
-﻿import React, {useEffect} from 'react';
+﻿import React, { useEffect} from 'react';
+// import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -6,13 +7,14 @@ import { useAuth } from "../../Context/useAuth";
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { UserProfile } from "../../Models/User";
+import { Address, UserProfile } from "../../Models/User";
 import { UpdateProfileAPI } from "../../Services/UserService";
 import Disco from '../../assets/disco.svg';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser} from "@fortawesome/free-solid-svg-icons";
-import {DatePicker} from "rsuite";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker } from "rsuite";
+import Button from 'react-bootstrap/Button';
+// import Modal from 'react-bootstrap/Modal';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -21,8 +23,8 @@ const validationSchema = Yup.object().shape({
     lastName: Yup.string().optional(),
     phoneNumber: Yup.string().optional(),
     bio: Yup.string().optional(),
-    photo: Yup.string().optional(),
-    formBackgroundUrl: Yup.string().optional(),
+    // photo: Yup.string().optional(),
+    // formBackgroundUrl: Yup.string().optional(),
     gender: Yup.number().optional(),
     dateOfBirth: Yup.string().matches(
         /^\d{4}-\d{2}-\d{2}$/,
@@ -40,6 +42,8 @@ const EditProfilePage: React.FC = () => {
     const { user, token, updateUser, logout } = useAuth();
     const navigate = useNavigate();
 
+    // console.log("user", user);
+
     const {
         register,
         handleSubmit,
@@ -50,23 +54,24 @@ const EditProfilePage: React.FC = () => {
         resolver: yupResolver(validationSchema),
     });
 
-
     useEffect(() => {
         if (user) {
-            console.log('User data:', user);
             Object.keys(user).forEach((key) => {
                 setValue(key as keyof UserProfile, user[key as keyof UserProfile]);
             });
         }
     }, [user, setValue]);
 
+    // const [modalShow, setModalShow] = useState(false);
+    // const [photoUrl, setPhotoUrl] = useState(user?.photo || "");
+    // const [backgroundUrl, setBackgroundUrl] = useState(user?.formBackgroundUrl || "");
+
     const handleUpdate = async (formData: UserProfile) => {
-        // console.log("Token:", token);
-        console.log("Form data:", formData);
         if (!token) {
             toast.error("You must be logged in to update your profile");
             return;
         }
+        console.log("formData", formData);
         try {
             const response = await UpdateProfileAPI(
                 formData.email,
@@ -75,19 +80,15 @@ const EditProfilePage: React.FC = () => {
                 formData.lastName || "",
                 formData.bio || "",
                 formData.dateOfBirth || "",
-                formData.photo || "",
+                // formData.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
                 formData.phoneNumber || "",
                 formData.address || { streetAddress: "", city: "", postalCode: "", country: "" },
-                formData.formBackgroundUrl || "",
+                // formData.formBackgroundUrl,
                 formData.gender,
                 token
             );
             if (response && response.data) {
-                console.log('Profile updated:', response.data);
-                // toast.success('Profile updated successfully');
-
                 updateUser(response.data);
-
                 navigate('/profile');
             }
         } catch (error) {
@@ -97,8 +98,90 @@ const EditProfilePage: React.FC = () => {
     };
 
     const dateOfBirth = watch('dateOfBirth');
-    // Convert dateOfBirth to a Date object if it's a valid date string
     const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
+
+    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof UserProfile) => (
+        <div className="mb-3" key={id}>
+            <label htmlFor={id} className="form-label">{label}</label>
+            <input
+                type={type}
+                id={id}
+                autoComplete={id}
+                className={`form-control ${errors[registerName] ? 'is-invalid' : ''}`}
+                placeholder={placeholder}
+                {...register(registerName)}
+            />
+            {errors[registerName] && <div className="invalid-feedback">{errors[registerName]?.message}</div>}
+        </div>
+    );
+
+    const renderAddressInput = (label: string, id: string, placeholder: string, registerName: keyof Address) => (
+        <div className="mb-3" key={id}>
+            <label htmlFor={id} className="form-label">{label}</label>
+            <input
+                type="text"
+                id={id}
+                autoComplete={id}
+                className={`form-control ${errors.address?.[registerName] ? 'is-invalid' : ''}`}
+                placeholder={placeholder}
+                {...register(`address.${registerName}` as const)}
+            />
+            {errors.address?.[registerName] && <div className="invalid-feedback">{errors.address[registerName]?.message}</div>}
+        </div>
+    );
+
+    // const handleSaveModalChanges = () => {
+    //     setValue('photo', photoUrl);
+    //     setValue('formBackgroundUrl', backgroundUrl);
+    //     setModalShow(false);
+    // };
+
+    // const MyVerticallyCenteredModal = (props) => {
+    //     return (
+    //         <Modal
+    //             {...props}
+    //             size="lg"
+    //             aria-labelledby="contained-modal-title-vcenter"
+    //             centered
+    //         >
+    //             <Modal.Header closeButton>
+    //                 <Modal.Title id="contained-modal-title-vcenter">
+    //                     Update Profile Pictures
+    //                 </Modal.Title>
+    //             </Modal.Header>
+    //             <Modal.Body>
+    //                 <div className="mb-3">
+    //                     <label htmlFor="photoUrl" className="form-label">Profile Photo URL</label>
+    //                     <input
+    //                         type="text"
+    //                         id="photoUrl"
+    //                         value={photoUrl}
+    //                         readOnly
+    //                         className="form-control"
+    //                         placeholder="Enter your photo URL"
+    //                     />
+    //                     <Button onClick={() => setPhotoUrl(prompt('Enter new profile photo URL:', photoUrl) || photoUrl)}>Change</Button>
+    //                 </div>
+    //                 <div className="mb-3">
+    //                     <label htmlFor="backgroundUrl" className="form-label">Background Photo URL</label>
+    //                     <input
+    //                         type="text"
+    //                         id="backgroundUrl"
+    //                         value={backgroundUrl}
+    //                         readOnly
+    //                         className="form-control"
+    //                         placeholder="Enter your background photo URL"
+    //                     />
+    //                     <Button onClick={() => setBackgroundUrl(prompt('Enter new background photo URL:', backgroundUrl) || backgroundUrl)}>Change</Button>
+    //                 </div>
+    //             </Modal.Body>
+    //             <Modal.Footer>
+    //                 <Button onClick={handleSaveModalChanges}>Save Changes</Button>
+    //                 <Button onClick={props.onHide}>Close</Button>
+    //             </Modal.Footer>
+    //         </Modal>
+    //     );
+    // };
 
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
@@ -113,40 +196,44 @@ const EditProfilePage: React.FC = () => {
             <div className="card shadow-lg p-3 mb-5 bg-white rounded" style={{ width: '80%', maxWidth: '600px', marginTop: '50px', backgroundImage: `url(${user?.formBackgroundUrl})`, backgroundSize: 'cover', minHeight: '100vh' }}>
                 <div className="card-body">
                     <div className="d-flex flex-column align-items-center">
-                        <img
-                            src={user?.photo}
-                            alt={`${user?.userName}'s profile`}
-                            className="rounded-circle"
-                            style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                        />
-                        <h3 className="card-title mt-3">{user?.userName}</h3>
-                    </div>
-                    <form className="mt-4" onSubmit={handleSubmit(handleUpdate)}>
-                        <div className="mb-3">
-                            <label htmlFor="firstName" className="form-label">First Name</label>
-                            <input type="text" className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
-                                   id="firstName" {...register("firstName")} />
-                            {errors.firstName && <div className="invalid-feedback">{errors.firstName.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="lastName" className="form-label">Last Name</label>
-                            <input type="text" className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
-                                   id="lastName" {...register("lastName")} />
-                            {errors.lastName && <div className="invalid-feedback">{errors.lastName.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="phone" className="form-label">Phone</label>
-                            <input type="tel" className={`form-control ${errors.phoneNumber ? 'is-invalid' : ''}`}
-                                   id="phone" {...register("phoneNumber")} />
-                            {errors.phoneNumber && <div className="invalid-feedback">{errors.phoneNumber.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="email" className="form-label">Email address</label>
-                            <input type="email" className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                                   id="email" {...register("email")} />
-                            {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
-                        </div>
+                        <Button
+                            // onClick={() => setModalShow(true)}
+                            variant="link"
+                            style={{
+                                padding: 0,
+                                border: 'none',
+                                background: 'none',
+                                display: 'inline-block',
+                            }}
+                            className="p-0"
+                        >
+                            <img
+                                src={user?.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}
+                                alt={`${user?.userName}'s profile`}
+                                className="rounded-circle"
+                                style={{
+                                    width: '150px',
+                                    height: '150px',
+                                    objectFit: 'cover',
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        </Button>
 
+                        {/*<MyVerticallyCenteredModal*/}
+                        {/*    show={modalShow}*/}
+                        {/*    onHide={() => setModalShow(false)}*/}
+                        {/*/>*/}
+                    </div>
+                    <form onSubmit={handleSubmit(handleUpdate)}>
+                        {renderInput('Email', 'email', 'email', 'Email', 'email')}
+                        {renderInput('Username', 'userName', 'text', 'Username', 'userName')}
+                        {renderInput('First Name', 'firstName', 'text', 'First Name', 'firstName')}
+                        {renderInput('Last Name', 'lastName', 'text', 'Last Name', 'lastName')}
+                        {renderInput('Phone Number', 'phoneNumber', 'text', 'Phone Number', 'phoneNumber')}
+                        {renderInput('Bio', 'bio', 'text', 'Bio', 'bio')}
+                        {/*{renderInput('Profile Picture URL', 'photo', 'text', 'Profile Picture URL', 'photo')}*/}
+                        {/*{renderInput('Background Picture URL', 'formBackgroundUrl', 'text', 'Background Picture URL', 'formBackgroundUrl')}*/}
                         <div className="mb-3">
                             <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
                             <DatePicker
@@ -181,48 +268,14 @@ const EditProfilePage: React.FC = () => {
                                 <div className="invalid-feedback">{errors.gender.message}</div>
                             )}
                         </div>
-
                         <div className="mb-3">
                             <label htmlFor="address" className="form-label">Address</label>
                         </div>
+                        {renderAddressInput("Street", "address.streetAddress", "Enter your street address", "streetAddress")}
+                        {renderAddressInput("City", "address.city", "Enter your city", "city")}
+                        {renderAddressInput("Country", "address.country", "Enter your country", "country")}
+                        {renderAddressInput("Zip Code", "address.postalCode", "Enter your zip code", "postalCode")}
 
-                        <div className="mb-3">
-                            <label htmlFor="address.streetAddress" className="form-label">Street</label>
-                            <input type="text"
-                                   className={`form-control ${errors.address?.streetAddress ? 'is-invalid' : ''}`}
-                                   id="address.streetAddress" {...register("address.streetAddress")} />
-                            {errors.address?.streetAddress &&
-                                <div className="invalid-feedback">{errors.address.streetAddress.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="address.city" className="form-label">City</label>
-                            <input type="text" className={`form-control ${errors.address?.city ? 'is-invalid' : ''}`}
-                                   id="address.city" {...register("address.city")} />
-                            {errors.address?.city &&
-                                <div className="invalid-feedback">{errors.address.city.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="address.country" className="form-label">Country</label>
-                            <input type="text" className={`form-control ${errors.address?.country ? 'is-invalid' : ''}`}
-                                   id="address.country" {...register("address.country")} />
-                            {errors.address?.country &&
-                                <div className="invalid-feedback">{errors.address.country.message}</div>}
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="address.postalCode" className="form-label">Zip Code</label>
-                            <input type="text"
-                                   className={`form-control ${errors.address?.postalCode ? 'is-invalid' : ''}`}
-                                   id="address.postalCode" {...register("address.postalCode")} />
-                            {errors.address?.postalCode &&
-                                <div className="invalid-feedback">{errors.address.postalCode.message}</div>}
-                        </div>
-
-                        <div className="mb-3">
-                            <label htmlFor="bio" className="form-label">Bio</label>
-                            <textarea className={`form-control ${errors.bio ? 'is-invalid' : ''}`}
-                                      id="bio" {...register("bio")} />
-                            {errors.bio && <div className="invalid-feedback">{errors.bio.message}</div>}
-                        </div>
                         <div className="d-flex justify-content-between">
                             <button type="submit" className="btn btn-primary">Save Changes</button>
                             <button type="button" className="btn btn-secondary" onClick={logout}>

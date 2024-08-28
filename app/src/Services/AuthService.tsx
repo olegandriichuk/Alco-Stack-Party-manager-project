@@ -12,7 +12,6 @@ export const loginAPI = async (username: string, password: string) => {
             username: username,
             password: password,
         });
-        console.log(data);
         return data;
     } catch (error) {
         handleError(error);
@@ -27,7 +26,7 @@ export const registerAPI = async (
     password: string,
     firstName: string,
     lastName: string,
-    phone: string,
+    phoneNumber: string,
     address: Address,
     photo: string,
     bio: string,
@@ -42,7 +41,7 @@ export const registerAPI = async (
             password: password,
             firstName: firstName,
             lastName: lastName,
-            phone: phone,
+            phoneNumber: phoneNumber,
             address: address,
             photo: photo,
             bio: bio,

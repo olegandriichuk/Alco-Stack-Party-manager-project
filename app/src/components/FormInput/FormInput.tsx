@@ -1,33 +1,40 @@
-﻿// import React from 'react';
-// import { FieldError, FieldValues, UseFormRegister } from 'react-hook-form';
+﻿// // Input.tsx
+// import React from 'react';
+// import { UseFormRegister } from 'react-hook-form';
+// import { UserProfile } from "../../Models/User";
 //
-// interface FormInputProps {
+// interface InputProps {
 //     label: string;
 //     id: string;
-//     type: string;
-//     autoComplete: string;
+//     type?: string;
 //     placeholder: string;
-//     register: UseFormRegister<FieldValues>;
-//     errors: Record<string, FieldError | undefined>;
+//     registerName: keyof UserProfile | `address.${keyof UserProfile['address']}`;
+//     register: UseFormRegister<UserProfile>;
+//     error?: string;
+//     isAddressField?: boolean;
 // }
 //
-// const FormInput: React.FC<FormInputProps> = ({ label, id, type, autoComplete, placeholder, register, errors }) => {
-//     return (
-//         <div className="mb-3">
-//             <label htmlFor={id} className="form-label">{label}</label>
-//             <input
-//                 type={type}
-//                 id={id}
-//                 autoComplete={autoComplete}
-//                 className={`form-control ${errors[id] ? 'is-invalid' : ''}`}
-//                 placeholder={placeholder}
-//                 {...register(id)}
-//             />
-//             {errors[id] && (
-//                 <div className="invalid-feedback">{errors[id]?.message}</div>
-//             )}
-//         </div>
-//     );
-// };
+// const Input: React.FC<InputProps> = ({
+//                                          label,
+//                                          id,
+//                                          type = "text",
+//                                          placeholder,
+//                                          // registerName,
+//                                          // register,
+//                                          error,
+//                                      }) => (
+//     <div className="mb-3">
+//         <label htmlFor={id} className="form-label">{label}</label>
+//         <input
+//             type={type}
+//             id={id}
+//             autoComplete={id}
+//             className={`form-control ${error ? 'is-invalid' : ''}`}
+//             placeholder={placeholder}
+//             {...register(registerName as keyof UserProfile)}
+//         />
+//         {error && <div className="invalid-feedback">{error}</div>}
+//     </div>
+// );
 //
-// export default FormInput;
+// export default Input;

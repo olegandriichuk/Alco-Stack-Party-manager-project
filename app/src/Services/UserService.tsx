@@ -11,15 +11,15 @@ export const UpdateProfileAPI = async (
     lastName?: string,
     bio?: string,
     dateOfBirth?: string,
-    photo?: string,
-    phone?: string,
+    // photo?: string,
+    phoneNumber?: string,
     address?: Address,
-    fromBackgroundUrl?: string,
+    // formBackgroundUrl?: string,
     gender?: number,
     authToken?: string
 ) => {
     try {
-        // console.log("Token:", authToken);
+        // console.log("forggfmBackgroundUrl", formBackgroundUrl);
         const data = await axios.put<UserProfile>(
             api+"account/update",
             {
@@ -29,12 +29,36 @@ export const UpdateProfileAPI = async (
                 lastName: lastName,
                 bio: bio,
                 dateOfBirth: dateOfBirth,
-                photo: photo,
-                phone: phone,
+                // photo: photo,
+                phoneNumber: phoneNumber,
                 address: address,
-                fromBackgroundUrl: fromBackgroundUrl,
+                // formBackgroundUrl: formBackgroundUrl,
                 gender: gender
 
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export const UpdatePhotoAPI = async (
+    photo?: string,
+    formBackgroundUrl?: string,
+    authToken?: string
+) => {
+    try {
+        const data = await axios.patch<UserProfile>(
+            api+"account/updatePhoto",
+            {
+                photo: photo,
+                formBackgroundUrl: formBackgroundUrl,
             },
             {
                 headers: {
