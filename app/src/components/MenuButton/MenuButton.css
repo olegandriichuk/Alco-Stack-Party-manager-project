@@ -1,4 +1,15 @@
-﻿.container .menu-button {
+﻿/* Import Halant font */
+@font-face {
+    font-family: 'Halant';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+}
+
+/* Apply font to the button text */
+.menu-button span {
+    font-family: 'Halant', serif;
+}
+
+.container .menu-button {
     display: flex;
     flex-direction: column;
     align-items: center;
