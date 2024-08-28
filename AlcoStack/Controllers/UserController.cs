@@ -228,8 +228,7 @@ namespace AlcoStack.Controllers;
             currentUser.LastName = userDto.LastName;
             currentUser.Bio = userDto.Bio;
             currentUser.DateOfBirth = userDto.DateOfBirth;
-            currentUser.Photo = userDto.Photo;
-            currentUser.PhoneNumber = userDto.Phone;
+            currentUser.PhoneNumber = userDto.PhoneNumber;
             currentUser.Gender = userDto.Gender;
             if (userDto.Address != null)
             {
@@ -244,6 +243,30 @@ namespace AlcoStack.Controllers;
             if (result.Succeeded)
                 return Ok(currentUser);
     
+            return StatusCode(500, result.Errors);
+        }
+        
+        [HttpPatch("updatePhoto")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePhoto([FromBody] UpdateUserPhotoDto  photoDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var username = User.GetUsername();
+            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
+            
+            if (user == null)
+                return NotFound();
+            
+            user.Photo = photoDto.Photo;
+            user.FormBackgroundUrl = photoDto.FormBackgroundUrl;
+            user.UpdatedDate = DateTime.Now;
+            var result = await _userManager.UpdateAsync(user);
+            
+            if (result.Succeeded)
+                return Ok(user);
+            
             return StatusCode(500, result.Errors);
         }
         

@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
     
     public async Task<User> UpdateAsync(string UserName, UpdateUserDto user)
     {
-        var existingUser = await _context.Users.FirstOrDefaultAsync(user => user.UserName == UserName);
+        var existingUser = await _context.Users.Include(x => x.Address).FirstOrDefaultAsync(user => user.UserName == UserName);
         if (existingUser == null)
         {
             throw new Exception("User not found");
@@ -31,9 +31,7 @@ public class UserRepository : IUserRepository
         existingUser.LastName = user.LastName;
         existingUser.Bio = user.Bio;
         existingUser.DateOfBirth = user.DateOfBirth;
-        existingUser.Photo = user.Photo;
-        existingUser.PhoneNumber = user.Phone;
-        existingUser.FormBackgroundUrl = user.FormBackgroundUrl;
+        existingUser.PhoneNumber = user.PhoneNumber;
         if (user.Address != null)
         {
             existingUser.Address.StreetAddress = user.Address.StreetAddress;
