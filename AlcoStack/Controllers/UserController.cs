@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlcoStack.Controllers;
 
-[Route("api/account")]
+    [Route("api/account")]
     [ApiController]
     public class UserController : ControllerBase
     {
