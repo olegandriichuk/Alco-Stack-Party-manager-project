@@ -9,18 +9,16 @@ namespace AlcoStack.Repositories;
 
 public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepository
 {
-    private readonly AppDataContext _context = context;
-
     public async Task<PartyAlcohol> AddAsync(Guid partyId, Guid alcoholId)
     {
-        var party = await _context.Parties.FirstOrDefaultAsync(x => x.Id == partyId);
+        var party = await context.Parties.FirstOrDefaultAsync(x => x.Id == partyId);
         
         if (party == null)
         {
             throw new Exception("Party not found");
         }
         
-        var alcohol = await _context.Alcohols.FirstOrDefaultAsync(x => x.Id == alcoholId);
+        var alcohol = await context.Alcohols.FirstOrDefaultAsync(x => x.Id == alcoholId);
         
         if (alcohol == null)
         {
@@ -35,14 +33,14 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
             Alcohol = alcohol
         };
         
-        await _context.PartyAlcohols.AddAsync(partyAlcohol);
-        await _context.SaveChangesAsync();
+        await context.PartyAlcohols.AddAsync(partyAlcohol);
+        await context.SaveChangesAsync();
         return partyAlcohol;
     }
 
     public async Task<PartyAlcohol?> DeleteAsync(Guid partyId, Guid alcoholId)
     {
-        var partyAlcohol = await _context.PartyAlcohols
+        var partyAlcohol = await context.PartyAlcohols
             .FirstOrDefaultAsync(x => x.PartyId == partyId && x.AlcoholId == alcoholId);
         
         if (partyAlcohol == null)
@@ -50,14 +48,14 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
             return null;
         }
         
-        _context.PartyAlcohols.Remove(partyAlcohol);
-        await _context.SaveChangesAsync();
+        context.PartyAlcohols.Remove(partyAlcohol);
+        await context.SaveChangesAsync();
         return partyAlcohol;
     }
 
     public async Task<ICollection<Alcohol>> GetAlcoholsByPartyIdAsync(Guid partyId)
     {
-        var partyAlcohols = await _context.PartyAlcohols
+        var partyAlcohols = await context.PartyAlcohols
             .Where(x => x.PartyId == partyId)
             .Include(x => x.Alcohol)
             .Select(x => x.Alcohol)
@@ -68,7 +66,7 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
 
     public async Task<ICollection<PartyAlcohol>> UpdateVolumeAsync(Guid partyId, Guid alcoholId, int volume)
     {
-        var partyAlcohol = await _context.PartyAlcohols
+        var partyAlcohol = await context.PartyAlcohols
             .FirstOrDefaultAsync(x => x.PartyId == partyId && x.AlcoholId == alcoholId);
         
         if (partyAlcohol == null)
@@ -77,9 +75,9 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
         }
         
         partyAlcohol.Volume = volume;
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         
-        var partyAlcohols = await _context.PartyAlcohols
+        var partyAlcohols = await context.PartyAlcohols
             .Where(x => x.PartyId == partyId)
             .Include(x => x.Alcohol)
             .ToListAsync();
@@ -89,7 +87,7 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
 
     public async Task<ICollection<PartyAlcohol>> UpdateRatingAsync(Guid partyId, Guid alcoholId, int rating)
     {
-        var partyAlcohol = await _context.PartyAlcohols
+        var partyAlcohol = await context.PartyAlcohols
             .FirstOrDefaultAsync(x => x.PartyId == partyId && x.AlcoholId == alcoholId);
         
         if (partyAlcohol == null)
@@ -98,9 +96,9 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
         }
         
         partyAlcohol.Rating = rating;
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         
-        var partyAlcohols = await _context.PartyAlcohols
+        var partyAlcohols = await context.PartyAlcohols
             .Where(x => x.PartyId == partyId)
             .Include(x => x.Alcohol)
             .ToListAsync();
@@ -110,7 +108,7 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
 
     public async Task<ICollection<PartyAlcohol>> GetAllAsync()
     {
-        var partyAlcohols = await _context.PartyAlcohols
+        var partyAlcohols = await context.PartyAlcohols
             .Include(x => x.Party)
             .Include(x => x.Alcohol)
             .ToListAsync();

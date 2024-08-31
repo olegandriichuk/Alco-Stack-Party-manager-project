@@ -12,26 +12,24 @@ namespace AlcoStack.Controllers;
 
 [Route("api/party")]
 [ApiController]
-public class PartyController : ControllerBase
+public class PartyController(
+    IPartyRepository repository,
+    IPartyAlcoholRepository partyAlcoholRepository,
+    IUserPartyRepository userPartyRepository,
+    IAlcoholRepository alcoholRepository,
+    UserManager<User> userManager,
+    SignInManager<User> signinManager)
+    : ControllerBase
 {
-    private readonly IPartyRepository _repository;
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signinManager;
+    private readonly SignInManager<User> _signinManager = signinManager;
 
-
-    public PartyController(IPartyRepository repository, UserManager<User> userManager, SignInManager<User> signinManager)
-    {
-        _repository = repository;
-        _userManager = userManager;
-        _signinManager = signinManager;
-    }
 
     [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateParty([FromBody] CreatePartyDto partyDto)
     {
         var username = User.GetUsername();
-        var user = await _userManager.FindByNameAsync(username);
+        var user = await userManager.FindByNameAsync(username);
 
         if (user == null)
         {
@@ -45,15 +43,15 @@ public class PartyController : ControllerBase
         party.Creator = user;
         
         
-        var createdParty = await _repository.CreateAsync(party);
-        return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, PartyMapper.MapToDto(createdParty));
+        var createdParty = await repository.CreateAsync(party);
+        return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, createdParty.MapToDto());
     }
 
     [Authorize]
     [HttpGet("{Id}")]
     public async Task<IActionResult> GetParty(Guid Id)
     {
-        var party = await _repository.GetByIdAsync(Id);
+        var party = await repository.GetByIdAsync(Id);
         if (party == null)
         {
             return NotFound();
@@ -65,7 +63,7 @@ public class PartyController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetAllParties()
     {
-        var parties = await _repository.GetAllAsync();
+        var parties = await repository.GetAllAsync();
         return Ok(parties.Select(PartyMapper.MapToDto));
     }
 
@@ -73,7 +71,7 @@ public class PartyController : ControllerBase
     [HttpPut("{Id}")]
     public async Task<IActionResult> UpdateParty(Guid Id, [FromBody] UpdatePartyDto partyDto)
     {
-        var party = await _repository.UpdateAsync(Id, partyDto);
+        var party = await repository.UpdateAsync(Id, partyDto);
         if (party == null)
         {
             return NotFound();
@@ -85,11 +83,59 @@ public class PartyController : ControllerBase
     [HttpDelete("{Id}")]
     public async Task<IActionResult> DeleteParty(Guid Id)
     {
-        var party = await _repository.DeleteAsync(Id);
+        var party = await repository.DeleteAsync(Id);
         if (party == null)
         {
             return NotFound();
         }
         return Ok(party.MapToDto());
     }
+    
+    [Authorize]
+    [HttpPost("{partyId}/add-alcohol/{alcoholId}")]
+    public async Task<IActionResult> AddAlcoholToParty(Guid partyId, Guid alcoholId)
+    {
+        return Ok(await partyAlcoholRepository.AddAsync(partyId, alcoholId));
+    }
+    
+    [Authorize]
+    [HttpPost("{partyId}/add-user/{userName}")]
+    public async Task<IActionResult> AddUserToParty(Guid partyId, string userName)
+    {
+        return Ok(await userPartyRepository.AddAsync(userName, partyId));
+    }
+    
+    [Authorize]
+    [HttpDelete("{partyId}/delete-alcohol/{alcoholId}")]
+    public async Task<IActionResult> DeleteAlcoholFromParty(Guid partyId, Guid alcoholId)
+    {
+        var partyAlcohol = await partyAlcoholRepository.DeleteAsync(partyId, alcoholId);
+        if (partyAlcohol == null)
+        {
+            return NotFound();
+        }
+        return Ok(partyAlcohol);
+    }
+    
+    [Authorize]
+    [HttpGet("{partyId}/alcohols")]
+    public async Task<IActionResult> GetAlcoholsByPartyId(Guid partyId)
+    {
+        return Ok(await partyAlcoholRepository.GetAlcoholsByPartyIdAsync(partyId));
+    }
+    
+    [Authorize]
+    [HttpPut("{partyId}/update-volume/{alcoholId}")]
+    public async Task<IActionResult> UpdateVolume(Guid partyId, Guid alcoholId, [FromBody] int volume)
+    {
+        return Ok(await partyAlcoholRepository.UpdateVolumeAsync(partyId, alcoholId, volume));
+    }
+    
+    [Authorize]
+    [HttpPut("{partyId}/update-rating/{alcoholId}")]
+    public async Task<IActionResult> UpdateRating(Guid partyId, Guid alcoholId, [FromBody] int rating)
+    {
+        return Ok(await partyAlcoholRepository.UpdateRatingAsync(partyId, alcoholId, rating));
+    }
+    
 }
