@@ -16,9 +16,9 @@ interface MenuButtonProps {
     className?: string; // Add this prop to pass the class
 }
 
-// const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', onClick }) => {
+// const MenuButton: React.FC<ChooseAlcoButtonProps> = ({ text, icon, color = 'primary', onClick }) => {
 const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', link, className}) => {
-    const menuButtonStyle: React.CSSProperties = {
+    const MenuButtonStyle: React.CSSProperties = {
         backgroundColor: color,
     };
 
@@ -30,7 +30,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', 
     return (
         // <button className={`btn btn-${color} menu-button`} onClick={onClick} style={menuButtonStyle}>
         <Link to={link} style={LinkStyle}>
-            <button className={`btn btn-${color} menu-button`} style={menuButtonStyle}>
+            <button className={`btn btn-${color} menu-button`} style={MenuButtonStyle}>
                 <FontAwesomeIcon icon={icon} size="2x"/>
                 <span className={`menu-button-text ${className}`}>{text}</span>
             </button>

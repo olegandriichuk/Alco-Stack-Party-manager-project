@@ -6,12 +6,19 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Disco from '../../assets/disco.svg';
 import { useAuth } from "../../Context/useAuth.tsx";
-
+import ChooseAlcoButtonList from '../../components/СhooseAlcoButtonList/ChooseAlcoButtonList';
+import Beer from '../../assets/beer.png'
+import React from "react";
 
 const ProfilePage: React.FC = () => {
     const { user } = useAuth();
 
-
+    const alcoButtons = [
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' }
+    ];
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
             <div className="d-flex justify-content-between align-items-center w-100">
@@ -38,7 +45,7 @@ const ProfilePage: React.FC = () => {
                 photoUrl={user?.photo || ""}
                 formBackgroundUrl={user?.formBackgroundUrl || ""}
             />
-
+            <ChooseAlcoButtonList alcoButtons={alcoButtons} />
         </div>
     );
 }

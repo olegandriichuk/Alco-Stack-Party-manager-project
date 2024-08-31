@@ -3,46 +3,46 @@ import HomePage from "../Pages/HomePage/HomePage.tsx";
 import WelcomePage from "../Pages/WelcomePage/WelcomePage.tsx";
 import App from "../App.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
-import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
-import ProtectedRoute from "./ProtectedRoutes.tsx";
+//import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
+//import ProtectedRoute from "./ProtectedRoutes.tsx";
 import ProfileEditRoute from "./ProfileEditRoute"; // Import the newly created component
-import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx";
+//import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         children: [
-            {
-                path: "/",
-                element: <LoginPage />,
-            },
-            {
-                path: "/register",
-                element: <RegisterPage />,
-            },
+            // {
+            //     path: "/",
+            //     element: <LoginPage />,
+            // },
+            // {
+            //     path: "/register",
+            //     element: <RegisterPage />,
+            // },
             {
                 path: "/home",
                 element: (
-                    <ProtectedRoute>
+//                    <ProtectedRoute>
                         <HomePage />
-                    </ProtectedRoute>
+//                    </ProtectedRoute>
                 ),
             },
             {
                 path: "/welcome",
                 element: (
-                    <ProtectedRoute>
+ //                   <ProtectedRoute>
                         <WelcomePage />
-                    </ProtectedRoute>
+ //                   </ProtectedRoute>
                 ),
             },
             {
                 path: "/profile",
                 element: (
-                    <ProtectedRoute>
+ //                   <ProtectedRoute>
                         <ProfilePage />
-                    </ProtectedRoute>
+   //                 </ProtectedRoute>
                 ),
             },
             {
