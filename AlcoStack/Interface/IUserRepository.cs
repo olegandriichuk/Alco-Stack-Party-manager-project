@@ -5,11 +5,11 @@ namespace AlcoStack.Interface;
 
 public interface IUserRepository
 {
-    Task<User> UpdateAsync(string UserName, UpdateUserDto user);
-    Task<User?> GetAsync(string UserName);
+    Task<User> UpdateAsync(string userName, UpdateUserDto user);
+    Task<User?> GetAsync(string userName);
     
     Task<List<User>> GetAllAsync();
     
-    Task<User?> DeleteAsync(string UserName);
+    Task<User?> DeleteAsync(string userName);
     
 }

@@ -116,11 +116,13 @@ public class PartyController(
     }
     
     [Authorize]
-    [HttpPost("{partyId}/add-user/{userName}")]
-    public async Task<IActionResult> AddUserToParty(Guid partyId, string userName)
+    [HttpPost("{partyId}/add-user")]
+    public async Task<IActionResult> AddUserToParty(Guid partyId)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
+        
+        var userName = User.GetUsername();
         
         return Ok(await userPartyRepository.AddAsync(userName, partyId));
     }
@@ -149,6 +151,57 @@ public class PartyController(
         return Ok(await partyAlcoholRepository.GetAlcoholsByPartyIdAsync(partyId));
     }
     
+    // [HttpGet("{userName}/userParties")]
+    // public async Task<IActionResult> GetPartiesByUserName(string userName)
+    // {
+    //     if (!ModelState.IsValid)
+    //         return BadRequest(ModelState);
+    //     
+    //     return Ok(await userPartyRepository.GetByUserNameAsync(userName));
+    // }
+    
+    [Authorize]
+    [HttpGet("userParties")]
+    public async Task<IActionResult> GetPartiesByUserName()
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var userName = User.GetUsername();
+        
+        return Ok(await userPartyRepository.GetByUserNameAsync(userName));
+    }
+   
+    [Authorize]
+    [HttpDelete("{partyId}remove-user/{userName}")]
+    public async Task<IActionResult> RemoveUserFromParty(Guid partyId, string userName)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var UserName = User.GetUsername();
+        
+        var party = await repository.GetByIdAsync(partyId);
+        
+        if(party == null)
+        {
+            throw new Exception("Party not found");
+        }
+        
+        if(party.CreatorUserName != UserName)
+        {
+            throw new Exception("You are not the creator of this party");
+        }
+        
+        var userParty = await userPartyRepository.DeleteAsync(userName, partyId);
+        if (userParty == null)
+        {
+            return NotFound();
+        }
+        return Ok(userParty);
+    }
+    
+    [Authorize]
     [HttpPatch("{partyId}/update-volume/{alcoholId}")]
     public async Task<IActionResult> UpdateVolume(Guid partyId, Guid alcoholId, [FromBody] int volume)
     {
@@ -158,6 +211,7 @@ public class PartyController(
         return Ok(await partyAlcoholRepository.UpdateVolumeAsync(partyId, alcoholId, volume));
     }
     
+    [Authorize]
     [HttpPatch("{partyId}/update-rating/{alcoholId}")]
     public async Task<IActionResult> UpdateRating(Guid partyId, Guid alcoholId, [FromBody] int rating)
     {

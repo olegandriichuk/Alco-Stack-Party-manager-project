@@ -276,6 +276,15 @@ namespace AlcoStack.Controllers;
             return Ok(users);
         }
         
+        [HttpPost("{userName}/addAlcohol/{alcoholId}")]
+        public async Task<IActionResult> AddUserAlcohol(string userName, Guid alcoholId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+        
+            return Ok(await userAlcoholRepository.AddAsync(userName, alcoholId));
+        }
+        
         [HttpPatch("{userName}/update-volume/{alcoholId}")]
         public async Task<IActionResult> UpdateVolume(string userName, Guid alcoholId, [FromBody] int volume)
         {
@@ -293,6 +302,38 @@ namespace AlcoStack.Controllers;
                 return BadRequest(ModelState);
         
             return Ok(await userAlcoholRepository.UpdateRatingAsync(userName, alcoholId, rating));
+        }
+        
+        [HttpDelete("{userName}/delete/{alcoholId}")]
+        public async Task<IActionResult> DeleteUserAlcohol(string userName, Guid alcoholId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var userAlcohol = await userAlcoholRepository.DeleteAsync(userName, alcoholId);
+            
+            if (userAlcohol == null)
+                return NotFound();
+            
+            return Ok(userAlcohol);
+        }
+        
+        
+        
+        [Authorize]
+        [HttpDelete("{partyId}LeaveParty")]
+        public async Task<IActionResult> LeaveParty(Guid partyId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var username = User.GetUsername();
+            var userParty = await userPartyRepository.DeleteAsync(username, partyId);
+            
+            if (userParty == null)
+                return NotFound();
+            
+            return Ok(userParty);
         }
         
         [HttpDelete("{username}")]

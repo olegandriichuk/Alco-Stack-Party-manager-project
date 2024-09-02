@@ -2,6 +2,7 @@
 using AlcoStack.Extensions;
 using AlcoStack.Interface;
 using AlcoStack.Models;
+using AlcoStack.Enums;
 using AlcoStack.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,6 @@ public class AlcoholController(
         return CreatedAtAction(nameof(GetAlcohol), new { Id = createdAlcohol.Id }, createdAlcohol.MapToDto());
     }
     
-    [Authorize]
     [HttpGet("{Id}")]
     public async Task<IActionResult> GetAlcohol(Guid Id)
     {
@@ -63,7 +63,20 @@ public class AlcoholController(
         return Ok(alcohol.MapToDto());
     }
     
-    [Authorize]
+    [HttpGet("{name}/name")]
+    public async Task<IActionResult> GetAlcohol(string name)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var alcohol = await _alcoholRepository.GetAlcoholByNameAsync(name);
+        if (alcohol == null)
+        {
+            return NotFound();
+        }
+        return Ok(alcohol.MapToDto());
+    }
+    
     [HttpGet("all")]
     public async Task<IActionResult> GetAllAlcohols()
     {
@@ -127,6 +140,22 @@ public class AlcoholController(
         
         var parties = await _partyAlcoholRepository.GetAlcoholsByPartyIdAsync(partyId);
         return Ok(parties.Select(party => party.MapToDto()));
+    }
+    
+    [HttpGet("{type}AlcoholByType")]
+    public async Task<IActionResult> GetAlcoholByType(AlcoType type)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var alcohols = await _alcoholRepository.GetAlcoholsByTypeAsync(type);
+        
+        if (alcohols == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
     }
     
     [Authorize]
