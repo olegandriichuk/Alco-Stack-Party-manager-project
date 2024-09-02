@@ -28,6 +28,9 @@ public class PartyController(
     [HttpPost("create")]
     public async Task<IActionResult> CreateParty([FromBody] CreatePartyDto partyDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var username = User.GetUsername();
         var user = await userManager.FindByNameAsync(username);
 
@@ -35,7 +38,6 @@ public class PartyController(
         {
             return BadRequest("User not found");   
         }
-        
         
         var party = partyDto.MapToCreateModel();
         
@@ -51,6 +53,9 @@ public class PartyController(
     [HttpGet("{Id}")]
     public async Task<IActionResult> GetParty(Guid Id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var party = await repository.GetByIdAsync(Id);
         if (party == null)
         {
@@ -63,6 +68,9 @@ public class PartyController(
     [HttpGet("all")]
     public async Task<IActionResult> GetAllParties()
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var parties = await repository.GetAllAsync();
         return Ok(parties.Select(PartyMapper.MapToDto));
     }
@@ -71,6 +79,9 @@ public class PartyController(
     [HttpPut("{Id}")]
     public async Task<IActionResult> UpdateParty(Guid Id, [FromBody] UpdatePartyDto partyDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var party = await repository.UpdateAsync(Id, partyDto);
         if (party == null)
         {
@@ -83,6 +94,9 @@ public class PartyController(
     [HttpDelete("{Id}")]
     public async Task<IActionResult> DeleteParty(Guid Id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var party = await repository.DeleteAsync(Id);
         if (party == null)
         {
@@ -95,6 +109,9 @@ public class PartyController(
     [HttpPost("{partyId}/add-alcohol/{alcoholId}")]
     public async Task<IActionResult> AddAlcoholToParty(Guid partyId, Guid alcoholId)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await partyAlcoholRepository.AddAsync(partyId, alcoholId));
     }
     
@@ -102,6 +119,9 @@ public class PartyController(
     [HttpPost("{partyId}/add-user/{userName}")]
     public async Task<IActionResult> AddUserToParty(Guid partyId, string userName)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await userPartyRepository.AddAsync(userName, partyId));
     }
     
@@ -109,6 +129,9 @@ public class PartyController(
     [HttpDelete("{partyId}/delete-alcohol/{alcoholId}")]
     public async Task<IActionResult> DeleteAlcoholFromParty(Guid partyId, Guid alcoholId)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         var partyAlcohol = await partyAlcoholRepository.DeleteAsync(partyId, alcoholId);
         if (partyAlcohol == null)
         {
@@ -117,24 +140,30 @@ public class PartyController(
         return Ok(partyAlcohol);
     }
     
-    [Authorize]
     [HttpGet("{partyId}/alcohols")]
     public async Task<IActionResult> GetAlcoholsByPartyId(Guid partyId)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await partyAlcoholRepository.GetAlcoholsByPartyIdAsync(partyId));
     }
     
-    [Authorize]
-    [HttpPut("{partyId}/update-volume/{alcoholId}")]
+    [HttpPatch("{partyId}/update-volume/{alcoholId}")]
     public async Task<IActionResult> UpdateVolume(Guid partyId, Guid alcoholId, [FromBody] int volume)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await partyAlcoholRepository.UpdateVolumeAsync(partyId, alcoholId, volume));
     }
     
-    [Authorize]
-    [HttpPut("{partyId}/update-rating/{alcoholId}")]
+    [HttpPatch("{partyId}/update-rating/{alcoholId}")]
     public async Task<IActionResult> UpdateRating(Guid partyId, Guid alcoholId, [FromBody] int rating)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         return Ok(await partyAlcoholRepository.UpdateRatingAsync(partyId, alcoholId, rating));
     }
     

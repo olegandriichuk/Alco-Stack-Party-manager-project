@@ -65,7 +65,7 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
         return userParties.Select(x => x.Party).ToList();
     }
 
-    public async Task<ICollection<User>?> GetByPartyIdAsync(Guid partyId)
+    public async Task<ICollection<User>?> GetUsersByPartyIdAsync(Guid partyId)
     {
         var userParties = await _context.UserParties
             .Where(x => x.PartyId == partyId)

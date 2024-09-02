@@ -21,4 +21,12 @@ public static class AlcoholMapper
         Photo = alcoholDto.Photo,
         Description = alcoholDto.Description,
     };
+    
+    public static Alcohol MapToModel(this CreateAlcoholDto createAlcoholDto) => new Alcohol
+    {
+        Name = createAlcoholDto.Name,
+        Type = createAlcoholDto.Type,
+        Photo = createAlcoholDto.Photo,
+        Description = createAlcoholDto.Description,
+    };
 }
