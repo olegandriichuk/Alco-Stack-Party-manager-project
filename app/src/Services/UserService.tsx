@@ -2,7 +2,7 @@
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {UserProfile, Address} from "../Models/User.tsx";
 
-const api = "http://localhost:5131/api/";
+const api = "https://localhost:44376/api/";
 
 export const UpdateProfileAPI = async (
     email: string,

@@ -20,9 +20,9 @@ const PartyButton: React.FC<PartyButtonProps> = ({ title, description, date, typ
                 <div className="d-flex align-items-center">
                     <div className="me-3">
                         {type === '#708ff0' ? (
-                            <FontAwesomeIcon icon={faUsers} size="2x"/>
-                        ) : (
                             <FontAwesomeIcon icon={faCake} size="2x"/>
+                        ) : (
+                            <FontAwesomeIcon icon={faUsers} size="2x"/>
                         )}
                     </div>
                     <div className="d-flex flex-column">
