@@ -11,7 +11,7 @@ export const UpdateProfileAPI = async (
     lastName?: string,
     bio?: string,
     dateOfBirth?: string,
-    // photo?: string,
+    // photo?: string,z
     phoneNumber?: string,
     address?: Address,
     // formBackgroundUrl?: string,
