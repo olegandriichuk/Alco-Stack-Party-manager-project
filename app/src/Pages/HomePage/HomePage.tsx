@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 import MenuButtonList from '../../components/MenuButtonList/MenuButtonList';
 import PartyButtonList from '../../components/PartyButtonList/PartyButtonList';
 import { faUser, faUsers, faCake, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
@@ -11,10 +11,23 @@ import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 import backgroundImage from '../../assets/backleft.svg';
 import backgroundImage1 from '../../assets/backright.svg';
 import backgroundImageMobile from '../../assets/backPhone.svg';
-
+import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
+import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
 
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
+
+    const [showCreatePartyPopUp, setShowCreatePartyPopUp] = useState(false);
+    // const [showProfilePopUp, setShowProfilePopUp] = useState(false);
+    const [showJoinPartyPopUp, setShowJoinPartyPopUp] = useState(false);
+
+    const handleShowCreateParty = () => setShowCreatePartyPopUp(true);
+    // const handleShowProfile = () => setShowProfilePopUp(true);
+    const handleShowJoinParty = () => setShowJoinPartyPopUp(true);
+
+    const handleCloseCreateParty = () => setShowCreatePartyPopUp(false);
+    // const handleCloseProfile = () => setShowProfilePopUp(false);
+    const handleCloseJoinParty = () => setShowJoinPartyPopUp(false);
 
     const parties = [
         { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
@@ -25,8 +38,8 @@ const HomePage: React.FC = () => {
 
     const menuButtons = [
         { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
-        { text: 'join party', icon: faCake, color: '#5b7ff0', link: '/join' },
-        { text: 'create party', icon: faUsers, color: '#ce5659', link: '/create' }
+        { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
+        { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
 
     
@@ -108,6 +121,15 @@ const HomePage: React.FC = () => {
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
             <MenuButtonList menuButtons={menuButtons}/>
             <PartyButtonList parties={parties}/>
+
+            {showCreatePartyPopUp && (
+                <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty} />
+            )}
+
+            {showJoinPartyPopUp && (
+                <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty} />
+            )}
+
         </div>
     );
 };
