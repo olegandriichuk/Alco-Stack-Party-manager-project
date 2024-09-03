@@ -28,7 +28,7 @@ public class PartyRepository(AppDataContext context) : IPartyRepository
             throw new Exception("Party not found");
         }
 
-        existingParty = PartyMapper.MapToUpdateModel(party);
+        existingParty = party.MapToUpdateModel();
 
         _context.Parties.Update(existingParty);
         await _context.SaveChangesAsync();

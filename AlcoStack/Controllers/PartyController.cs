@@ -41,10 +41,6 @@ public class PartyController(
         
         var party = partyDto.MapToCreateModel();
         
-        party.CreatorUserName = user.UserName;
-        party.Creator = user;
-        
-        
         var createdParty = await repository.CreateAsync(party);
         return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, createdParty.MapToDto());
     }

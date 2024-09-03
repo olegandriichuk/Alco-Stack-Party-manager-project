@@ -1,4 +1,6 @@
-﻿namespace AlcoStack.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AlcoStack.Dtos;
 
 public class CreatePartyDto
 {
@@ -12,5 +14,8 @@ public class CreatePartyDto
     public DateTime Date { get; set; }
     
     public string? Location { get; set; }
+    
+    [Required]
+    public string CreatorUserName { get; set; }
     
 }

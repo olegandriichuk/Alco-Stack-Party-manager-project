@@ -17,6 +17,7 @@ public static class PartyMapper
         MidAlcohol = party.MidAlcohol,
         HighAlcohol = party.HighAlcohol,
         Status = party.Status,
+        Photo = party.Photo,
     };
 
     public static Party MapToCreateModel(this CreatePartyDto partyDto) => new Party
@@ -25,6 +26,8 @@ public static class PartyMapper
         Description = partyDto.Description,
         Date = partyDto.Date,
         Location = partyDto.Location,
+        Photo = partyDto.Photo,
+        CreatorUserName = partyDto.CreatorUserName,
     };
     
     public static Party MapToUpdateModel(this UpdatePartyDto partyDto) => new Party
@@ -38,5 +41,6 @@ public static class PartyMapper
         MidAlcohol = partyDto.MidAlcohol,
         HighAlcohol = partyDto.HighAlcohol,
         Status = partyDto.Status,
+        Photo = partyDto.Photo,
     };
 }

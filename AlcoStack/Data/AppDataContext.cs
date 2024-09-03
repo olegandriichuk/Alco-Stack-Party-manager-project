@@ -44,6 +44,7 @@ namespace AlcoStack.Data
                 .HasMany(u => u.CreatedParties)
                 .WithOne(p => p.Creator)
                 .HasForeignKey(p => p.CreatorUserName)
+                .HasPrincipalKey(u => u.UserName)
                 .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<UserParty>()
@@ -53,6 +54,7 @@ namespace AlcoStack.Data
                 .HasOne(up => up.User)
                 .WithMany(u => u.Parties)
                 .HasForeignKey(up => up.UserName)
+                .HasPrincipalKey(u => u.UserName)
                 .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<UserParty>()
@@ -68,13 +70,14 @@ namespace AlcoStack.Data
                 .HasOne(ua => ua.User)
                 .WithMany(u => u.Alcohols)
                 .HasForeignKey(ua => ua.UserName)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .HasPrincipalKey(u => u.UserName)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<UserAlcohol>()
                 .HasOne(ua => ua.Alcohol)
                 .WithMany(a => a.Users)
                 .HasForeignKey(ua => ua.AlcoholId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PartyAlcohol>()
                 .HasKey(pa => new { pa.PartyId, pa.AlcoholId });
@@ -83,13 +86,13 @@ namespace AlcoStack.Data
                 .HasOne(pa => pa.Party)
                 .WithMany(p => p.Alcohols)
                 .HasForeignKey(pa => pa.PartyId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PartyAlcohol>()
                 .HasOne(pa => pa.Alcohol)
                 .WithMany(a => a.Parties)
                 .HasForeignKey(pa => pa.AlcoholId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Seed roles
             List<IdentityRole> roles = new List<IdentityRole>
