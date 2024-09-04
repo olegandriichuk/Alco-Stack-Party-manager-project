@@ -38,7 +38,10 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
         }
     }, [show]);
 
+
     const onSubmit = async (data: { name?: string; description?: string; date: string; photo?: string; location?: string; }) => {
+        console.log("Create party form submitted");
+        console.log(data.date);
         try {
             const response = await CreatePartyAPI(
                 data.name || "",
@@ -85,16 +88,27 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                         <p className="text-danger">{errors.description?.message}</p>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="date" className="form-label">Date</label>
+                        <label htmlFor="date" className="form-label">Date and Time</label>
                         <DatePicker
-                            format="yyyy-MM-dd"
+                            format="yyyy-MM-dd HH:mm"
                             oneTap
                             onChange={(value) => {
-                                // Update the date field value manually
-                                setValue("date", value?.toISOString().split('T')[0] || "");
-                            }}
+                                if (value) {
+                                    // If DatePicker returns a local date, make sure it’s handled correctly
+                                    const localDate = new Date(value);
+                                    console.log("Local Date:", localDate);
+                                    // If you need to adjust the time, do it here
+                                    // e.g., adjust time by 2 hours if needed
+                                    localDate.setHours(localDate.getHours() + 2);
+                                    setValue("date", localDate.toISOString());
+                                } else {
+                                    setValue("date", "");
+                                }
+                            }
+                            }
                             placement="auto"
                             block
+                            ranges={[]}  // Remove preset ranges if any
                         />
                         <p className="text-danger">{errors.date?.message}</p>
                     </div>
@@ -122,7 +136,7 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                         Create Party
                     </Button>
                     <Button onClick={handleClose} appearance="subtle">
-                    Cancel
+                        Cancel
                     </Button>
                 </form>
             </Modal.Body>
