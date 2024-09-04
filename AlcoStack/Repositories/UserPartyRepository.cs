@@ -60,6 +60,7 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
         var userParties = await _context.UserParties
             .Where(x => x.UserName == userName)
             .Include(x => x.Party)
+            .OrderBy(x => x.Party.Date)
             .ToListAsync();
         
         return userParties.Select(x => x.Party).ToList();

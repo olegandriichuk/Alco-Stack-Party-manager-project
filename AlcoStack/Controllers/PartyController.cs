@@ -40,8 +40,10 @@ public class PartyController(
         }
         
         var party = partyDto.MapToCreateModel();
-        
         var createdParty = await repository.CreateAsync(party);
+        
+        await userPartyRepository.AddAsync(username, createdParty.Id);
+        
         return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, createdParty.MapToDto());
     }
 
@@ -165,7 +167,14 @@ public class PartyController(
         
         var userName = User.GetUsername();
         
-        return Ok(await userPartyRepository.GetByUserNameAsync(userName));
+        var parties = await userPartyRepository.GetByUserNameAsync(userName);
+
+        if (parties == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(parties.Select(party => party.MapToListDto(userName)));
     }
    
     [Authorize]

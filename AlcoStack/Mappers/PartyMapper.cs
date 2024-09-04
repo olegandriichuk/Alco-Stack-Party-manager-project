@@ -43,4 +43,12 @@ public static class PartyMapper
         Status = partyDto.Status,
         Photo = partyDto.Photo,
     };
+    
+    public static PartyListDto MapToListDto(this Party party, string userName) => new PartyListDto
+    {
+        Name = party.Name,
+        Description = party.Description,
+        Date = party.Date,
+        CreatedByMe = party.CreatorUserName == userName,
+    };
 }
