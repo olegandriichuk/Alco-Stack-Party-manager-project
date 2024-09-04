@@ -7,3 +7,10 @@
     creatorUserName: string;
     token: string;
 }
+
+export type PartyListGet = {
+    name: string;
+    description: string;
+    date: string;
+    createdByMe: boolean;
+}

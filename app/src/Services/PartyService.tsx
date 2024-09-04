@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
-import { PartyPost } from "../Models/Party.tsx";
+import {PartyListGet, PartyPost} from "../Models/Party.tsx";
 
 const api = "http://localhost:5131/api/";
 
@@ -44,6 +44,22 @@ export const JoinPartyAPI = async (
         const data = await axios.post(
             `${api}party/${partyId}/add-user`,
             {},
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export const GetPartyListAPI = async (authToken?: string | null) => {
+    try {
+        const data = await axios.get<PartyListGet[]>(
+            `${api}party/userParties`,
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`

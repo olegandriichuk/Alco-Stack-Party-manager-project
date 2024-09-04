@@ -1,5 +1,4 @@
-﻿import React, { useEffect} from 'react';
-// import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -14,7 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker } from "rsuite";
 import Button from 'react-bootstrap/Button';
-// import Modal from 'react-bootstrap/Modal';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -23,13 +21,15 @@ const validationSchema = Yup.object().shape({
     lastName: Yup.string().optional(),
     phoneNumber: Yup.string().optional(),
     bio: Yup.string().optional(),
-    // photo: Yup.string().optional(),
-    // formBackgroundUrl: Yup.string().optional(),
     gender: Yup.number().optional(),
-    dateOfBirth: Yup.string().matches(
-        /^\d{4}-\d{2}-\d{2}$/,
-        "Date of Birth must be in YYYY-MM-DD format"
-    ).optional(),
+    dateOfBirth: Yup.string()
+        .nullable()
+        .matches(
+            /^\d{4}-\d{2}-\d{2}$/,
+            "Date of Birth must be in YYYY-MM-DD format"
+        )
+        .optional(),
+
     address: Yup.object().shape({
         streetAddress: Yup.string().optional(),
         city: Yup.string().optional(),
@@ -42,17 +42,13 @@ const EditProfilePage: React.FC = () => {
     const { user, token, updateUser, logout } = useAuth();
     const navigate = useNavigate();
 
-    // console.log("user", user);
-
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        watch,
-        formState: { errors }
-    } = useForm<UserProfile>({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<UserProfile>({
         resolver: yupResolver(validationSchema),
     });
+
+
+    console.log("errors", errors);
+    console.log("watch", watch());
 
     useEffect(() => {
         if (user) {
@@ -62,16 +58,12 @@ const EditProfilePage: React.FC = () => {
         }
     }, [user, setValue]);
 
-    // const [modalShow, setModalShow] = useState(false);
-    // const [photoUrl, setPhotoUrl] = useState(user?.photo || "");
-    // const [backgroundUrl, setBackgroundUrl] = useState(user?.formBackgroundUrl || "");
-
     const handleUpdate = async (formData: UserProfile) => {
+        console.log("handleUpdate called with:", formData);
         if (!token) {
             toast.error("You must be logged in to update your profile");
             return;
         }
-        console.log("formData", formData);
         try {
             const response = await UpdateProfileAPI(
                 formData.email,
@@ -80,10 +72,8 @@ const EditProfilePage: React.FC = () => {
                 formData.lastName || "",
                 formData.bio || "",
                 formData.dateOfBirth || "",
-                // formData.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
                 formData.phoneNumber || "",
                 formData.address || { streetAddress: "", city: "", postalCode: "", country: "" },
-                // formData.formBackgroundUrl,
                 formData.gender,
                 token
             );
@@ -130,59 +120,6 @@ const EditProfilePage: React.FC = () => {
         </div>
     );
 
-    // const handleSaveModalChanges = () => {
-    //     setValue('photo', photoUrl);
-    //     setValue('formBackgroundUrl', backgroundUrl);
-    //     setModalShow(false);
-    // };
-
-    // const MyVerticallyCenteredModal = (props) => {
-    //     return (
-    //         <Modal
-    //             {...props}
-    //             size="lg"
-    //             aria-labelledby="contained-modal-title-vcenter"
-    //             centered
-    //         >
-    //             <Modal.Header closeButton>
-    //                 <Modal.Title id="contained-modal-title-vcenter">
-    //                     Update Profile Pictures
-    //                 </Modal.Title>
-    //             </Modal.Header>
-    //             <Modal.Body>
-    //                 <div className="mb-3">
-    //                     <label htmlFor="photoUrl" className="form-label">Profile Photo URL</label>
-    //                     <input
-    //                         type="text"
-    //                         id="photoUrl"
-    //                         value={photoUrl}
-    //                         readOnly
-    //                         className="form-control"
-    //                         placeholder="Enter your photo URL"
-    //                     />
-    //                     <Button onClick={() => setPhotoUrl(prompt('Enter new profile photo URL:', photoUrl) || photoUrl)}>Change</Button>
-    //                 </div>
-    //                 <div className="mb-3">
-    //                     <label htmlFor="backgroundUrl" className="form-label">Background Photo URL</label>
-    //                     <input
-    //                         type="text"
-    //                         id="backgroundUrl"
-    //                         value={backgroundUrl}
-    //                         readOnly
-    //                         className="form-control"
-    //                         placeholder="Enter your background photo URL"
-    //                     />
-    //                     <Button onClick={() => setBackgroundUrl(prompt('Enter new background photo URL:', backgroundUrl) || backgroundUrl)}>Change</Button>
-    //                 </div>
-    //             </Modal.Body>
-    //             <Modal.Footer>
-    //                 <Button onClick={handleSaveModalChanges}>Save Changes</Button>
-    //                 <Button onClick={props.onHide}>Close</Button>
-    //             </Modal.Footer>
-    //         </Modal>
-    //     );
-    // };
-
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
             <div className="d-flex justify-content-between align-items-center w-100 p-3">
@@ -197,7 +134,6 @@ const EditProfilePage: React.FC = () => {
                 <div className="card-body">
                     <div className="d-flex flex-column align-items-center">
                         <Button
-                            // onClick={() => setModalShow(true)}
                             variant="link"
                             style={{
                                 padding: 0,
@@ -219,11 +155,6 @@ const EditProfilePage: React.FC = () => {
                                 }}
                             />
                         </Button>
-
-                        {/*<MyVerticallyCenteredModal*/}
-                        {/*    show={modalShow}*/}
-                        {/*    onHide={() => setModalShow(false)}*/}
-                        {/*/>*/}
                     </div>
                     <form onSubmit={handleSubmit(handleUpdate)}>
                         {renderInput('Email', 'email', 'email', 'Email', 'email')}
@@ -232,8 +163,6 @@ const EditProfilePage: React.FC = () => {
                         {renderInput('Last Name', 'lastName', 'text', 'Last Name', 'lastName')}
                         {renderInput('Phone Number', 'phoneNumber', 'text', 'Phone Number', 'phoneNumber')}
                         {renderInput('Bio', 'bio', 'text', 'Bio', 'bio')}
-                        {/*{renderInput('Profile Picture URL', 'photo', 'text', 'Profile Picture URL', 'photo')}*/}
-                        {/*{renderInput('Background Picture URL', 'formBackgroundUrl', 'text', 'Background Picture URL', 'formBackgroundUrl')}*/}
                         <div className="mb-3">
                             <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
                             <DatePicker
@@ -243,11 +172,8 @@ const EditProfilePage: React.FC = () => {
                                 placeholder="Select Date"
                                 style={{width: '100%'}}
                             />
-                            {errors.dateOfBirth && (
-                                <div className="invalid-feedback">{errors.dateOfBirth.message}</div>
-                            )}
+                            {errors.dateOfBirth && <div className="invalid-feedback">{errors.dateOfBirth.message}</div>}
                         </div>
-
                         <div className="mb-3">
                             <label htmlFor="gender" className="form-label">Gender</label>
                             <select
@@ -256,7 +182,7 @@ const EditProfilePage: React.FC = () => {
                                 className={`form-control ${errors.gender ? 'is-invalid' : ''}`}
                                 {...register("gender", {
                                     required: "Gender is required",
-                                    valueAsNumber: true // Ensure the value is parsed as a number
+                                    valueAsNumber: true
                                 })}
                             >
                                 <option value="">Select Gender</option>
@@ -275,12 +201,9 @@ const EditProfilePage: React.FC = () => {
                         {renderAddressInput("City", "address.city", "Enter your city", "city")}
                         {renderAddressInput("Country", "address.country", "Enter your country", "country")}
                         {renderAddressInput("Zip Code", "address.postalCode", "Enter your zip code", "postalCode")}
-
                         <div className="d-flex justify-content-between">
                             <button type="submit" className="btn btn-primary">Save Changes</button>
-                            <button type="button" className="btn btn-secondary" onClick={logout}>
-                                Logout
-                            </button>
+                            <button type="button" className="btn btn-secondary" onClick={logout}>Logout</button>
                         </div>
                     </form>
                 </div>
