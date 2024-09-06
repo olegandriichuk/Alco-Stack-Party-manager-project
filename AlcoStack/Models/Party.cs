@@ -29,7 +29,7 @@ public class Party
     
     public bool  HighAlcohol { get; set; } = false;
     
-    public bool Status { get; set; } = true;
+    // public bool Status { get; set; } = true;
     public string CreatorUserName { get; set; }
     
     public User Creator { get; set; }

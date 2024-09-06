@@ -58,11 +58,22 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
     public async Task<ICollection<Party>?> GetByUserNameAsync(string userName)
     {
         var userParties = await _context.UserParties
-            .Where(x => x.UserName == userName)
+            .Where(x => x.UserName == userName && x.Party.Date >= DateTime.Now)
             .Include(x => x.Party)
             .OrderBy(x => x.Party.Date)
             .ToListAsync();
-        
+    
+        return userParties.Select(x => x.Party).ToList();
+    }
+
+    public async Task<ICollection<Party>?> GetHistoryByUserNameAsync(string userName)
+    {
+        var userParties = await _context.UserParties
+            .Where(x => x.UserName == userName && x.Party.Date <= DateTime.Now)
+            .Include(x => x.Party)
+            .OrderBy(x => x.Party.Date)
+            .ToListAsync();
+    
         return userParties.Select(x => x.Party).ToList();
     }
 

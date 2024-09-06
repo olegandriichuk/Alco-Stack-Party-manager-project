@@ -5,9 +5,8 @@ namespace AlcoStack.Mappers;
 
 public static class PartyMapper
 {
-    public static PartyDto MapToDto(this Party party) => new PartyDto
+    public static PartyDto MapToDto(this Party party, string userName) => new PartyDto
     {
-        Id = party.Id,
         Name = party.Name,
         Description = party.Description,
         Date = party.Date,
@@ -16,9 +15,11 @@ public static class PartyMapper
         LowAlcohol = party.LowAlcohol,
         MidAlcohol = party.MidAlcohol,
         HighAlcohol = party.HighAlcohol,
-        Status = party.Status,
+        // Status = party.Status,
         Photo = party.Photo,
+        CreatedByMe = party.CreatorUserName == userName,
     };
+    
 
     public static Party MapToCreateModel(this CreatePartyDto partyDto) => new Party
     {
@@ -40,12 +41,13 @@ public static class PartyMapper
         LowAlcohol = partyDto.LowAlcohol,
         MidAlcohol = partyDto.MidAlcohol,
         HighAlcohol = partyDto.HighAlcohol,
-        Status = partyDto.Status,
+        // Status = partyDto.Status,
         Photo = partyDto.Photo,
     };
     
     public static PartyListDto MapToListDto(this Party party, string userName) => new PartyListDto
     {
+        PartyId = party.Id,
         Name = party.Name,
         Description = party.Description,
         Date = party.Date,
