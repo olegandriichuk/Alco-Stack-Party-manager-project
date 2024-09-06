@@ -9,8 +9,33 @@
 }
 
 export type PartyListGet = {
+    partyId: string;
     name: string;
     description: string;
     date: string;
     createdByMe: boolean;
+}
+
+export type PartyDetailGet = {
+    name: string;
+    description?: string;
+    photo?: string;
+    date: Date;
+    location?: string;
+    liquors: boolean;
+    lowAlcohol: boolean;
+    midAlcohol: boolean;
+    highAlcohol: boolean;
+    createdByMe: boolean;
+}
+export type PartyDetailPut = {
+    name: string;
+    description?: string;
+    photo?: string;
+    date: Date;
+    location?: string;
+    liquors: boolean;
+    lowAlcohol: boolean;
+    midAlcohol: boolean;
+    highAlcohol: boolean;
 }

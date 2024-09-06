@@ -7,6 +7,7 @@ import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import ProtectedRoute from "./ProtectedRoutes.tsx";
 import ProfileEditRoute from "./ProfileEditRoute"; // Import the newly created component
 import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx";
+import PartyPage from "../Pages/PartyPage/PartyPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,14 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <HomePage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/home/party/:partyId",
+                element: (
+                    <ProtectedRoute>
+                        <PartyPage />
                     </ProtectedRoute>
                 ),
             },

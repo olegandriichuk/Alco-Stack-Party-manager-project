@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
-import {PartyListGet, PartyPost} from "../Models/Party.tsx";
+import {PartyListGet, PartyPost, PartyDetailGet} from "../Models/Party.tsx";
 
 const api = "http://localhost:5131/api/";
 
@@ -71,3 +71,64 @@ export const GetPartyListAPI = async (authToken?: string | null) => {
         handleError(error);
     }
 };
+
+export const GetPartyDetailAPI = async (
+    partyId: string,
+    authToken?: string | null
+) => {
+    try {
+        const data = await axios.get<PartyDetailGet>(
+            `${api}party/${partyId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+
+export const UpdatePartyAPI = async (
+    partyId: string,
+    name?: string,
+    description?: string,
+    date?: string,
+    photo?: string,
+    location?: string,
+    liquors?: boolean,
+    lowAlcohol?: boolean,
+    midAlcohol?: boolean,
+    highAlcohol?: boolean,
+    authToken?: string | null
+) => {
+    try {
+        const data = await axios.put<PartyDetailGet>(
+            `${api}party/${partyId}`,
+            {
+                name: name,
+                description: description,
+                date: date,
+                photo: photo,
+                location: location,
+                liquors: liquors,
+                lowAlcohol: lowAlcohol,
+                midAlcohol: midAlcohol,
+                highAlcohol: highAlcohol
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+

@@ -7,6 +7,7 @@ import './PartyButtonList.css';
 
 interface PartyButtonListProps {
     parties: {
+        partyId: string;
         name: string;
         description: string;
         date: string;
@@ -28,6 +29,7 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
             {parties.map((party, index) => (
                 <PartyButton
                     key={index}
+                    partyId={party.partyId}
                     name={party.name}
                     description={party.description}
                     date={party.date}

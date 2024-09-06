@@ -24,9 +24,16 @@ const validationSchema = Yup.object().shape({
     gender: Yup.number().optional(),
     dateOfBirth: Yup.string()
         .nullable()
-        .matches(
-            /^\d{4}-\d{2}-\d{2}$/,
-            "Date of Birth must be in YYYY-MM-DD format"
+        .test(
+            'is-valid-date-or-empty',
+            'Date of Birth must be in YYYY-MM-DD format',
+            value => {
+                // Allow empty string or undefined
+                if (value === '' || value === undefined || value === null) return true;
+
+                // Check if value matches YYYY-MM-DD format
+                return /^\d{4}-\d{2}-\d{2}$/.test(value);
+            }
         )
         .optional(),
 
@@ -57,6 +64,10 @@ const EditProfilePage: React.FC = () => {
             });
         }
     }, [user, setValue]);
+
+    useEffect(() => {
+        console.log("Date of Birth watched value:", watch('dateOfBirth'));
+    }, [watch('dateOfBirth')]);
 
     const handleUpdate = async (formData: UserProfile) => {
         console.log("handleUpdate called with:", formData);
@@ -168,7 +179,7 @@ const EditProfilePage: React.FC = () => {
                             <DatePicker
                                 format="yyyy-MM-dd"
                                 value={dateOfBirthValue}
-                                onChange={(date) => setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)}
+                                onChange={(date) => setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : null)}
                                 placeholder="Select Date"
                                 style={{width: '100%'}}
                             />
