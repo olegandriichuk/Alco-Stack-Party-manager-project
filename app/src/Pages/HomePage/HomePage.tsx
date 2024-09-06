@@ -1,7 +1,7 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import MenuButtonList from '../../components/MenuButtonList/MenuButtonList';
 import PartyButtonList from '../../components/PartyButtonList/PartyButtonList';
-
+import Slider from "../../components/Slider/Slider";
 import { faUser, faUsers, faCake, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/logo.svg';
 import Disco from '../../assets/disco.svg';
@@ -18,7 +18,16 @@ import backgroundImageMobile from '../../assets/backPhone.svg';
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
 
+    const [sliderValue, setSliderValue] = useState(50);
+    const [toggle, setToggle] = useState(false);
 
+    const handleSliderChange = (value: number) => {
+        setSliderValue(value);
+    };
+
+    const handleToggleChange = () => {
+        setToggle(!toggle);
+    };
 
     const parties = [
         { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
@@ -109,6 +118,13 @@ const HomePage: React.FC = () => {
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
              {/* Use the corrected prop name */}
             <MenuButtonList menuButtons={menuButtons}/>
+            <Slider
+                label="Beer"
+                value={sliderValue}
+                onChange={handleSliderChange}
+                toggle={toggle}
+                onToggleChange={handleToggleChange}
+            />
             <PartyButtonList parties={parties}/>
         </div>
     );

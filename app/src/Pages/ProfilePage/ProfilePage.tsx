@@ -14,10 +14,10 @@ const ProfilePage: React.FC = () => {
     const { user } = useAuth();
 
     const alcoButtons = [
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile' }
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
+        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' }
     ];
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
