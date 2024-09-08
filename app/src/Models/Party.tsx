@@ -20,7 +20,7 @@ export type PartyDetailGet = {
     name: string;
     description?: string;
     photo?: string;
-    date: Date;
+    date: string;
     location?: string;
     liquors: boolean;
     lowAlcohol: boolean;
@@ -32,7 +32,7 @@ export type PartyDetailPut = {
     name: string;
     description?: string;
     photo?: string;
-    date: Date;
+    date: string;
     location?: string;
     liquors: boolean;
     lowAlcohol: boolean;

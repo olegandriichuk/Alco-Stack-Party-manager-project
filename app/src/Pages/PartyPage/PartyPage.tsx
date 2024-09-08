@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿// PartyPage.tsx
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './PartyPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,9 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Disco from '../../assets/disco.svg';
-import { GetPartyDetailAPI } from "../../Services/PartyService.tsx";
-import { PartyDetailGet } from "../../Models/Party.tsx";
-import {useAuth} from "../../Context/useAuth.tsx";
+import { GetPartyDetailAPI, UpdatePartyAPI } from "../../Services/PartyService.tsx";
+import { PartyDetailGet, PartyDetailPut } from "../../Models/Party.tsx";
+import { useAuth } from "../../Context/useAuth.tsx";
+import PartySettingsPopUp from "../../components/PartySettingsPopUp/PartySettingsPopUp.tsx";
+import { toast } from 'react-toastify';
 
 // PartyPage Component
 const PartyPage: React.FC = () => {
@@ -16,9 +19,9 @@ const PartyPage: React.FC = () => {
     const [party, setParty] = useState<PartyDetailGet | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [copied, setCopied] = useState(false)
+    const [copied, setCopied] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const { token } = useAuth();
-
 
     // Fetch party details when partyId changes
     useEffect(() => {
@@ -33,7 +36,7 @@ const PartyPage: React.FC = () => {
             }
         };
         fetchPartyDetails();
-    }, [partyId]);
+    }, [partyId, token]);
 
     // Function to handle copying party ID
     const handleCopy = () => {
@@ -42,6 +45,35 @@ const PartyPage: React.FC = () => {
         document.execCommand('copy');
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    // Handle save action from modal
+    const handleSave = async (updatedParty: PartyDetailPut) => {
+        try {
+            const response = await UpdatePartyAPI(
+                partyId!,
+                updatedParty.name,
+                updatedParty.description || "",
+                updatedParty.date,
+                updatedParty.photo || "",
+                updatedParty.location || "",
+                updatedParty.liquors,
+                updatedParty.lowAlcohol,
+                updatedParty.midAlcohol,
+                updatedParty.highAlcohol,
+                token
+            );
+            if (!response) {
+                toast.error("Failed to update party");
+                return;
+            }
+            setParty(prevParty => prevParty ? { ...prevParty, ...updatedParty } : null);
+            //toast.success("Party updated successfully!");
+            setShowModal(false);
+        } catch (error) {
+            console.error("Failed to update party", error);
+            toast.error("Failed to update party");
+        }
     };
 
     // If the data is still loading
@@ -106,7 +138,26 @@ const PartyPage: React.FC = () => {
                     <p>Mid Alcohol: {party.midAlcohol ? "Yes" : "No"}</p>
                     <p>High Alcohol: {party.highAlcohol ? "Yes" : "No"}</p>
                     <p>Created by me: {party.createdByMe ? "Yes" : "No"}</p>
+                    <button className="btn btn-primary" onClick={() => setShowModal(true)}>Edit</button>
                 </div>
+            )}
+
+            {/* Party Settings PopUp Modal */}
+            {party && (
+                <PartySettingsPopUp
+                    name={party.name}
+                    description={party.description || ""}
+                    date={party.date}
+                    photo={party.photo || ""}
+                    location={party.location || ""}
+                    liquors={party.liquors}
+                    lowAlcohol={party.lowAlcohol}
+                    midAlcohol={party.midAlcohol}
+                    highAlcohol={party.highAlcohol}
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    onSave={handleSave} // Ensure this prop is passed
+                />
             )}
         </div>
     );
