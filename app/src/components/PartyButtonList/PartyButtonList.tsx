@@ -25,7 +25,7 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
     return (
         <div className="list-group w-100">
             {
-            <h4 className="p-2 rounded-top-4" style={partyStyle}>your parties</h4>}
+            <h4 className="p-2 rounded-top-4" style={partyStyle}>Your Parties</h4>}
             {parties.map((party, index) => (
                 <PartyButton
                     key={index}
