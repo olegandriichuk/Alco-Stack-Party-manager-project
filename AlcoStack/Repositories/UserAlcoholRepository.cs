@@ -38,6 +38,30 @@ public class UserAlcoholRepository(AppDataContext context) : IUserAlcoholReposit
         return userAlcohol;
     }
 
+    public async Task<ICollection<UserAlcohol>> AddAllAlcoholsAsync(string userName)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+        
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        
+        var alcohols = await context.Alcohols.ToListAsync();
+        
+        var userAlcohols = alcohols.Select(x => new UserAlcohol
+        {
+            UserName = userName,
+            AlcoholId = x.Id,
+            User = user,
+            Alcohol = x
+        }).ToList();
+        
+        await context.UserAlcohols.AddRangeAsync(userAlcohols);
+        await context.SaveChangesAsync();
+        return userAlcohols;
+    }
+
     public async Task<UserAlcohol?> DeleteAsync(string userName, Guid alcoholId)
     {
         var userAlcohol = await context.UserAlcohols
@@ -63,7 +87,7 @@ public class UserAlcoholRepository(AppDataContext context) : IUserAlcoholReposit
         return userAlcohols;
     }
 
-    public async Task<ICollection<UserAlcohol>> UpdateVolumeAsync(string userName, Guid alcoholId, int volume)
+    public async Task<UserAlcohol> UpdateVolumeAsync(string userName, Guid alcoholId, int volume)
     {
         var userAlcohol = await context.UserAlcohols
             .FirstOrDefaultAsync(x => x.UserName == userName && x.AlcoholId == alcoholId);
@@ -78,15 +102,10 @@ public class UserAlcoholRepository(AppDataContext context) : IUserAlcoholReposit
         context.UserAlcohols.Update(userAlcohol);
         await context.SaveChangesAsync();
         
-        var userAlcohols = await context.UserAlcohols
-            .Where(x => x.UserName == userName)
-            .Include(x => x.Alcohol)
-            .ToListAsync();
-        
-        return userAlcohols;
+        return userAlcohol;
     }
 
-    public async Task<ICollection<UserAlcohol>> UpdateRatingAsync(string userName, Guid alcoholId, int rating)
+    public async Task<UserAlcohol> UpdateRatingAsync(string userName, Guid alcoholId, int rating)
     {
         var userAlcohol = await context.UserAlcohols
             .FirstOrDefaultAsync(x => x.UserName == userName && x.AlcoholId == alcoholId);
@@ -100,13 +119,7 @@ public class UserAlcoholRepository(AppDataContext context) : IUserAlcoholReposit
         
         context.UserAlcohols.Update(userAlcohol);
         await context.SaveChangesAsync();
-        
-        var userAlcohols = await context.UserAlcohols
-            .Where(x => x.UserName == userName)
-            .Include(x => x.Alcohol)
-            .ToListAsync();
-        
-        return userAlcohols;
+        return userAlcohol;
     }
 
     public async Task<ICollection<UserAlcohol>> GetAllAsync()

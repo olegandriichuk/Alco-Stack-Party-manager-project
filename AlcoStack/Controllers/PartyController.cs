@@ -93,6 +93,7 @@ public class PartyController(
         string userName = User.GetUsername();
         
         var party = await repository.UpdateAsync(Id, partyDto);
+        
         if (party == null)
         {
             return NotFound();
@@ -252,13 +253,12 @@ public class PartyController(
     }
     
     [Authorize]
-    [HttpPatch("{partyId}/update-rating/{alcoholId}")]
-    public async Task<IActionResult> UpdateRating(Guid partyId, Guid alcoholId, [FromBody] int rating)
+    [HttpPatch("{partyId}/update-rank/{alcoholId}")]
+    public async Task<IActionResult> UpdateRank(Guid partyId, Guid alcoholId, [FromBody] int rank)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        return Ok(await partyAlcoholRepository.UpdateRatingAsync(partyId, alcoholId, rating));
+        return Ok(await partyAlcoholRepository.UpdateRankAsync(partyId, alcoholId, rank));
     }
-    
 }

@@ -112,6 +112,8 @@ namespace AlcoStack.Controllers;
                 await userManager.UpdateAsync(user);
 
                 var token = tokenService.CreateToken(user);
+                
+                await userAlcoholRepository.AddAllAlcoholsAsync(user.UserName);
 
                 var newUserDto = new NewUserDto
                 {

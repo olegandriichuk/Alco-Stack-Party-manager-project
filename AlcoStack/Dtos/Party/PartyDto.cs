@@ -23,7 +23,7 @@ public class PartyDto
     
     public bool  HighAlcohol { get; set; } = false;
     
-    public bool Status { get; set; } = true;
+    public int RankLimit { get; set; } = 0;
     
     // public int[]? VolumeList { get; set; }
     
