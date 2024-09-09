@@ -6,7 +6,6 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 //import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 //import ProtectedRoute from "./ProtectedRoutes.tsx";
 import ProfileEditRoute from "./ProfileEditRoute";
-import LowAlcoPage from "../Pages/AlcoRatingPages/LowAlcoPage/LowAlcoPage.tsx"; // Import the newly created component
 //import RegisterPage from "../Pages/RegisterPage/RegisterPage.tsx";
 
 export const router = createBrowserRouter([
@@ -38,14 +37,14 @@ export const router = createBrowserRouter([
  //                   </ProtectedRoute>
                 ),
             },
-            {
-                path: "/profile/low-alco",
-                element:
-                                  //    <ProtectedRoute>
-                                        <LowAlcoPage />
-                                    //   </ProtectedRoute>
-
-            },
+           // {
+            //     path: "/profile/low-alco",
+            //     element:
+            //                       //    <ProtectedRoute>
+            //                             <LowAlcoPage />
+            //                         //   </ProtectedRoute>
+            //
+            // },
             {
                 path: "/profile",
                 element: (

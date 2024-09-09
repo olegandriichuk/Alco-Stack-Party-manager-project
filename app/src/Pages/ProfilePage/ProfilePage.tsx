@@ -7,18 +7,35 @@ import { Link } from "react-router-dom";
 import Disco from '../../assets/disco.svg';
 import { useAuth } from "../../Context/useAuth.tsx";
 import ChooseAlcoButtonList from '../../components/СhooseAlcoButtonList/ChooseAlcoButtonList';
-import Beer from '../../assets/beer.png'
-import React from "react";
+import Beer from '../../assets/beer.png';
+import Wine from '../../assets/Wine.png';
+import Liquor from '../../assets/Liquor.png';
+import Base_Liquor from '../../assets/Base_liquor.png'
+import React, { useState } from "react";
+import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp'; // Імпорт модального вікна
 
 const ProfilePage: React.FC = () => {
     const { user } = useAuth();
 
+    const [showModal, setShowModal] = useState(false);
+
+    // Функція для відкриття модального вікна
+    const handleButtonClick = () => {
+        setShowModal(true);
+    };
+
+    // Функція для закриття модального вікна
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
     const alcoButtons = [
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' },
-        { text: 'Low-Alco', icon: Beer, color: '#D9D9D9', link: '/profile/low-alco' }
+        { text: 'Low Alcohol', icon: Beer, color: '#D9D9D9', onClick: handleButtonClick },
+        { text: 'Wine', icon: Wine, color: '#D9D9D9', onClick: handleButtonClick },
+        { text: 'Liquor', icon: Liquor, color: '#D9D9D9', onClick: handleButtonClick },
+        { text: 'Base Liquor', icon: Base_Liquor, color: '#D9D9D9', onClick: handleButtonClick }
     ];
+
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
             <div className="d-flex justify-content-between align-items-center w-100">
@@ -46,6 +63,9 @@ const ProfilePage: React.FC = () => {
                 formBackgroundUrl={user?.formBackgroundUrl || ""}
             />
             <ChooseAlcoButtonList alcoButtons={alcoButtons} />
+
+            {/* Використання компонента модального вікна */}
+            <LowAlcoRatingPopUp show={showModal} handleClose={handleCloseModal} />
         </div>
     );
 }
