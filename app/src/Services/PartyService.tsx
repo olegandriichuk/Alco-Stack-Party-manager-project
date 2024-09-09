@@ -103,6 +103,7 @@ export const UpdatePartyAPI = async (
     lowAlcohol?: boolean,
     midAlcohol?: boolean,
     highAlcohol?: boolean,
+    rankLimit?: number,
     authToken?: string | null
 ) => {
     try {
@@ -117,7 +118,8 @@ export const UpdatePartyAPI = async (
                 liquors: liquors,
                 lowAlcohol: lowAlcohol,
                 midAlcohol: midAlcohol,
-                highAlcohol: highAlcohol
+                highAlcohol: highAlcohol,
+                rankLimit: rankLimit
             },
             {
                 headers: {

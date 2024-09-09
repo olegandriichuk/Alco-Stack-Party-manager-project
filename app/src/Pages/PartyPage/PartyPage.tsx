@@ -61,6 +61,7 @@ const PartyPage: React.FC = () => {
                 updatedParty.lowAlcohol,
                 updatedParty.midAlcohol,
                 updatedParty.highAlcohol,
+                updatedParty.rankLimit,
                 token
             );
             if (!response) {
@@ -137,6 +138,7 @@ const PartyPage: React.FC = () => {
                     <p>Low Alcohol: {party.lowAlcohol ? "Yes" : "No"}</p>
                     <p>Mid Alcohol: {party.midAlcohol ? "Yes" : "No"}</p>
                     <p>High Alcohol: {party.highAlcohol ? "Yes" : "No"}</p>
+                    <p>Rank Limit: {party.rankLimit}</p>
                     <p>Created by me: {party.createdByMe ? "Yes" : "No"}</p>
                     <button className="btn btn-primary" onClick={() => setShowModal(true)}>Edit</button>
                 </div>
@@ -154,6 +156,7 @@ const PartyPage: React.FC = () => {
                     lowAlcohol={party.lowAlcohol}
                     midAlcohol={party.midAlcohol}
                     highAlcohol={party.highAlcohol}
+                    rankLimit={party.rankLimit}
                     show={showModal}
                     onClose={() => setShowModal(false)}
                     onSave={handleSave} // Ensure this prop is passed
