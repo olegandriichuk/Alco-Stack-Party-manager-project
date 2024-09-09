@@ -1,0 +1,16 @@
+/* Background blur effect */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(10px); /* Apply the blur effect */
+    z-index: 1040; /* Make sure it stays behind the modal */
+}
+
+/* Ensure the modal itself is on top */
+.rs-modal {
+    z-index: 1050; /* Higher z-index to stay on top of the backdrop */
+}

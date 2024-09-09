@@ -1,4 +1,4 @@
-﻿import React, {useState} from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import MenuButtonList from '../../components/MenuButtonList/MenuButtonList';
 import PartyButtonList from '../../components/PartyButtonList/PartyButtonList';
 import { faUser, faUsers, faCake, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
@@ -8,13 +8,47 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
 import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
+// import backgroundImage from '../../assets/backleft.svg';
+// import backgroundImage1 from '../../assets/backright.svg';
+// import backgroundImageMobile from '../../assets/backPhone.svg';
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
 import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
+import { useAuth } from "../../Context/useAuth.tsx";
+import { toast } from "react-toastify";
+import { GetPartyListAPI } from "../../Services/PartyService";
+import { PartyListGet } from "../../Models/Party.tsx";
 import backgroundImage from '../../assets/backcov1.svg';
 
 
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
+
+    const { token } = useAuth();
+    const [parties, setParties] = useState<PartyListGet[]>([]);
+
+    const UserPartiesGet = async () => {
+        if (!token) {
+            toast.error("You must be logged in to view your parties");
+            return;
+        }
+        try {
+            const response = await GetPartyListAPI(token);
+
+            if (response && response.data) {
+                setParties(response.data); // Update state with the party data
+            } else {
+                setParties([]); // If response is undefined or empty, set an empty array
+            }
+        } catch (error) {
+            console.error('Failed to fetch parties', error);
+            toast.error('Failed to fetch parties. Please try again.');
+            setParties([]); // Set an empty array in case of error
+        }
+    };
+
+    useEffect(() => {
+        UserPartiesGet();
+    }, []);
 
     const [showCreatePartyPopUp, setShowCreatePartyPopUp] = useState(false);
     // const [showProfilePopUp, setShowProfilePopUp] = useState(false);
@@ -24,16 +58,14 @@ const HomePage: React.FC = () => {
     // const handleShowProfile = () => setShowProfilePopUp(true);
     const handleShowJoinParty = () => setShowJoinPartyPopUp(true);
 
-    const handleCloseCreateParty = () => setShowCreatePartyPopUp(false);
-    // const handleCloseProfile = () => setShowProfilePopUp(false);
-    const handleCloseJoinParty = () => setShowJoinPartyPopUp(false);
-
-    const parties = [
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#cf6165' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#cf6165' as const }
-    ];
+    const handleCloseCreateParty = () => {
+        setShowCreatePartyPopUp(false);
+        UserPartiesGet(); // Refresh the party list after closing the pop-up
+    };
+    const handleCloseJoinParty = () => {
+        setShowJoinPartyPopUp(false);
+        UserPartiesGet(); // Refresh the party list after closing the pop-up
+    };
 
     const menuButtons = [
         { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
@@ -41,7 +73,7 @@ const HomePage: React.FC = () => {
         { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
 
-
+    
 
     return (
         <div
@@ -74,7 +106,6 @@ const HomePage: React.FC = () => {
                 .custom-heading {
                     font-family: 'Halant', serif;
                 }
-                
                 `}
             </style>
             <div className="d-flex justify-content-between align-items-center w-100">
@@ -116,7 +147,7 @@ const HomePage: React.FC = () => {
                     STACK
                 </span>
             </div>
-
+            
             <h2 className="custom-heading">Your party, your rules!</h2>
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
             <MenuButtonList menuButtons={menuButtons}/>

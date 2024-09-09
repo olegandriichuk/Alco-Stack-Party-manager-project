@@ -61,7 +61,7 @@ namespace AlcoStack.Data
                 .HasOne(up => up.Party)
                 .WithMany(p => p.Users)
                 .HasForeignKey(up => up.PartyId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserAlcohol>()
                 .HasKey(ua => new { ua.UserName, ua.AlcoholId });

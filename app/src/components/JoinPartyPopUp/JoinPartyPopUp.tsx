@@ -14,12 +14,12 @@ const validationSchema = yup.object().shape({
     partyId: yup.string().required("Party ID is required"),
 });
 
-interface CreatePartyPopUpProps {
+interface JoinPartyPopUpProps {
     show: boolean;
     handleClose: () => void;
 }
 
-const JoinPartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }) => {
+const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) => {
     const { token } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema)
@@ -50,25 +50,28 @@ const JoinPartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }) 
     };
 
     return (
-        <Modal open={show} onClose={handleClose}>
-            <Modal.Header>
-                <Modal.Title>Join Party</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form-group">
-                        <label>Party ID</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            {...register("partyId")}
-                        />
-                        <span className="text-danger">{errors.partyId?.message}</span>
-                    </div>
-                    <Button type="submit" appearance="primary" className="mt-3">Join Party</Button>
-                </form>
-            </Modal.Body>
-        </Modal>
+        <>
+            {show && <div className="modal-backdrop" />} {/* Add blurred backdrop */}
+            <Modal open={show} onClose={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Join Party</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="form-group">
+                            <label>Party ID</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                {...register("partyId")}
+                            />
+                            <span className="text-danger">{errors.partyId?.message}</span>
+                        </div>
+                        <Button type="submit" appearance="primary" className="mt-3">Join Party</Button>
+                    </form>
+                </Modal.Body>
+            </Modal>
+        </>
     );
 }
 

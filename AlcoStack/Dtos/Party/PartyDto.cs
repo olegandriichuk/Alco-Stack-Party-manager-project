@@ -5,8 +5,6 @@ namespace AlcoStack.Dtos;
 
 public class PartyDto
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; }
     
     public string? Description { get; set; }
@@ -27,10 +25,12 @@ public class PartyDto
     
     public bool Status { get; set; } = true;
     
-    public int[]? VolumeList { get; set; }
+    // public int[]? VolumeList { get; set; }
     
-    public ICollection<User> Users { get; set; } = new List<User>();
+    public bool CreatedByMe { get; set; }
     
-    public ICollection<Alcohol> Alcohols { get; set; } = new List<Alcohol>();
+    // public ICollection<User> Users { get; set; } = new List<User>();
+    //
+    // public ICollection<Alcohol> Alcohols { get; set; } = new List<Alcohol>();
     
 }

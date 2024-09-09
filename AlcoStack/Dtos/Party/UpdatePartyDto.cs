@@ -20,7 +20,7 @@ public class UpdatePartyDto
     
     public bool  HighAlcohol { get; set; } = false;
     
-    public bool Status { get; set; } = true;
-    
-    public int[]? VolumeList { get; set; }
+    // public bool Status { get; set; } = true;
+    //
+    // public int[]? VolumeList { get; set; }
 }

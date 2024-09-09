@@ -40,9 +40,11 @@ public class PartyController(
         }
         
         var party = partyDto.MapToCreateModel();
-        
         var createdParty = await repository.CreateAsync(party);
-        return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, createdParty.MapToDto());
+        
+        await userPartyRepository.AddAsync(username, createdParty.Id);
+        
+        return CreatedAtAction(nameof(GetParty), new { Id = createdParty.Id }, createdParty.MapToDto(username));
     }
 
     [Authorize]
@@ -52,12 +54,14 @@ public class PartyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
+        string userName = User.GetUsername();
+        
         var party = await repository.GetByIdAsync(Id);
         if (party == null)
         {
             return NotFound();
         }
-        return Ok(party.MapToDto());
+        return Ok(party.MapToDto(userName));
     }
 
     [Authorize]
@@ -67,8 +71,16 @@ public class PartyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
+        string userName = User.GetUsername();
+        
         var parties = await repository.GetAllAsync();
-        return Ok(parties.Select(PartyMapper.MapToDto));
+        
+        if (parties == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(parties.Select(party => party.MapToDto(userName))); 
     }
 
     [Authorize]
@@ -78,12 +90,14 @@ public class PartyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
+        string userName = User.GetUsername();
+        
         var party = await repository.UpdateAsync(Id, partyDto);
         if (party == null)
         {
             return NotFound();
         }
-        return Ok(party.MapToDto());
+        return Ok(party.MapToDto(userName));
     }
 
     [Authorize]
@@ -93,12 +107,14 @@ public class PartyController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
+        string userName = User.GetUsername();
+        
         var party = await repository.DeleteAsync(Id);
         if (party == null)
         {
             return NotFound();
         }
-        return Ok(party.MapToDto());
+        return Ok(party.MapToDto(userName));
     }
     
     [Authorize]
@@ -165,8 +181,36 @@ public class PartyController(
         
         var userName = User.GetUsername();
         
-        return Ok(await userPartyRepository.GetByUserNameAsync(userName));
+        var parties = await userPartyRepository.GetByUserNameAsync(userName);
+
+        if (parties == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(parties.Select(party => party.MapToListDto(userName)));
     }
+    
+    [Authorize]
+    [HttpGet("partyHistory")]
+    public async Task<IActionResult> GetPartyHistoryByUserName()
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var userName = User.GetUsername();
+        
+        var parties = await userPartyRepository.GetHistoryByUserNameAsync(userName);
+
+        if (parties == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(parties.Select(party => party.MapToListDto(userName)));
+    }
+    
+    
    
     [Authorize]
     [HttpDelete("{partyId}remove-user/{userName}")]
