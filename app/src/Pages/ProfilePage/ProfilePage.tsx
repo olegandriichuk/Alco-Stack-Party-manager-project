@@ -12,28 +12,49 @@ import Wine from '../../assets/Wine.png';
 import Liquor from '../../assets/Liquor.png';
 import Base_Liquor from '../../assets/Base_liquor.png'
 import React, { useState } from "react";
-import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp'; // Імпорт модального вікна
-
+import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp';// Імпорт модального вікна
+import WineAlcoRatingPopUp from '../AlcoRatingPopUp/WineAlcoRatingPopUp/WineAlcoRatingPopUp';
+import LiquorRatingPopUP from '../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP';
+import StrongAlcoRatingPopUp from '../AlcoRatingPopUp/StrongAlcoRatingPopUp/StrongAlcoRatingPopUp';
 const ProfilePage: React.FC = () => {
     const { user } = useAuth();
 
-    const [showModal, setShowModal] = useState(false);
-
-    // Функція для відкриття модального вікна
-    const handleButtonClick = () => {
-        setShowModal(true);
+  //  const [showModal, setShowModal] = useState(false);
+    const [showLowAlcoModal, setShowLowAlcoModal] = useState(false);
+    const [showWineModal, setShowWineModal] = useState(false);
+    const [showLiquorModal, setShowLiquorModal] = useState(false);
+    const [showStrongAlcoModal, setShowStrongAlcoModal] = useState(false);
+    const handleLowAlcoButtonClick = () => {
+        setShowLowAlcoModal(true);
     };
 
-    // Функція для закриття модального вікна
+    // Функція для відкриття вікна Wine
+    const handleWineButtonClick = () => {
+        setShowWineModal(true);
+    };
+
+    const handleLiquorButtonClick = () => {
+        setShowLiquorModal(true);
+    };
+    const handleStrongAlcoButtonClick = () => {
+        setShowStrongAlcoModal(true);
+    };
+
+    // Функція для закриття будь-якого модального вікна
     const handleCloseModal = () => {
-        setShowModal(false);
+        setShowLowAlcoModal(false);
+        setShowWineModal(false);
+        setShowLiquorModal(false);
+        setShowStrongAlcoModal(false);
     };
+
+
 
     const alcoButtons = [
-        { text: 'Low Alcohol', icon: Beer, color: '#D9D9D9', onClick: handleButtonClick },
-        { text: 'Wine', icon: Wine, color: '#D9D9D9', onClick: handleButtonClick },
-        { text: 'Liquor', icon: Liquor, color: '#D9D9D9', onClick: handleButtonClick },
-        { text: 'Base Liquor', icon: Base_Liquor, color: '#D9D9D9', onClick: handleButtonClick }
+        { text: 'Low Alcohol', icon: Beer, color: '#D9D9D9', onClick: handleLowAlcoButtonClick },
+        { text: 'Wine', icon: Wine, color: '#D9D9D9', onClick: handleWineButtonClick },
+        { text: 'Liquor', icon: Liquor, color: '#D9D9D9', onClick: handleLiquorButtonClick },
+        { text: 'Base Liquor', icon: Base_Liquor, color: '#D9D9D9', onClick: handleStrongAlcoButtonClick }
     ];
 
     return (
@@ -65,7 +86,10 @@ const ProfilePage: React.FC = () => {
             <ChooseAlcoButtonList alcoButtons={alcoButtons} />
 
             {/* Використання компонента модального вікна */}
-            <LowAlcoRatingPopUp show={showModal} handleClose={handleCloseModal} />
+            <LowAlcoRatingPopUp show={showLowAlcoModal} handleClose={handleCloseModal} />
+            <WineAlcoRatingPopUp show={showWineModal} handleClose={handleCloseModal} />
+            <LiquorRatingPopUP show={showLiquorModal} handleClose={handleCloseModal} />
+            <StrongAlcoRatingPopUp show={showStrongAlcoModal} handleClose={handleCloseModal} />
         </div>
     );
 }

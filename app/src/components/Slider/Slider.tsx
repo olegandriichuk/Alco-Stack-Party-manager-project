@@ -21,7 +21,7 @@ const Slider: React.FC<SliderProps> = ({ label, value, onChange, toggle, onToggl
                 type="range"
                 className="slider-range"
                 min="0"
-                max="100"
+                max="10"
                 value={value}
                 onChange={handleSliderChange}
             />

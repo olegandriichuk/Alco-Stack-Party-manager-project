@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import './LowAlcoRatingPopUp.css';
+import './LiquorRatingPopUp.css';
 //import Slider from "../../../components/Slider/Slider.tsx";
 import SliderList from "../../../components/SliderList/SliderList";
 
@@ -10,10 +10,10 @@ interface LowAlcoRatingPopUpProps {
 
 const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
     const [sliders, setSliders] = useState([
-        { label: 'Beer', value: 50, toggle: false },
-        { label: 'Cider', value: 50, toggle: false },
-        { label: 'Lager beer', value: 50, toggle: false },
-        { label: 'Revo', value: 50, toggle: false }
+        { label: 'Amaro', value: 50, toggle: false },
+        { label: 'Baileys', value: 50, toggle: false },
+        { label: 'Umeru', value: 50, toggle: false },
+        { label: 'Campari', value: 50, toggle: false }
     ]);
 
     // Обробник зміни значення слайдера

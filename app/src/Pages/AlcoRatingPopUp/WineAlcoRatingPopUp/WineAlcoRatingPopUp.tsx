@@ -1,6 +1,5 @@
 ﻿import React, { useState } from "react";
-import './LowAlcoRatingPopUp.css';
-//import Slider from "../../../components/Slider/Slider.tsx";
+import './WineAlcoRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
 
 interface LowAlcoRatingPopUpProps {
@@ -10,10 +9,10 @@ interface LowAlcoRatingPopUpProps {
 
 const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
     const [sliders, setSliders] = useState([
-        { label: 'Beer', value: 50, toggle: false },
-        { label: 'Cider', value: 50, toggle: false },
-        { label: 'Lager beer', value: 50, toggle: false },
-        { label: 'Revo', value: 50, toggle: false }
+        { label: 'White wine', value: 50, toggle: false },
+        { label: 'Red wine', value: 50, toggle: false },
+        { label: 'Rose wine', value: 50, toggle: false },
+        { label: 'Dessert wine', value: 50, toggle: false }
     ]);
 
     // Обробник зміни значення слайдера
@@ -42,9 +41,14 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
         <>
             <div className="modal-backdrop-blur" /> {/* Заблюрений фон */}
             <div className="modal-container">
+                {/* Кнопка Back у верхньому правому куті */}
+                <button className="btn-back" onClick={handleClose}>Back</button>
+
                 <div className="modal-content">
                     <SliderList sliders={sliderItems} />
-                    <button className="btn btn-primary" onClick={handleClose}>Close</button>
+
+                    {/* Кнопка Save з великими розмірами, сірого кольору, заокруглена */}
+                    <button className="btn-save" onClick={handleClose}>Save</button>
                 </div>
             </div>
         </>

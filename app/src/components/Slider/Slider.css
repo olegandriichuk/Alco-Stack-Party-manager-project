@@ -3,15 +3,19 @@
     align-items: center;
     background-color: #f1f1f1;
     border-radius: 25px;
-    padding: 10px;
+    padding: 7px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /*width: 300px;*/
+    width: 100%;
 }
 
 .slider-label {
-    margin-right: 10px;
+    margin-right: 30px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
+    white-space: nowrap; /* Запобігає переносу тексту */
+    /*overflow: hidden; !* Обрізає текст, що виходить за межі *!*/
+    /*text-overflow: ellipsis; !* Додає три крапки в кінці, якщо текст занадто довгий *!*/
+    max-width: 40px;
 }
 
 .slider-range {
@@ -44,7 +48,7 @@
 }
 
 .slider-toggle {
-    margin-left: 10px;
+    margin-left: 15px;
     width: 40px;
     height: 20px;
     background-color: #ccc;
@@ -71,7 +75,7 @@
 }
 
 .slider-toggle.on .toggle-circle {
-    left: 14px;
+    left: 10px;
 }
 .slider-toggle.off  {
     left: 2px;
