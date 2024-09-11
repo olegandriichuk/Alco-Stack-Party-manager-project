@@ -133,4 +133,23 @@ export const UpdatePartyAPI = async (
     }
 };
 
+export const DeletePartyAPI = async (
+    partyId: string,
+    authToken?: string | null
+) => {
+    try {
+        const data = await axios.delete(
+            `${api}party/${partyId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
 

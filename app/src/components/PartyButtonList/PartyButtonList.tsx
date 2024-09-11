@@ -21,7 +21,7 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
         color: '#d5d5d5',
     };
 
-
+    console.log('parties:', parties);
     return (
         <div className="list-group w-100">
             {
