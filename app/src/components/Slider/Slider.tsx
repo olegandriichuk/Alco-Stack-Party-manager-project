@@ -5,11 +5,11 @@ interface SliderProps {
     label: string;
     value: number;
     onChange: (value: number) => void;
-    toggle: boolean;
-    onToggleChange: () => void;
+   // toggle: boolean;
+    //onToggleChange: () => void;
 }
 
-const Slider: React.FC<SliderProps> = ({ label, value, onChange, toggle, onToggleChange }) => {
+const Slider: React.FC<SliderProps> = ({ label, value, onChange/* toggle, onToggleChange */ }) => {
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(parseInt(e.target.value, 10));
     };
@@ -25,9 +25,10 @@ const Slider: React.FC<SliderProps> = ({ label, value, onChange, toggle, onToggl
                 value={value}
                 onChange={handleSliderChange}
             />
-            <button className={`slider-toggle ${toggle ? 'on' : 'off'}`} onClick={onToggleChange}>
-                <div className="toggle-circle"></div>
-            </button>
+            {/*<button className={`slider-toggle ${toggle ? 'on' : 'off'}`} onClick={onToggleChange}>*/}
+            {/*    <div className="toggle-circle"></div>*/}
+            {/*</button>*/}
+            <span className="slider-value">{value}</span> {/* Відображаємо поточне значення */}
         </div>
     );
 };
