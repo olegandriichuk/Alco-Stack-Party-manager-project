@@ -4,8 +4,6 @@ namespace AlcoStack.Dtos;
 
 public class AlcoholDto
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; }
 
     public AlcoType Type { get; set; }

@@ -65,6 +65,31 @@ public class PartyAlcoholRepository(AppDataContext context) : IPartyAlcoholRepos
         return partyAlcohols;
     }
 
+    public async Task<ICollection<Alcohol>?> GetByRankAndLimitAsync(Guid partyId, int rankLimit)
+    {
+        var partyAlcohols = await context.PartyAlcohols
+            .Where(x => x.PartyId == partyId && x.Rank > 0)
+            .Include(x => x.Alcohol)
+            .OrderBy(x => x.Rank)
+            .Take(rankLimit)
+            .Select(x => x.Alcohol)
+            .ToListAsync();
+        
+        return partyAlcohols;
+    }
+    
+    public async Task<ICollection<Alcohol>?> GetByRankAsync(Guid partyId)
+    {
+        var partyAlcohols = await context.PartyAlcohols
+            .Where(x => x.PartyId == partyId && x.Rank > 0)
+            .Include(x => x.Alcohol)
+            .OrderBy(x => x.Rank)
+            .Select(x => x.Alcohol)
+            .ToListAsync();
+        
+        return partyAlcohols;
+    }
+
     public async Task<ICollection<PartyAlcohol>> UpdateVolumeAsync(Guid partyId, Guid alcoholId, int volume)
     {
         var partyAlcohol = await context.PartyAlcohols

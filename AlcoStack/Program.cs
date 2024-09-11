@@ -97,6 +97,8 @@ builder.Services.AddScoped<IPartyRepository, PartyRepository>();
 builder.Services.AddScoped<IUserPartyRepository, UserPartyRepository>();
 builder.Services.AddScoped<IPartyAlcoholRepository, PartyAlcoholRepository>();
 builder.Services.AddScoped<IAlcoholRankingService, AlcoholRankingService>();
+builder.Services.AddHttpClient<ICocktailService, CocktailService>();
+
 
 
 var app = builder.Build();
