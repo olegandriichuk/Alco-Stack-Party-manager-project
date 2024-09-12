@@ -8,9 +8,9 @@ import Slider from "../Slider/Slider";
 interface SliderItem {
     label: string;
     value: number;
-    toggle: boolean;
-    onChange: (value: number) => void;
-    onToggleChange: () => void;
+    //toggle: boolean;
+   onChange: (value: number) => void;
+  //  onToggleChange: () => void;
 }
 
 interface SliderListProps {
@@ -27,8 +27,8 @@ const SliderList: React.FC<SliderListProps> = ({ sliders }) => {
                             label={slider.label}
                             value={slider.value}
                             onChange={slider.onChange}
-                            toggle={slider.toggle}
-                            onToggleChange={slider.onToggleChange}
+                           // toggle={slider.toggle}
+                            //onToggleChange={slider.onToggleChange}
                         />
                     </div>
                 ))}

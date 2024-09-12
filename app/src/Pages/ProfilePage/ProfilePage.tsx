@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
         { text: 'Low Alcohol', icon: Beer, color: '#D9D9D9', onClick: handleLowAlcoButtonClick },
         { text: 'Wine', icon: Wine, color: '#D9D9D9', onClick: handleWineButtonClick },
         { text: 'Liquor', icon: Liquor, color: '#D9D9D9', onClick: handleLiquorButtonClick },
-        { text: 'Base Liquor', icon: Base_Liquor, color: '#D9D9D9', onClick: handleStrongAlcoButtonClick }
+        { text: 'Strong alcohol', icon: Base_Liquor, color: '#D9D9D9', onClick: handleStrongAlcoButtonClick }
     ];
 
     return (

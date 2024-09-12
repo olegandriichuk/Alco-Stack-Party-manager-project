@@ -1,4 +1,5 @@
 ﻿.alco-container {
+    margin-top: 30px;
     width: 100%; /* Займає всю ширину екрану */
 }
 
@@ -7,7 +8,7 @@
 }
 
 .choose-alco-button {
-    margin-top: 10px;
+    margin-top: 1px;
     width: 80%; /* Кнопка займає всю ширину батьківського контейнера */
     max-width: none; /* Відміна обмеження на максимальну ширину */
     text-align: center;

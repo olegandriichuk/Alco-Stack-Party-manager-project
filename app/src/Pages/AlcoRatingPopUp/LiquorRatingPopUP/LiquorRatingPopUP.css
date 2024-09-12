@@ -37,3 +37,21 @@
     align-items: center; /* Центрування по горизонталі */
     width: 100%;
 }
+.btn-save {
+    background-color: #f1f1f1; /* Світло-сірий колір */
+    border: none;
+    border-radius: 50px; /* Заокруглені краї */
+    padding: 15px 30px; /* Великі розміри кнопки */
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 80%; /* Ширина на 100% контейнера */
+    max-width: 300px; /* Максимальна ширина */
+    transition: background-color 0.3s ease; /* Ефект переходу */
+}
+
+.btn-save:hover {
+    background-color: #BEBEBE; /* Зміна кольору при наведенні */
+}

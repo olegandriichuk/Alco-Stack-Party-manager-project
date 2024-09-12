@@ -10,10 +10,10 @@ interface LowAlcoRatingPopUpProps {
 
 const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
     const [sliders, setSliders] = useState([
-        { label: 'Vodka', value: 50, toggle: false },
-        { label: 'Whiskey', value: 50, toggle: false },
-        { label: 'Gin', value: 50, toggle: false },
-        { label: 'Tequila', value: 50, toggle: false }
+        { label: 'Vodka', value: 5, toggle: false },
+        { label: 'Whiskey', value: 5, toggle: false },
+        { label: 'Gin', value: 5, toggle: false },
+        { label: 'Tequila', value: 5, toggle: false }
     ]);
 
     // Обробник зміни значення слайдера
@@ -24,27 +24,32 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
     };
 
     // Обробник зміни стану перемикача
-    const handleToggleChange = (index: number) => {
-        const newSliders = [...sliders];
-        newSliders[index] = { ...newSliders[index], toggle: !newSliders[index].toggle };
-        setSliders(newSliders);
-    };
+    // const handleToggleChange = (index: number) => {
+    //     const newSliders = [...sliders];
+    //     newSliders[index] = { ...newSliders[index], toggle: !newSliders[index].toggle };
+    //     setSliders(newSliders);
+    // };
 
     if (!show) return null; // Якщо вікно не повинно показуватися, повертаємо null
 
     const sliderItems = sliders.map((slider, index) => ({
         ...slider,
-        onChange: (value: number) => handleSliderChange(index, value),
-        onToggleChange: () => handleToggleChange(index)
+        onChange: (value: number) => handleSliderChange(index, value)
+        //onToggleChange: () => handleToggleChange(index)
     }));
-
+// Обробник для кліку по фону
+    const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget) {
+            handleClose(); // Закрити вікно, якщо натиснуто на фон
+        }
+    };
     return (
         <>
-            <div className="modal-backdrop-blur" /> {/* Заблюрений фон */}
+            <div className="modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
             <div className="modal-container">
                 <div className="modal-content">
-                    <SliderList sliders={sliderItems} />
-                    <button className="btn btn-primary" onClick={handleClose}>Close</button>
+                    <SliderList sliders={sliderItems}/>
+                    <button className="btn-save" onClick={handleClose}>Save</button>
                 </div>
             </div>
         </>
