@@ -14,8 +14,13 @@ public class User : IdentityUser
     public Address? Address { get; set; }
     public string? Photo { get; set; }
     public string? Bio { get; set; }
-    
     public string? FormBackgroundUrl { get; set; }
+    
+    public ICollection<UserAlcohol> Alcohols { get; set; } = new List<UserAlcohol>();
+    
+    public ICollection<Party> CreatedParties { get; set; } = new List<Party>();
+    
+    public ICollection<UserParty> Parties { get; set; } = new List<UserParty>();
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime UpdatedDate { get; set; } = DateTime.Now; 
 }

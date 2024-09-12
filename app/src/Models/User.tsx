@@ -29,7 +29,7 @@ export type UserProfile = {
     firstName?: string;
     lastName?: string;
     gender?: number;
-    dateOfBirth?: string;
+    dateOfBirth?: string | null;
     address?: Address;
     phoneNumber?: string;
     photo?: string;

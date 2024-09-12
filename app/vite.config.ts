@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     svgr(), // Add the svgr plugin here
   ],
+  resolve: {
+    alias: {
+      'date-fns/_lib/format/longFormatters': 'date-fns/esm/_lib/format/longFormatters'
+    }
+  }
 });

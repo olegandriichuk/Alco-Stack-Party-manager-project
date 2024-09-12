@@ -1,0 +1,28 @@
+﻿.modal {
+    z-index: 1050; /* Bootstrap's default z-index for modals */
+}
+
+.modal-backdrop {
+    z-index: 1040; /* Bootstrap's default z-index for backdrops */
+}
+/* Ensure your custom CSS is loaded after all other stylesheets */
+.rs-picker-dropdown {
+    z-index: 2000 !important; /* Ensure it is above the modal */
+}
+
+/* Background blur effect */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
+    backdrop-filter: blur(10px); /* Apply the blur effect */
+    z-index: 1040; /* Set a higher z-index if necessary */
+}
+
+/* Ensure that the modal itself is above the blurred backdrop */
+.rs-modal {
+    z-index: 1050; /* Ensure it's above the backdrop */
+}

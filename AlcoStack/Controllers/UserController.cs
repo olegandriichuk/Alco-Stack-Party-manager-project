@@ -10,33 +10,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlcoStack.Controllers;
 
-[Route("api/account")]
+    [Route("api/account")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(
+        UserManager<User> userManager,
+        ITokenService tokenService,
+        SignInManager<User> signInManager,
+        ILogger<UserController> logger,
+        IUserAlcoholRepository userAlcoholRepository,
+        IUserPartyRepository userPartyRepository)
+        : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        private readonly ITokenService _tokenService;
-        private readonly SignInManager<User> _signinManager;
-        private readonly ILogger<UserController> _logger;
-        public UserController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ILogger<UserController> logger)
-        {
-            _userManager = userManager;
-            _tokenService = tokenService;
-            _signinManager = signInManager;
-            _logger = logger;
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
             if (user == null) return Unauthorized("Invalid username!");
 
-            var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
 
@@ -47,10 +42,10 @@ namespace AlcoStack.Controllers;
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Token = _tokenService.CreateToken(user),
+                    Token = tokenService.CreateToken(user),
                     Gender = user.Gender,
                     DateOfBirth = user.DateOfBirth,
-                    Address = AddressMapper.MapToDto(user.Address),
+                    Address = user.Address.MapToDto(),
                     Phone = user.PhoneNumber,
                     Photo = user.Photo,
                     Bio = user.Bio,
@@ -86,18 +81,18 @@ namespace AlcoStack.Controllers;
 
             try
             {
-                var createdUserResult = await _userManager.CreateAsync(user, registerDto.Password);
+                var createdUserResult = await userManager.CreateAsync(user, registerDto.Password);
 
                 if (!createdUserResult.Succeeded)
                 {
                     return StatusCode(500, createdUserResult.Errors);
                 }
 
-                var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                var roleResult = await userManager.AddToRoleAsync(user, "User");
 
                 if (!roleResult.Succeeded)
                 {
-                    await _userManager.DeleteAsync(user);
+                    await userManager.DeleteAsync(user);
                     return StatusCode(500, roleResult.Errors);
                 }
                 
@@ -114,9 +109,11 @@ namespace AlcoStack.Controllers;
                     user.Address = address;
                 }
                 
-                await _userManager.UpdateAsync(user);
+                await userManager.UpdateAsync(user);
 
-                var token = _tokenService.CreateToken(user);
+                var token = tokenService.CreateToken(user);
+                
+                await userAlcoholRepository.AddAllAlcoholsAsync(user.UserName);
 
                 var newUserDto = new NewUserDto
                 {
@@ -125,7 +122,7 @@ namespace AlcoStack.Controllers;
                     FirstName = user.FirstName,
                     Email = user.Email,
                     Token = token,
-                    Address = AddressMapper.MapToDto(user.Address),
+                    Address = user.Address.MapToDto(),
                     DateOfBirth = user.DateOfBirth,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
@@ -152,7 +149,7 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var users = await _userManager.Users.ToListAsync();
+            var users = await userManager.Users.ToListAsync();
             
             return Ok(users);
         }
@@ -163,7 +160,7 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
             
             if (user == null)
                 return NotFound();
@@ -176,7 +173,7 @@ namespace AlcoStack.Controllers;
         public async Task<IActionResult> GetCurrentUser()
         {
             var username = User.GetUsername();
-            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
             
             if (user == null)
                 return NotFound();
@@ -189,25 +186,25 @@ namespace AlcoStack.Controllers;
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto userDto)
         {
             
-            _logger.LogInformation("Received token: {Token}", Request.Headers["Authorization"]);
+            logger.LogInformation("Received token: {Token}", Request.Headers["Authorization"]);
 
             try
             {
                 var username = User.GetUsername();
                 // Additional logging
-                _logger.LogInformation("Username from token: {Username}", username);
+                logger.LogInformation("Username from token: {Username}", username);
 
                 // Your existing code...
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error during token validation: {Exception}", ex);
+                logger.LogError("Error during token validation: {Exception}", ex);
                 return StatusCode(500, "Internal server error");
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var username1 = User.GetUsername();
-            var currentUser = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username1);
+            var currentUser = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username1);
     
             if (currentUser == null)
                 return Unauthorized();
@@ -219,7 +216,7 @@ namespace AlcoStack.Controllers;
             // Update username if it has changed
             if (currentUser.UserName != userDto.Username)
             {
-                var setUsernameResult = await _userManager.SetUserNameAsync(currentUser, userDto.Username);
+                var setUsernameResult = await userManager.SetUserNameAsync(currentUser, userDto.Username);
                 if (!setUsernameResult.Succeeded)
                     return BadRequest(setUsernameResult.Errors);
             }
@@ -238,7 +235,7 @@ namespace AlcoStack.Controllers;
                 currentUser.Address.Country = userDto.Address.Country;
             }
     
-            var result = await _userManager.UpdateAsync(currentUser);
+            var result = await userManager.UpdateAsync(currentUser);
     
             if (result.Succeeded)
                 return Ok(currentUser);
@@ -254,7 +251,7 @@ namespace AlcoStack.Controllers;
                 return BadRequest(ModelState);
             
             var username = User.GetUsername();
-            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
             
             if (user == null)
                 return NotFound();
@@ -262,12 +259,83 @@ namespace AlcoStack.Controllers;
             user.Photo = photoDto.Photo;
             user.FormBackgroundUrl = photoDto.FormBackgroundUrl;
             user.UpdatedDate = DateTime.Now;
-            var result = await _userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user);
             
             if (result.Succeeded)
                 return Ok(user);
             
             return StatusCode(500, result.Errors);
+        }
+        
+        [HttpGet("{partyId}/users")]
+        public async Task<IActionResult> GetUsersByPartyId(Guid partyId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var users = await userPartyRepository.GetUsersByPartyIdAsync(partyId);
+            
+            return Ok(users);
+        }
+        
+        [HttpPost("{userName}/addAlcohol/{alcoholId}")]
+        public async Task<IActionResult> AddUserAlcohol(string userName, Guid alcoholId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+        
+            return Ok(await userAlcoholRepository.AddAsync(userName, alcoholId));
+        }
+        
+        [HttpPatch("{userName}/update-volume/{alcoholId}")]
+        public async Task<IActionResult> UpdateVolume(string userName, Guid alcoholId, [FromBody] int volume)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+        
+            return Ok(await userAlcoholRepository.UpdateVolumeAsync(userName, alcoholId, volume));
+        }
+       
+    
+        [HttpPatch("{userName}/update-rating/{alcoholId}")]
+        public async Task<IActionResult> UpdateRating(string userName, Guid alcoholId, [FromBody] int rating)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+        
+            return Ok(await userAlcoholRepository.UpdateRatingAsync(userName, alcoholId, rating));
+        }
+        
+        [HttpDelete("{userName}/delete/{alcoholId}")]
+        public async Task<IActionResult> DeleteUserAlcohol(string userName, Guid alcoholId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var userAlcohol = await userAlcoholRepository.DeleteAsync(userName, alcoholId);
+            
+            if (userAlcohol == null)
+                return NotFound();
+            
+            return Ok(userAlcohol);
+        }
+        
+        
+        
+        [Authorize]
+        [HttpDelete("{partyId}LeaveParty")]
+        public async Task<IActionResult> LeaveParty(Guid partyId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var username = User.GetUsername();
+            var userParty = await userPartyRepository.DeleteAsync(username, partyId);
+            
+            if (userParty == null)
+                return NotFound();
+            
+            return Ok(userParty);
         }
         
         [HttpDelete("{username}")]
@@ -276,12 +344,12 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
             
             if (user == null)
                 return NotFound();
             
-            var result = await _userManager.DeleteAsync(user);
+            var result = await userManager.DeleteAsync(user);
             
             if (result.Succeeded)
                 return Ok();

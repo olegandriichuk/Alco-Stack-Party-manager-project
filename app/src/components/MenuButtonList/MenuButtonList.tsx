@@ -5,13 +5,12 @@ import './MenuButtonList.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 
-
-
 interface MenuButton {
     text: string;
     icon: IconDefinition;
     color: string;
-    link: string;
+    link?: string; // Optional link prop
+    onClick?: () => void; // Optional onClick prop
 }
 
 interface MenuButtonListProps {
@@ -41,7 +40,8 @@ const MenuButtonList: React.FC<MenuButtonListProps> = ({ menuButtons }) => {
                             icon={menuButton.icon}
                             color={menuButton.color}
                             link={menuButton.link}
-                            className="custom-font" // Pass the custom font class
+                            onClick={menuButton.onClick}
+                            className="custom-font"
                         />
                     </div>
                 ))}

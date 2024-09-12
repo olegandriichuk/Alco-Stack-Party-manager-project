@@ -1,11 +1,9 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import MenuButtonList from '../../components/MenuButtonList/MenuButtonList';
 import PartyButtonList from '../../components/PartyButtonList/PartyButtonList';
-
 import { faUser, faUsers, faCake, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/logo.svg';
 import Disco from '../../assets/disco.svg';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
@@ -13,24 +11,62 @@ import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 import backgroundImage from '../../assets/backleft.svg';
 import backgroundImage1 from '../../assets/backright.svg';
 import backgroundImageMobile from '../../assets/backPhone.svg';
-//import { ReactComponent as Liquor } from '/src/assets/Liquor.svg';
+import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
+import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
+import { useAuth } from "../../Context/useAuth.tsx";
+import { toast } from "react-toastify";
+import { GetPartyListAPI } from "../../Services/PartyService";
+import { PartyListGet } from "../../Models/Party.tsx";
 
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
 
+    const { token } = useAuth();
+    const [parties, setParties] = useState<PartyListGet[]>([]);
 
+    const UserPartiesGet = async () => {
+        if (!token) {
+            toast.error("You must be logged in to view your parties");
+            return;
+        }
+        try {
+            const response = await GetPartyListAPI(token);
 
-    const parties = [
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#cf6165' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#708ff0' as const },
-        { title: 'Name of party', description: 'Description bla bla blabla bla', date: 'xx.xx.xxxx', type: '#cf6165' as const }
-    ];
+            if (response && response.data) {
+                setParties(response.data); // Update state with the party data
+            } else {
+                setParties([]); // If response is undefined or empty, set an empty array
+            }
+        } catch (error) {
+            console.error('Failed to fetch parties', error);
+            toast.error('Failed to fetch parties. Please try again.');
+            setParties([]); // Set an empty array in case of error
+        }
+    };
+
+    useEffect(() => {
+        UserPartiesGet();
+    }, []);
+
+    const [showCreatePartyPopUp, setShowCreatePartyPopUp] = useState(false);
+    const [showJoinPartyPopUp, setShowJoinPartyPopUp] = useState(false);
+
+    const handleShowCreateParty = () => setShowCreatePartyPopUp(true);
+    const handleShowJoinParty = () => setShowJoinPartyPopUp(true);
+
+    const handleCloseCreateParty = () => {
+        setShowCreatePartyPopUp(false);
+        UserPartiesGet(); // Refresh the party list after closing the pop-up
+    };
+    const handleCloseJoinParty = () => {
+        setShowJoinPartyPopUp(false);
+        UserPartiesGet(); // Refresh the party list after closing the pop-up
+    };
 
     const menuButtons = [
         { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
-        { text: 'join party', icon: faCake, color: '#5b7ff0', link: '/join' },
-        { text: 'create party', icon: faUsers, color: '#ce5659', link: '/create' }
+        { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
+        { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
 
     return (
@@ -105,12 +141,20 @@ const HomePage: React.FC = () => {
                     STACK
                 </span>
             </div>
+
             <h2 className="custom-heading">Your party, your rules!</h2>
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
-             {/* Use the corrected prop name */}
             <MenuButtonList menuButtons={menuButtons}/>
-
             <PartyButtonList parties={parties}/>
+
+            {showCreatePartyPopUp && (
+                <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty} />
+            )}
+
+            {showJoinPartyPopUp && (
+                <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty} />
+            )}
+
         </div>
     );
 };
