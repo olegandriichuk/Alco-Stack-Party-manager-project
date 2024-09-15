@@ -8,17 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
 import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
-// import backgroundImage from '../../assets/backleft.svg';
-// import backgroundImage1 from '../../assets/backright.svg';
-// import backgroundImageMobile from '../../assets/backPhone.svg';
+import backgroundImage from '../../assets/backcov1.svg';
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
 import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
 import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
 import { GetPartyListAPI } from "../../Services/PartyService";
 import { PartyListGet } from "../../Models/Party.tsx";
-import backgroundImage from '../../assets/backcov1.svg';
-
 
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
@@ -33,12 +29,13 @@ const HomePage: React.FC = () => {
         }
         try {
             const response = await GetPartyListAPI(token);
-
+            console.log(response);
             if (response && response.data) {
                 setParties(response.data); // Update state with the party data
             } else {
                 setParties([]); // If response is undefined or empty, set an empty array
             }
+            console.log(parties);
         } catch (error) {
             console.error('Failed to fetch parties', error);
             toast.error('Failed to fetch parties. Please try again.');
@@ -51,11 +48,9 @@ const HomePage: React.FC = () => {
     }, []);
 
     const [showCreatePartyPopUp, setShowCreatePartyPopUp] = useState(false);
-    // const [showProfilePopUp, setShowProfilePopUp] = useState(false);
     const [showJoinPartyPopUp, setShowJoinPartyPopUp] = useState(false);
 
     const handleShowCreateParty = () => setShowCreatePartyPopUp(true);
-    // const handleShowProfile = () => setShowProfilePopUp(true);
     const handleShowJoinParty = () => setShowJoinPartyPopUp(true);
 
     const handleCloseCreateParty = () => {
@@ -72,8 +67,6 @@ const HomePage: React.FC = () => {
         { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
         { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
-
-    
 
     return (
         <div
@@ -99,6 +92,7 @@ const HomePage: React.FC = () => {
                     src: url(${Halant}) format('truetype');
                 }
 
+
                 .logo-text {
                     font-family: 'JejuHallasan', sans-serif;
                 }
@@ -118,7 +112,7 @@ const HomePage: React.FC = () => {
                     />
                 </div>
                 <Link to={"/welcome"} className="p-2" aria-label="Go to Welcome Page">
-                    <FontAwesomeIcon icon={faCircleInfo} size="2x" color="black" />
+                    <FontAwesomeIcon icon={faCircleInfo} size="2x" color="black"/>
                 </Link>
             </div>
 
@@ -147,7 +141,7 @@ const HomePage: React.FC = () => {
                     STACK
                 </span>
             </div>
-            
+
             <h2 className="custom-heading">Your party, your rules!</h2>
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
             <MenuButtonList menuButtons={menuButtons}/>

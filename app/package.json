@@ -17,7 +17,6 @@
     "@hookform/resolvers": "^3.9.0",
     "@vaadin/vaadin-date-picker": "^23.5.4",
     "antd": "^5.20.5",
-    "axios": "^1.7.4",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",

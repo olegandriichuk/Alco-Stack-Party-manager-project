@@ -19,6 +19,9 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
     // Using useNavigate to programmatically navigate
     const navigate = useNavigate();
 
+    console.log(partyId);
+
+
     const handleButtonClick = () => {
         // Navigate to the party detail page with the specific partyId
         console.log(`Navigating to /home/party/${partyId}`);
@@ -35,20 +38,20 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
         minute: '2-digit'
     }).format(new Date(date));
 
-    const titleStyle = {
-        fontFamily: 'Halant Semi Bold',
-        fontWeight: 600,
-    };
-
-    const descriptionStyle = {
-        fontFamily: 'Halant Regular',
-        fontWeight: 400,
-    };
-
-    const dateStyle = {
-        fontFamily: 'Halant Semi Bold',
-        fontWeight: 600,
-    };
+    // const titleStyle = {
+    //     fontFamily: 'Halant Semi Bold',
+    //     fontWeight: 600,
+    // };
+    //
+    // const descriptionStyle = {
+    //     fontFamily: 'Halant Regular',
+    //     fontWeight: 400,
+    // };
+    //
+    // const dateStyle = {
+    //     fontFamily: 'Halant Semi Bold',
+    //     fontWeight: 600,
+    // };
 
     return (
         <button
