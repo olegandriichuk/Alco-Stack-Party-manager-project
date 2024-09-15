@@ -29,6 +29,8 @@ public class Party
     
     public bool  HighAlcohol { get; set; } = false;
     
+    public int RankLimit { get; set; } = 0;
+    
     // public bool Status { get; set; } = true;
     public string CreatorUserName { get; set; }
     

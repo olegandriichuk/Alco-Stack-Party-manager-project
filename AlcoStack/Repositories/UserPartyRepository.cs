@@ -7,20 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlcoStack.Repositories;
 
-public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
+public class UserPartyRepository(AppDataContext context, IAlcoholRankingService alcoholRankingService) : IUserPartyRepository
 {
-    private readonly AppDataContext _context = context;
 
     public async Task<UserParty> AddAsync(string userName, Guid partyId)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+        var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         
         if (user == null)
         {
             throw new Exception("User not found");
         }
         
-        var party = await _context.Parties.FirstOrDefaultAsync(x => x.Id == partyId);
+        var party = await context.Parties.FirstOrDefaultAsync(x => x.Id == partyId);
         
         if (party == null)
         {
@@ -35,14 +34,17 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
             Party = party
         };
         
-        await _context.UserParties.AddAsync(userParty);
-        await _context.SaveChangesAsync();
+        await context.UserParties.AddAsync(userParty);
+        await context.SaveChangesAsync();
+        
+        await alcoholRankingService.SetAlcoholRanksForParty(partyId, party.RankLimit);
+
         return userParty;
     }
 
     public async Task<UserParty?> DeleteAsync(string userName, Guid partyId)
     {
-        var userParty = await _context.UserParties
+        var userParty = await context.UserParties
             .FirstOrDefaultAsync(x => x.UserName == userName && x.PartyId == partyId);
         
         if (userParty == null)
@@ -50,14 +52,14 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
             return null;
         }
         
-        _context.UserParties.Remove(userParty);
-        await _context.SaveChangesAsync();
+        context.UserParties.Remove(userParty);
+        await context.SaveChangesAsync();
         return userParty;
     }
 
     public async Task<ICollection<Party>?> GetByUserNameAsync(string userName)
     {
-        var userParties = await _context.UserParties
+        var userParties = await context.UserParties
             .Where(x => x.UserName == userName && x.Party.Date >= DateTime.Now)
             .Include(x => x.Party)
             .OrderBy(x => x.Party.Date)
@@ -68,7 +70,7 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
 
     public async Task<ICollection<Party>?> GetHistoryByUserNameAsync(string userName)
     {
-        var userParties = await _context.UserParties
+        var userParties = await context.UserParties
             .Where(x => x.UserName == userName && x.Party.Date <= DateTime.Now)
             .Include(x => x.Party)
             .OrderBy(x => x.Party.Date)
@@ -79,7 +81,7 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
 
     public async Task<ICollection<User>?> GetUsersByPartyIdAsync(Guid partyId)
     {
-        var userParties = await _context.UserParties
+        var userParties = await context.UserParties
             .Where(x => x.PartyId == partyId)
             .Include(x => x.User)
             .ToListAsync();
@@ -89,6 +91,6 @@ public class UserPartyRepository(AppDataContext context) : IUserPartyRepository
 
     public async Task<ICollection<UserParty>> GetAllAsync()
     {
-        return await _context.UserParties.ToListAsync();
+        return await context.UserParties.ToListAsync();
     }
 }

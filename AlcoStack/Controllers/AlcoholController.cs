@@ -93,6 +93,37 @@ public class AlcoholController(
         return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
     }
     
+    [HttpGet("{partyId}/limitByRank/{rankLimit}")]
+    public async Task<IActionResult> GetAllAlcoholsByRank(Guid partyId, int rankLimit)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var alcohols = await _partyAlcoholRepository.GetByRankAndLimitAsync(partyId, rankLimit);
+
+        if (alcohols == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
+    }
+    
+    [HttpGet("{partyId}/allByRank")]
+    public async Task<IActionResult> GetAllAlcoholsByRank(Guid partyId)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        var alcohols = await _partyAlcoholRepository.GetByRankAsync(partyId);
+
+        if (alcohols == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
+    }
     // [Authorize]
     // [HttpPut("{Id}")]
     // public async Task<IActionResult> UpdateAlcohol(Guid Id, [FromBody] UpdateAlcoholDto alcoholDto)

@@ -1,6 +1,5 @@
 ﻿using AlcoStack.Enums;
 
-
 namespace AlcoStack.Dtos;
 
 public class CreateAlcoholDto
@@ -13,5 +12,4 @@ public class CreateAlcoholDto
     
     public string Description { get; set; }
     
-    public int Rating { get; set; }
 }

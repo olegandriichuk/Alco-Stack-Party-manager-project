@@ -11,4 +11,4 @@ public class UserAlcohol
     public int Rating { get; set; } = 0;
     
     public int Volume { get; set; } = 0;
-}
+}   

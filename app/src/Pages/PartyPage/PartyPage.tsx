@@ -1,22 +1,24 @@
-﻿// PartyPage.tsx
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+﻿import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import './PartyPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faCopy } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faCopy } from '@fortawesome/free-solid-svg-icons';
 import Disco from '../../assets/disco.svg';
-import { GetPartyDetailAPI, UpdatePartyAPI } from "../../Services/PartyService.tsx";
-import { PartyDetailGet, PartyDetailPut } from "../../Models/Party.tsx";
-import { useAuth } from "../../Context/useAuth.tsx";
-import PartySettingsPopUp from "../../components/PartySettingsPopUp/PartySettingsPopUp.tsx";
+import { GetPartyDetailAPI, UpdatePartyAPI, DeletePartyAPI } from '../../Services/PartyService.tsx';
+import { GetAllAlcoholByRankListAPI } from '../../Services/AlcoholService.tsx'; // Import the new service
+import { PartyDetailGet, PartyDetailPut } from '../../Models/Party.tsx';
+import { AlcoholGet } from '../../Models/Alcohol.tsx'; // Import the AlcoholGet type
+import { useAuth } from '../../Context/useAuth.tsx';
+import PartySettingsPopUp from '../../components/PartySettingsPopUp/PartySettingsPopUp.tsx';
+import AlcoholList from '../../components/AlcoholCardList/AlcoholCardList';
 import { toast } from 'react-toastify';
 
 // PartyPage Component
 const PartyPage: React.FC = () => {
     const { partyId } = useParams<{ partyId: string }>();
     const [party, setParty] = useState<PartyDetailGet | null>(null);
+    const [alcohols, setAlcohols] = useState<AlcoholGet[]>([]); // State for alcohol data
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
@@ -29,6 +31,10 @@ const PartyPage: React.FC = () => {
             try {
                 const response = await GetPartyDetailAPI(partyId!, token);
                 setParty(response!.data);
+
+                // Fetch alcohol details after party details are fetched
+                const alcoholResponse = await GetAllAlcoholByRankListAPI(partyId!, token);
+                setAlcohols(alcoholResponse!.data);
             } catch {
                 setError('Failed to fetch party details');
             } finally {
@@ -47,6 +53,21 @@ const PartyPage: React.FC = () => {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const deleteParty = async () => {
+        try {
+            const response = await DeletePartyAPI(partyId!, token);
+            if (!response) {
+                toast.error("Failed to delete party");
+                return;
+            }
+            toast.success("Party deleted successfully!");
+            window.location.href = "/home";
+        } catch (error) {
+            console.error("Failed to delete party", error);
+            toast.error("Failed to delete party");
+        }
+    }
+
     // Handle save action from modal
     const handleSave = async (updatedParty: PartyDetailPut) => {
         try {
@@ -61,6 +82,7 @@ const PartyPage: React.FC = () => {
                 updatedParty.lowAlcohol,
                 updatedParty.midAlcohol,
                 updatedParty.highAlcohol,
+                updatedParty.rankLimit,
                 token
             );
             if (!response) {
@@ -137,8 +159,18 @@ const PartyPage: React.FC = () => {
                     <p>Low Alcohol: {party.lowAlcohol ? "Yes" : "No"}</p>
                     <p>Mid Alcohol: {party.midAlcohol ? "Yes" : "No"}</p>
                     <p>High Alcohol: {party.highAlcohol ? "Yes" : "No"}</p>
+                    <p>Rank Limit: {party.rankLimit}</p>
                     <p>Created by me: {party.createdByMe ? "Yes" : "No"}</p>
-                    <button className="btn btn-primary" onClick={() => setShowModal(true)}>Edit</button>
+                    {party.createdByMe && <button className="btn btn-primary" onClick={() => setShowModal(true)}>Edit</button> }
+                    {party.createdByMe && <button className="btn btn-danger" onClick={deleteParty}>Delete</button>}
+                </div>
+            )}
+
+            {/* Alcohol List */}
+            {alcohols.length > 0 && (
+                <div className="mt-4">
+                    <h3>Alcohols</h3>
+                    <AlcoholList alcohols={alcohols} />
                 </div>
             )}
 
@@ -154,6 +186,7 @@ const PartyPage: React.FC = () => {
                     lowAlcohol={party.lowAlcohol}
                     midAlcohol={party.midAlcohol}
                     highAlcohol={party.highAlcohol}
+                    rankLimit={party.rankLimit}
                     show={showModal}
                     onClose={() => setShowModal(false)}
                     onSave={handleSave} // Ensure this prop is passed

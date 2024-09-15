@@ -17,7 +17,8 @@ const validationSchema = yup.object().shape({
     liquors: yup.boolean().required(),
     lowAlcohol: yup.boolean().required(),
     midAlcohol: yup.boolean().required(),
-    highAlcohol: yup.boolean().required()
+    highAlcohol: yup.boolean().required(),
+    rankLimit: yup.number().required("Rank limit is required").min(1, "Rank limit must be at least 1")
 });
 
 interface PartySettingsPopUpProps {
@@ -30,25 +31,27 @@ interface PartySettingsPopUpProps {
     lowAlcohol: boolean;
     midAlcohol: boolean;
     highAlcohol: boolean;
+    rankLimit: number;
     show: boolean;
     onClose: () => void;
     onSave: (updatedParty: PartyDetailPut) => Promise<void>;
 }
 
 const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
-                                                                   name,
-                                                                   description,
-                                                                   date,
-                                                                   photo,
-                                                                   location,
-                                                                   liquors,
-                                                                   lowAlcohol,
-                                                                   midAlcohol,
-                                                                   highAlcohol,
-                                                                   show,
-                                                                   onClose,
-                                                                   onSave
-                                                               }) => {
+        name,
+        description,
+        date,
+        photo,
+        location,
+        liquors,
+        lowAlcohol,
+        midAlcohol,
+        highAlcohol,
+        rankLimit,
+        show,
+        onClose,
+        onSave
+        }) => {
     const {
         register,
         handleSubmit,
@@ -57,7 +60,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
         formState: { errors }
     } = useForm<PartyDetailPut>({
         resolver: yupResolver(validationSchema),
-        defaultValues: { name, description, date, photo, location, liquors, lowAlcohol, midAlcohol, highAlcohol }
+        defaultValues: { name, description, date, photo, location, liquors, lowAlcohol, midAlcohol, highAlcohol, rankLimit }
     });
 
     const watchLiquors = watch("liquors", liquors);
@@ -187,6 +190,16 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                 checked={watchHighAlcohol}
                                 onChange={(checked) => setValue("highAlcohol", checked)}
                             />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="rankLimit" className="form-label">Rank Limit</label>
+                            <Input
+                                id="rankLimit"
+                                type="number"
+                                {...register("rankLimit")}
+                                onChange={(value) => setValue("rankLimit", parseInt(value))}
+                            />
+                            {errors.rankLimit && <p className="text-danger">{errors.rankLimit.message}</p>}
                         </div>
                         <Button appearance="primary" type="submit">
                             Save Changes

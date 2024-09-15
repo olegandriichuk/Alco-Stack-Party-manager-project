@@ -15,6 +15,7 @@ public static class PartyMapper
         LowAlcohol = party.LowAlcohol,
         MidAlcohol = party.MidAlcohol,
         HighAlcohol = party.HighAlcohol,
+        RankLimit = party.RankLimit,
         // Status = party.Status,
         Photo = party.Photo,
         CreatedByMe = party.CreatorUserName == userName,
@@ -41,6 +42,7 @@ public static class PartyMapper
         LowAlcohol = partyDto.LowAlcohol,
         MidAlcohol = partyDto.MidAlcohol,
         HighAlcohol = partyDto.HighAlcohol,
+        RankLimit = partyDto.RankLimit,
         // Status = partyDto.Status,
         Photo = partyDto.Photo,
     };

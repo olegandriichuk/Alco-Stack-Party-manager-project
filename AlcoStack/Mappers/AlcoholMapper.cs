@@ -7,7 +7,6 @@ public static class AlcoholMapper
 {
     public static AlcoholDto MapToDto(this Alcohol alcohol) => new AlcoholDto
     {
-        Id = alcohol.Id,
         Name = alcohol.Name, 
         Type = alcohol.Type,
         Photo = alcohol.Photo,

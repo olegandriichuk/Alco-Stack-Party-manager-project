@@ -18,6 +18,7 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
 
     // Using useNavigate to programmatically navigate
     const navigate = useNavigate();
+    console.log('button id:', partyId);
 
     console.log(partyId);
 

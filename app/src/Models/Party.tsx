@@ -26,6 +26,7 @@ export type PartyDetailGet = {
     lowAlcohol: boolean;
     midAlcohol: boolean;
     highAlcohol: boolean;
+    rankLimit: number;
     createdByMe: boolean;
 }
 export type PartyDetailPut = {
@@ -38,4 +39,5 @@ export type PartyDetailPut = {
     lowAlcohol: boolean;
     midAlcohol: boolean;
     highAlcohol: boolean;
+    rankLimit: number;
 }

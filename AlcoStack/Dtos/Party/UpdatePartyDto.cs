@@ -20,6 +20,8 @@ public class UpdatePartyDto
     
     public bool  HighAlcohol { get; set; } = false;
     
+    public int RankLimit { get; set; } = 0;
+    
     // public bool Status { get; set; } = true;
     //
     // public int[]? VolumeList { get; set; }
