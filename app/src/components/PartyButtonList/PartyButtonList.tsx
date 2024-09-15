@@ -22,13 +22,13 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
         fontFamily: 'Halant Medium',
     };
 
-    console.log("parties", parties);
-
-    if (parties && parties[1]) {
-        console.log("partyId", parties[1].partyId);
-    } else {
-        console.log("No party found at index 1");
-    }
+    // console.log("parties", parties);
+    //
+    // if (parties && parties[1]) {
+    //     console.log("partyId", parties[1].partyId);
+    // } else {
+    //     console.log("No party found at index 1");
+    // }
 
 
     return (

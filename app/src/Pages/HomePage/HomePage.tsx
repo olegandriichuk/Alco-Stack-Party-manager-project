@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
                 backgroundColor: '#DDE4EE',
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
-                backgroundPosition: isMobile ? '0px, 10px' : '15px, 10px',
+                backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
                 backgroundRepeat: 'no-repeat',
                 backgroundAttachment: 'fixed',
                 minHeight: '100vh',
