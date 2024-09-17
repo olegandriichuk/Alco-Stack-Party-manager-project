@@ -1,6 +1,6 @@
 ﻿import { useAuth } from "../Context/useAuth.tsx";
 import EditProfilePage from "../Pages/EditProfilePage/EditProfilePage.tsx"; // Adjust the path as needed
-//import ProtectedRoute from "./ProtectedRoutes.tsx";
+import ProtectedRoute from "./ProtectedRoutes.tsx";
 
 const ProfileEditRoute = () => {
     const { user } = useAuth();
@@ -11,9 +11,9 @@ const ProfileEditRoute = () => {
     }
 
     return (
-  //      <ProtectedRoute>
+         <ProtectedRoute>
             <EditProfilePage/>
-    //    </ProtectedRoute>
+      </ProtectedRoute>
     );
 };
 

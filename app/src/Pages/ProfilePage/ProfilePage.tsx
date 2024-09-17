@@ -16,7 +16,12 @@ import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/L
 import WineAlcoRatingPopUp from '../AlcoRatingPopUp/WineAlcoRatingPopUp/WineAlcoRatingPopUp';
 import LiquorRatingPopUP from '../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP';
 import StrongAlcoRatingPopUp from '../AlcoRatingPopUp/StrongAlcoRatingPopUp/StrongAlcoRatingPopUp';
+import backgroundImage1 from '../../assets/backcov1.svg';
+// import backgroundImageMobile from "../../assets/backPhone.svg";
+// import backgroundImage from "../../assets/backleft.svg";
+// import backgroundImage1 from "../../assets/backright.svg";
 const ProfilePage: React.FC = () => {
+    const isMobile = window.innerWidth <= 768;
     const { user } = useAuth();
 
   //  const [showModal, setShowModal] = useState(false);
@@ -58,7 +63,16 @@ const ProfilePage: React.FC = () => {
     ];
 
     return (
-        <div className="container-fluid p-0 d-flex flex-column align-items-center">
+        <div className="container-fluid p-0 d-flex flex-column align-items-center"
+            style={{
+                backgroundColor: '#DDE4EE',
+                backgroundImage: `url(${backgroundImage1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: isMobile ? 'center' : '15px 6px',
+                backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
+                minHeight: '100vh',
+        }}>
             <div className="d-flex justify-content-between align-items-center w-100">
                 <div>
                     <img
@@ -69,7 +83,7 @@ const ProfilePage: React.FC = () => {
                     />
                 </div>
                 <Link to={"/home"} className="p-2" aria-label="Go to Home Page">
-                    <FontAwesomeIcon icon={faHome} size="2x" color="black" />
+                    <FontAwesomeIcon icon={faHome} size="3x" color="black" />
                 </Link>
             </div>
 
@@ -83,6 +97,8 @@ const ProfilePage: React.FC = () => {
                 photoUrl={user?.photo || ""}
                 formBackgroundUrl={user?.formBackgroundUrl || ""}
             />
+
+            <h3 style={{ marginTop: '20px' }}> Your alkohol preferences</h3>
             <ChooseAlcoButtonList alcoButtons={alcoButtons} />
 
             {/* Використання компонента модального вікна */}

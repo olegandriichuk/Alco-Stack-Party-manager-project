@@ -1,9 +1,9 @@
 ﻿.alco-container {
-    margin-top: 30px;
+    margin-top: 10px;
     width: 100%; /* Займає всю ширину екрану */
 }
 
-.row {
+.alco-row {
     width: 100%; /* Рядок також має займати всю ширину */
 }
 
