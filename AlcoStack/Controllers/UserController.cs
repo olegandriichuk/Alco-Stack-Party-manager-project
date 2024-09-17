@@ -18,7 +18,8 @@ namespace AlcoStack.Controllers;
         SignInManager<User> signInManager,
         ILogger<UserController> logger,
         IUserAlcoholRepository userAlcoholRepository,
-        IUserPartyRepository userPartyRepository)
+        IUserPartyRepository userPartyRepository,
+        IFileService fileService)
         : ControllerBase
     {
         [HttpPost("login")]
@@ -51,16 +52,37 @@ namespace AlcoStack.Controllers;
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
-                    FormBackgroundUrl = user.FormBackgroundUrl
+                    BackgroundPhoto = user.BackgroundPhoto
                 }
             );
         } 
     
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromForm] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (registerDto.PhotoFile != null)
+            {
+
+                var photoFileResult = fileService.SaveImage(registerDto.PhotoFile);
+
+                if (photoFileResult.Item1 == 1)
+                    registerDto.Photo = photoFileResult.Item2;
+                else
+                    return StatusCode(500, photoFileResult.Item2);
+            }
+
+            if (registerDto.BackgroundPhotoFile != null)
+            {
+                var backgroundPhotoFileResult = fileService.SaveImage(registerDto.BackgroundPhotoFile);
+
+                if (backgroundPhotoFileResult.Item1 == 1)
+                    registerDto.BackgroundPhoto = backgroundPhotoFileResult.Item2;
+                else
+                    return StatusCode(500, backgroundPhotoFileResult.Item2);
+            }
 
             var user = new User
             {
@@ -76,7 +98,7 @@ namespace AlcoStack.Controllers;
                 UpdatedDate = DateTime.Now,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                FormBackgroundUrl = registerDto.FormBackgroundUrl
+                BackgroundPhoto = registerDto.BackgroundPhoto
             };
 
             try
@@ -130,7 +152,7 @@ namespace AlcoStack.Controllers;
                     Photo = user.Photo,
                     Bio = user.Bio,
                     Gender = user.Gender,
-                    FormBackgroundUrl = user.FormBackgroundUrl
+                    BackgroundPhoto = user.BackgroundPhoto
                 };
 
                 return Ok(newUserDto);
@@ -245,28 +267,45 @@ namespace AlcoStack.Controllers;
         
         [HttpPatch("updatePhoto")]
         [Authorize]
-        public async Task<IActionResult> UpdatePhoto([FromBody] UpdateUserPhotoDto  photoDto)
+        public async Task<IActionResult> UpdatePhoto([FromForm] UpdateUserPhotoDto photoDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+    
             var username = User.GetUsername();
             var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
-            
+    
             if (user == null)
                 return NotFound();
-            
-            user.Photo = photoDto.Photo;
-            user.FormBackgroundUrl = photoDto.FormBackgroundUrl;
-            user.UpdatedDate = DateTime.Now;
+    
+            if (photoDto.PhotoFile != null)
+            {
+                var photoFileResult = fileService.SaveImage(photoDto.PhotoFile);
+        
+                if (photoFileResult.Item1 == 1)
+                    user.Photo = photoFileResult.Item2;
+                else
+                    return StatusCode(500, photoFileResult.Item2);
+            }
+    
+            if (photoDto.BackgroundPhotoFile != null)
+            {
+                var backgroundPhotoFileResult = fileService.SaveImage(photoDto.BackgroundPhotoFile);
+        
+                if (backgroundPhotoFileResult.Item1 == 1)
+                    user.BackgroundPhoto = backgroundPhotoFileResult.Item2;
+                else
+                    return StatusCode(500, backgroundPhotoFileResult.Item2);
+            }
+    
             var result = await userManager.UpdateAsync(user);
-            
+    
             if (result.Succeeded)
                 return Ok(user);
-            
+    
             return StatusCode(500, result.Errors);
         }
-        
+
         [HttpGet("{partyId}/users")]
         public async Task<IActionResult> GetUsersByPartyId(Guid partyId)
         {

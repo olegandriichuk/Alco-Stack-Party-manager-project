@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -98,10 +99,14 @@ builder.Services.AddScoped<IUserPartyRepository, UserPartyRepository>();
 builder.Services.AddScoped<IPartyAlcoholRepository, PartyAlcoholRepository>();
 builder.Services.AddScoped<IAlcoholRankingService, AlcoholRankingService>();
 builder.Services.AddHttpClient<ICocktailService, CocktailService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 
 
 var app = builder.Build();
+
+app.UseStaticFiles();
+
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
     SeedData(app);
