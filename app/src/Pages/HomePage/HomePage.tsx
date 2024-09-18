@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
 import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 import backgroundImage from '../../assets/backcov1.svg';
+import video from '../../assets/viddd2.mp4';
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
 import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
 import { useAuth } from "../../Context/useAuth.tsx";
@@ -16,11 +17,13 @@ import { toast } from "react-toastify";
 import { GetPartyListAPI } from "../../Services/PartyService";
 import { PartyListGet } from "../../Models/Party.tsx";
 
+
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
 
     const { token } = useAuth();
     const [parties, setParties] = useState<PartyListGet[]>([]);
+    //const [zoomLevel, setZoomLevel] = useState(1);
 
     const UserPartiesGet = async () => {
         if (!token) {
@@ -62,98 +65,159 @@ const HomePage: React.FC = () => {
         UserPartiesGet(); // Refresh the party list after closing the pop-up
     };
 
+    // // Функция для получения текущего уровня масштабирования
+    // const getZoomLevel = () => {
+    //     return window.outerWidth / window.innerWidth;
+    // };
+    //
+    // // Обработчик изменения размера окна (для отслеживания масштабирования)
+    // const handleResize = () => {
+    //     const newZoomLevel = getZoomLevel();
+    //     setZoomLevel(newZoomLevel); // Обновляем состояние с новым уровнем масштабирования
+    // };
+    //
+    // // useEffect для отслеживания изменения размера окна
+    // useEffect(() => {
+    //     window.addEventListener('resize', handleResize);
+    //
+    //     // Убираем обработчик при размонтировании компонента
+    //     return () => {
+    //         window.removeEventListener('resize', handleResize);
+    //     };
+    // }, []);
+
     const menuButtons = [
         { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
         { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
         { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
 
+    const videoStyles : React.CSSProperties = {
+        position: isMobile ? 'static' : 'fixed',
+        top: 0,
+        // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
+        height: isMobile ? '0vh' : '100vh',
+        objectFit: 'cover' as const,
+        zIndex: -1,
+       boxSizing: 'border-box',
+
+    };
+
     return (
-        <div
-            className="container-fluid p-0 d-flex flex-column align-items-center custom-background"
-            style={{
-                backgroundColor: '#DDE4EE',
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
-                backgroundRepeat: 'no-repeat',
-                backgroundAttachment: 'fixed',
-                minHeight: '100vh',
-            }}>
-            <style>
-                {`
+        <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
+
+            <div className="video-left flex-grow-1">
+                <video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
+                    <source src={video} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <div
+                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container flex-grow-7"
+                style={{
+                    backgroundColor: '#DDE4EE',
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundAttachment: 'fixed',
+                    minHeight: isMobile ? '100vh' : '100vh',
+                }}>
+                <style>
+                    {`
                 @font-face {
                     font-family: 'JejuHallasan';
                     src: url(${JejuHallasan}) format('truetype');
                 }
-                
+        
                 @font-face {
                     font-family: 'Halant';
                     src: url(${Halant}) format('truetype');
                 }
-
-
+    
                 .logo-text {
                     font-family: 'JejuHallasan', sans-serif;
                 }
-
+                
                 .custom-heading {
                     font-family: 'Halant', serif;
                 }
-                `}
-            </style>
-            <div className="d-flex justify-content-between align-items-center w-100">
-                <div>
-                    <img
-                        src={Disco}
-                        alt="Party Icon"
-                        width="80"
-                        height="80"
-                    />
+                
+                .square-container {
+                        position: relative;
+                        width: 100%;
+                        height: auto;
+                        max-width: 800px;
+                        max-height: 900px;
+                        margin: 0 auto;
+                        background-color: white;
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                        z-index: 1;
+                    }
+                }
+        `}
+                </style>
+                <div className="d-flex justify-content-between align-items-center w-100">
+                    <div>
+                        <img
+                            src={Disco}
+                            alt="Party Icon"
+                            width="80"
+                            height="80"
+                        />
+                    </div>
+                    <Link to={"/welcome"} className="p-2" aria-label="Go to Welcome Page">
+                        <FontAwesomeIcon icon={faCircleInfo} size="2x" color="black"/>
+                    </Link>
                 </div>
-                <Link to={"/welcome"} className="p-2" aria-label="Go to Welcome Page">
-                    <FontAwesomeIcon icon={faCircleInfo} size="2x" color="black"/>
-                </Link>
-            </div>
 
-            <div className="logo-container d-flex align-items-center">
-                <img
-                    src={Logo}
-                    alt="Logo"
-                    width="200"
-                    height="90"
-                />
-                <span className="logo-text" style={{
-                    position: 'relative',
-                    top: '-5px',
-                    left: '-102px',
-                    fontSize: '13px',
-                    fontFamily: 'JejuHallasan, sans-serif',
-                    lineHeight: '1'
-                }}>
+                <div className="logo-container d-flex align-items-center">
+                    <img
+                        src={Logo}
+                        alt="Logo"
+                        width="200"
+                        height="90"
+                    />
+                    <span className="logo-text" style={{
+                        position: 'relative',
+                        top: '-5px',
+                        left: '-102px',
+                        fontSize: '13px',
+                        fontFamily: 'JejuHallasan, sans-serif',
+                        lineHeight: '1'
+                    }}>
                     <span style={{
                         display: 'inline-block',
                         transform: 'translateX(4px)'
                     }}>
                         ALCO
                     </span>
-                    <br />
+                    <br/>
                     STACK
                 </span>
+                </div>
+
+                <h2 className="custom-heading">Your party, your rules!</h2>
+                <h2 className="custom-heading">Your unforgettable night!🎉</h2>
+
+                {showCreatePartyPopUp && (
+                    <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty}/>
+                )}
+                <MenuButtonList menuButtons={menuButtons}/>
+                <PartyButtonList parties={parties}/>
+
+                {showJoinPartyPopUp && (
+                    <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty}/>
+                )}
+
             </div>
-
-            <h2 className="custom-heading">Your party, your rules!</h2>
-            <h2 className="custom-heading">Your unforgettable night!🎉</h2>
-            <MenuButtonList menuButtons={menuButtons}/>
-            <PartyButtonList parties={parties}/>
-
-            {showCreatePartyPopUp && (
-                <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty} />
-            )}
-
-            {showJoinPartyPopUp && (
-                <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty} />
-            )}
+            <div className="video-right flex-grow-1">
+                <video className="background-video right" style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
+                    <source src={video} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>
+            </div>
 
         </div>
     );
