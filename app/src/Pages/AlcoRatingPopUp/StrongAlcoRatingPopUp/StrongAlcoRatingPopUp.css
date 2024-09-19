@@ -1,5 +1,5 @@
 ﻿/* Заблюрений фон */
-.modal-backdrop-blur {
+.strongalco-modal-backdrop-blur {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,12 +11,12 @@
 }
 
 /* Стиль модального контейнера */
-.modal-container {
+.strongalco-modal-container {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
+    width: 600px;
     height: 367px;
     /*background-color: white;*/
     border-radius: 15px;
@@ -30,7 +30,7 @@
 }
 
 /* Вміст модального вікна */
-.modal-content {
+.strongalco-modal-content {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Центрування елементів */
@@ -38,7 +38,7 @@
     width: 100%;
 }
 
-.btn-save {
+.strongalco-btn-save {
     background-color: #D9D9D9; /* Світло-сірий колір */
     border: none;
     border-radius: 50px; /* Заокруглені краї */
@@ -48,11 +48,24 @@
     color: black;
     cursor: pointer;
     margin-top: 20px;
-    width: 80%; /* Ширина на 100% контейнера */
+    width: 60%; /* Ширина на 100% контейнера */
     max-width: 300px; /* Максимальна ширина */
     transition: background-color 0.3s ease; /* Ефект переходу */
 }
 
-.btn-save:hover {
+.strongalco-btn-save:hover {
     background-color: #BEBEBE; /* Зміна кольору при наведенні */
+}
+
+@media (max-width: 768px) {
+    .strongalco-modal-container {
+        width: 80%; /* Зменшена ширина для планшетів */
+    }
+}
+
+/* Медіа-запит для екранів шириною до 576px (типові смартфони) */
+@media (max-width: 576px) {
+    .strongalco-modal-container {
+        width: 80%; /* Майже повна ширина для мобільних пристроїв */
+    }
 }

@@ -1,20 +1,16 @@
 ﻿import React from 'react';
-//import './ChooseAlcoButtonList.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Slider from "../Slider/Slider";
-
-
 
 interface SliderItem {
     label: string;
     value: number;
-    //toggle: boolean;
-   onChange: (value: number) => void;
-  //  onToggleChange: () => void;
+    imageSrc: string; // Include the image source
+    onChange: (value: number) => void;
 }
 
 interface SliderListProps {
-    sliders: SliderItem[]; // Масив слайдерів
+    sliders: SliderItem[]; // Array of sliders
 }
 
 const SliderList: React.FC<SliderListProps> = ({ sliders }) => {
@@ -27,14 +23,12 @@ const SliderList: React.FC<SliderListProps> = ({ sliders }) => {
                             label={slider.label}
                             value={slider.value}
                             onChange={slider.onChange}
-                           // toggle={slider.toggle}
-                            //onToggleChange={slider.onToggleChange}
+                            imageSrc={slider.imageSrc} // Pass the image source
                         />
                     </div>
                 ))}
             </div>
         </div>
-
     );
 };
 

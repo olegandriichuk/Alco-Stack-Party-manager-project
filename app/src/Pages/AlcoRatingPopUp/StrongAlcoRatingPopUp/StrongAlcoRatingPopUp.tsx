@@ -13,7 +13,8 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
         { label: 'Vodka', value: 5, toggle: false },
         { label: 'Whiskey', value: 5, toggle: false },
         { label: 'Gin', value: 5, toggle: false },
-        { label: 'Tequila', value: 5, toggle: false }
+        { label: 'Tequila', value: 5, toggle: false },
+        { label: 'Rum', value: 5, toggle: false }
     ]);
 
     // Обробник зміни значення слайдера
@@ -45,11 +46,11 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
     };
     return (
         <>
-            <div className="modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
-            <div className="modal-container">
-                <div className="modal-content">
+            <div className="strongalco-modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
+            <div className="strongalco-modal-container">
+                <div className="strongalco-modal-content">
                     <SliderList sliders={sliderItems}/>
-                    <button className="btn-save" onClick={handleClose}>Save</button>
+                    <button className="strongalco-btn-save" onClick={handleClose}>Save</button>
                 </div>
             </div>
         </>

@@ -1,5 +1,5 @@
 ﻿/* Заблюрений фон */
-.modal-backdrop-blur {
+.liquor-modal-backdrop-blur {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,12 +11,12 @@
 }
 
 /* Стиль модального контейнера */
-.modal-container {
+.liquor-modal-container {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
+    width: 600px;
     height: 367px;
     /*background-color: white;*/
     border-radius: 15px;
@@ -30,15 +30,15 @@
 }
 
 /* Вміст модального вікна */
-.modal-content {
+.liquor-modal-content {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Центрування елементів */
     align-items: center; /* Центрування по горизонталі */
     width: 100%;
 }
-.btn-save {
-    background-color: #f1f1f1; /* Світло-сірий колір */
+.liquor-btn-save {
+    background-color: #D5D5D5; /* Світло-сірий колір */
     border: none;
     border-radius: 50px; /* Заокруглені краї */
     padding: 15px 30px; /* Великі розміри кнопки */
@@ -47,11 +47,24 @@
     color: black;
     cursor: pointer;
     margin-top: 20px;
-    width: 80%; /* Ширина на 100% контейнера */
+    width: 60%; /* Ширина на 100% контейнера */
     max-width: 300px; /* Максимальна ширина */
     transition: background-color 0.3s ease; /* Ефект переходу */
 }
 
-.btn-save:hover {
+.liquor-btn-save:hover {
     background-color: #BEBEBE; /* Зміна кольору при наведенні */
+}
+
+@media (max-width: 768px) {
+    .liquor-modal-container {
+        width: 80%; /* Зменшена ширина для планшетів */
+    }
+}
+
+/* Медіа-запит для екранів шириною до 576px (типові смартфони) */
+@media (max-width: 576px) {
+    .liquor-modal-container {
+        width: 80%; /* Майже повна ширина для мобільних пристроїв */
+    }
 }

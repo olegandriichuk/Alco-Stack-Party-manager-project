@@ -2,7 +2,7 @@
 import './LiquorRatingPopUp.css';
 //import Slider from "../../../components/Slider/Slider.tsx";
 import SliderList from "../../../components/SliderList/SliderList";
-
+import beer1 from "../../../assets/beer1.png";
 interface LowAlcoRatingPopUpProps {
     show: boolean;
     handleClose: () => void;
@@ -10,10 +10,11 @@ interface LowAlcoRatingPopUpProps {
 
 const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
     const [sliders, setSliders] = useState([
-        { label: 'Amaro', value: 5, toggle: false },
-        { label: 'Baileys', value: 5, toggle: false },
-        { label: 'Umeru', value: 5, toggle: false },
-        { label: 'Campari', value: 5, toggle: false }
+        { label: 'Amaro', value: 5,imageSrc: beer1, toggle: false },
+        { label: 'Baileys', value: 5,imageSrc: beer1, toggle: false },
+        { label: 'Umeru', value: 5,imageSrc: beer1, toggle: false },
+        { label: 'Campari', value: 5,imageSrc: beer1, toggle: false },
+        { label: 'Aperol', value: 5,imageSrc: beer1, toggle: false },
     ]);
 
     // Обробник зміни значення слайдера
@@ -45,11 +46,11 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
 
     return (
         <>
-            <div className="modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
-            <div className="modal-container">
-                <div className="modal-content">
+            <div className="liquor-modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
+            <div className="liquor-modal-container">
+                <div className="liquor-modal-content">
                     <SliderList sliders={sliderItems}/>
-                    <button className="btn-save" onClick={handleClose}>Save</button>
+                    <button className="liquor-btn-save" onClick={handleClose}>Save</button>
                 </div>
             </div>
         </>

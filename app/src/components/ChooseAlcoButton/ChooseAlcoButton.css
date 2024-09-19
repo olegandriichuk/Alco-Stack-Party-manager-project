@@ -1,15 +1,4 @@
-﻿/* Import Halant font */
-@font-face {
-    font-family: 'Halant';
-    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
-}
-
-/* Apply font to the button text */
-.ChooseAlcoButton span {
-    font-family: 'Halant', serif;
-}
-
-.container .menu-button {
+﻿.container .menu-button {
     display: flex;
     flex-direction: column;
     align-items: center;

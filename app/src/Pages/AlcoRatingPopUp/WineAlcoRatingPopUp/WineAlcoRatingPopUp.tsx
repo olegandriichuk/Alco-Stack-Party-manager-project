@@ -12,7 +12,8 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
         { label: 'White wine', value: 5 },
         { label: 'Red wine', value: 5 },
         { label: 'Rose wine', value: 5 },
-        { label: 'Dessert wine', value: 5 }
+        { label: 'Dessert wine', value: 5 },
+        { label: 'Sparkling wine', value: 5 }
     ]);
 
     // Обробник зміни значення слайдера
@@ -38,13 +39,13 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
 
     return (
         <>
-            <div className="modal-backdrop-blur" onClick={handleBackdropClick}> {/* Фон, що закриває вікно */}
-                <div className="modal-container">
-                    <div className="modal-content">
+            <div className="midalco-modal-backdrop-blur" onClick={handleBackdropClick}> {/* Фон, що закриває вікно */}
+                <div className="midalco-modal-container">
+                    <div className="midalco-modal-content">
                         <SliderList sliders={sliderItems} />
 
                         {/* Кнопка Save з великими розмірами, сірого кольору, заокруглена */}
-                        <button className="btn-save" onClick={handleClose}>Save</button>
+                        <button className="midalco-btn-save" onClick={handleClose}>Save</button>
                     </div>
                 </div>
             </div>
