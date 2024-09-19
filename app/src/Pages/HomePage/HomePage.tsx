@@ -152,14 +152,16 @@ const HomePage: React.FC = () => {
                         max-height: 900px;
                         margin: 0 auto;
                         background-color: white;
-                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                        border-radius: 10px;
+                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), /* Основная большая тень */
+                                    0 5px 15px rgba(0, 0, 0, 1); /* Дополнительная мягкая тень */
                         z-index: 1;
                     }
-                }
+                
         `}
                 </style>
                 <div className="d-flex justify-content-between align-items-center w-100">
-                    <div>
+                    <div className="disco-container" style={{marginTop: '-1.5px'}}>
                         <img
                             src={Disco}
                             alt="Party Icon"
@@ -198,8 +200,29 @@ const HomePage: React.FC = () => {
                 </span>
                 </div>
 
-                <h2 className="custom-heading">Your party, your rules!</h2>
-                <h2 className="custom-heading">Your unforgettable night!🎉</h2>
+                <div className="centered-container">
+                    <h2 className="custom-heading">Your party, your rules!</h2>
+                    <h2 className="custom-heading">Your unforgettable night!🎉</h2>
+                </div>
+
+                <style>
+                    {`
+                    .custom-heading {
+                        text-align: center;
+                        font-family: 'Halant', serif;
+                        width: 100%;
+                    }
+            
+                    .centered-container {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                    }
+                `}
+                </style>
+
 
                 {showCreatePartyPopUp && (
                     <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty}/>
