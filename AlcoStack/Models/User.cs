@@ -15,9 +15,17 @@ public class User : IdentityUser
     public Address? Address { get; set; }
     [NotMapped]
     public IFormFile? PhotoFile { get; set; }
-    public string? Photo { get; set; }
+    
+    public string? PhotoName { get; set; }
+    
+    [NotMapped]
+    public string? PhotoSrc { get; set; }
     public string? Bio { get; set; }
-    public string? BackgroundPhoto { get; set; }
+    
+    public string? BackgroundPhotoName { get; set; }
+    
+    [NotMapped]
+    public string? BackgroundPhotoSrc { get; set; }
     [NotMapped]
     public IFormFile? BackgroundPhotoFile { get; set; }
     

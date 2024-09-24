@@ -19,11 +19,13 @@ public class NewUserDto
     public AddressDto? Address { get; set; }  
     public string? Phone { get; set; }  
     
-    public string? Photo { get; set; }
-    public IFormFile? PhotoFile { get; set; }
+    public string? PhotoName { get; set; }
     
-    public string? BackgroundPhoto { get; set; }
-    public IFormFile? BackgroundPhotoFile { get; set; }
+    public string? PhotoSrc { get; set; }
+    
+    public string? FormBackgroundName { get; set; }
+    
+    public string? FormBackgroundSrc { get; set; }
     public string? Bio { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; } 

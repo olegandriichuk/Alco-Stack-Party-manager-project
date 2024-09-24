@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using AlcoStack.Interface;
 using AlcoStack.Repositories;
 using AlcoStack.Service;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -105,7 +106,12 @@ builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();
 
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/Uploads"
+});
 
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")

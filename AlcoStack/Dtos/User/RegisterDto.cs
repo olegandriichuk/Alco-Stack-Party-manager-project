@@ -26,11 +26,9 @@ public class RegisterDto
 
     public string? Phone { get; set; }  
 
-    public string? Photo { get; set; }
     public IFormFile? PhotoFile { get; set; }
   
-    public string? BackgroundPhoto { get; set; }
-    public IFormFile? BackgroundPhotoFile { get; set; }
+    public IFormFile? FormBackgroundFile { get; set; }
     public string? Bio { get; set; }
     [JsonIgnore]    
     public DateTime CreatedDate { get; set; } = DateTime.Now;
