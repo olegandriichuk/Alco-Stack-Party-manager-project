@@ -103,10 +103,10 @@ const ProfilePage: React.FC = () => {
                         margin: 0 auto;
                         background-color: white;
                         border-radius: 10px;
-                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), /* Основная большая тень */
-                                    0 5px 15px rgba(0, 0, 0, 1); /* Дополнительная мягкая тень */
+                        box-shadow: 0 8px 30px rgba(255, 255, 255, 1), /* Основная большая тень */
+                                    0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */
                         z-index: 1;
-                    }
+                }
                 
         `}
                 </style>
@@ -135,7 +135,7 @@ const ProfilePage: React.FC = () => {
                     formBackgroundUrl={user?.formBackgroundUrl || ""}
                 />
 
-                <h3 style={{marginTop: '20px', fontFamily: 'HalantSemiBold'}}>
+                <h3 style={{marginTop: '20px', fontFamily: 'HalantSemiBold', textAlign: 'center'}}>
                     <style>
                         {`
             @font-face {

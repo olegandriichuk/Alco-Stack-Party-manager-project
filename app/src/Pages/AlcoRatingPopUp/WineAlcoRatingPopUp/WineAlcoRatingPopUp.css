@@ -39,8 +39,8 @@
 }
 
 .midalco-btn-save {
-    background-color: #f1f1f1; /* Світло-сірий колір */
-    border: none;
+    background-color: rgba(213, 213, 213, 0.86); /* Колір Fill (#D5D5D5) з 86% прозорістю */
+    border: 2px solid #90A4AE; /* Колір Stroke (#90A4AE) */
     border-radius: 50px; /* Заокруглені краї */
     padding: 15px 30px; /* Великі розміри кнопки */
     font-size: 18px;
@@ -50,11 +50,12 @@
     margin-top: 20px;
     width: 60%; /* Ширина на 100% контейнера */
     max-width: 300px; /* Максимальна ширина */
-    transition: background-color 0.3s ease; /* Ефект переходу */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Ефект плавного переходу */
 }
 
 .midalco-btn-save:hover {
-    background-color: #BEBEBE; /* Зміна кольору при наведенні */
+    background-color: rgba(190, 190, 190, 0.86); /* Трохи темніший сірий колір при наведенні */
+    border-color: #78909C; /* Трохи темніший колір Stroke при наведенні */
 }
 
 @media (max-width: 768px) {

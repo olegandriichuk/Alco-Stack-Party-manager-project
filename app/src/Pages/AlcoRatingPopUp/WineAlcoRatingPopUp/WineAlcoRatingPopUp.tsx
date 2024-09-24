@@ -1,19 +1,23 @@
 ﻿import React, { useState } from "react";
 import './WineAlcoRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
-
-interface LowAlcoRatingPopUpProps {
+import martini from "../../../assets/martini.jpg";
+import sweet_vermouth from "../../../assets/sweet_vermouth.jpg";
+import champagne from "../../../assets/champagne.jpg";
+import dubonnet from "../../../assets/dubonnet.jpg";
+import prosecco from "../../../assets/dubonnet.jpg";
+interface WineRatingPopUpProps {
     show: boolean;
     handleClose: () => void;
 }
 
-const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
+const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) => {
     const [sliders, setSliders] = useState([
-        { label: 'White wine', value: 5 },
-        { label: 'Red wine', value: 5 },
-        { label: 'Rose wine', value: 5 },
-        { label: 'Dessert wine', value: 5 },
-        { label: 'Sparkling wine', value: 5 }
+        { label: 'Sweet Vermouth', imageSrc: sweet_vermouth, value: 5 },
+        { label: 'Dry Vermouth',imageSrc: martini,value: 5 },
+        { label: 'Champagne',imageSrc: champagne,  value: 5 },
+        { label: 'Dubonnet Rouge', imageSrc: dubonnet, value: 5 },
+        { label: 'Prosecco', imageSrc: prosecco, value: 5 }
     ]);
 
     // Обробник зміни значення слайдера
@@ -53,4 +57,4 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
     );
 };
 
-export default LowAlcoRatingPopUp;
+export default WineRatingPopUp;

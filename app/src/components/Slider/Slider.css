@@ -1,12 +1,13 @@
 ﻿.slider-container {
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
+    background: linear-gradient(90deg, #D5D5D5 88%, #737373 100%);
     border-radius: 25px;
     padding: 7px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
     width: 100%;
 }
+
 
 .slider-header {
     display: flex;
@@ -15,22 +16,24 @@
 }
 
 .slider-image {
-    width: 30px; /* Set the width of the image */
-    height: 30px; /* Set the height of the image */
-    margin-right: 8px; /* Space between the image and the label */
+    width: 28px; /* Set the width of the image */
+    height: 28px; /* Set the height of the image */
+    margin-right: 10px; /* Space between the image and the label */
 }
 
 .slider-label {
-    margin-right: 35px;
+
+    margin-right: 50px;
     font-weight: bold;
     font-size: 12px;
     white-space: nowrap; /* Prevent text wrapping */
     max-width: 40px;
+    text-align: center; /* Align text to center */
 }
 
 .slider-range {
     -webkit-appearance: none;
-    width: 80%;
+    width: 75%;
     height: 8px;
     background: #ddd;
     border-radius: 5px;
@@ -57,6 +60,16 @@
     cursor: pointer;
 }
 
+@font-face {
+    font-family: 'Halant';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+    font-weight: 600; /* SemiBold */
+    font-style: normal;
+}
+
 .slider-value {
-    font-size: 14px; /* Adjust the font size as needed */
+    font-size: 18px; /* Розмір шрифту */
+    margin-left: auto;
+    font-family: 'Halant', serif; /* Використання шрифту Halant */
+    font-weight: 600; /* Напівжирний (SemiBold) */
 }

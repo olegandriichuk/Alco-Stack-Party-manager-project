@@ -17,55 +17,72 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
+    max-width: 100%; /* Максимальна ширина не більше 100% екрана */
     height: 367px;
-    /*background-color: white;*/
     border-radius: 15px;
     z-index: 1050;
-    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Центр по вертикалі */
-    align-items: center; /* Центр по горизонталі */
-    text-align: center; /* Текст теж по центру */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-height: 80vh; /* Максимальна висота для модального вікна */
+    overflow: hidden;
+    box-sizing: border-box; /* Враховує padding та border у ширину */
 }
 
 /* Вміст модального вікна */
 .strongalco-modal-content {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Центрування елементів */
-    align-items: center; /* Центрування по горизонталі */
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    box-sizing: border-box; /* Враховує padding у ширину */
 }
 
+/* Прокручуваний список слайдерів */
+.strongalco-slider-list-container {
+    max-height: 300px; /* Максимальна висота для списку слайдерів */
+    overflow-y: auto; /* Додаємо вертикальну прокрутку */
+    width: 100%; /* Ширина списку на всю модаль */
+    padding: 0 15px; /* Додаємо padding для уникнення обрізання тексту */
+    box-sizing: border-box; /* Враховує padding у ширину */
+}
+
+/* Стиль кнопки "Save" */
 .strongalco-btn-save {
-    background-color: #D9D9D9; /* Світло-сірий колір */
-    border: none;
+    background-color: rgba(213, 213, 213, 0.86); /* Колір Fill (#D5D5D5) з 86% прозорістю */
+    border: 2px solid #90A4AE; /* Колір Stroke (#90A4AE) */
     border-radius: 50px; /* Заокруглені краї */
     padding: 15px 30px; /* Великі розміри кнопки */
     font-size: 18px;
     font-weight: bold;
     color: black;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 60%; /* Ширина на 100% контейнера */
     max-width: 300px; /* Максимальна ширина */
-    transition: background-color 0.3s ease; /* Ефект переходу */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Ефект плавного переходу */
 }
 
 .strongalco-btn-save:hover {
-    background-color: #BEBEBE; /* Зміна кольору при наведенні */
+    background-color: rgba(190, 190, 190, 0.86); /* Трохи темніший сірий колір при наведенні */
+    border-color: #78909C; /* Трохи темніший колір Stroke при наведенні */
 }
 
+/* Медіа-запит для екранів до 768px (планшети) */
 @media (max-width: 768px) {
     .strongalco-modal-container {
-        width: 80%; /* Зменшена ширина для планшетів */
+        width: 80%;
+        max-width: 100%;
     }
 }
 
-/* Медіа-запит для екранів шириною до 576px (типові смартфони) */
+/* Медіа-запит для екранів до 576px (смартфони) */
 @media (max-width: 576px) {
     .strongalco-modal-container {
-        width: 80%; /* Майже повна ширина для мобільних пристроїв */
+        width: 80%;
+        max-width: 100%;
     }
 }
