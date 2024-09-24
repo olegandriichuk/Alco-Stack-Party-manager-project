@@ -20,31 +20,30 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
         background: 'linear-gradient(to right, rgba(74, 67, 67, 0.65), rgba(176, 159, 159, 0.65))',
         color: '#FFFFFF',
         fontFamily: 'Halant Medium',
+        padding: '10px',
+        borderRadius: '5px 5px 0 0', // Скругление для верха
     };
 
-    // console.log("parties", parties);
-    //
-    // if (parties && parties[1]) {
-    //     console.log("partyId", parties[1].partyId);
-    // } else {
-    //     console.log("No party found at index 1");
-    // }
-
-
     return (
-        <div className="list-group w-100">
-            {
-            <h4 className="p-2 rounded-top-4" style={partyStyle}>Your Parties</h4>}
-            {parties.map((party, index) => (
-                <PartyButton
-                    key={index}
-                    partyId={party.partyId}
-                    name={party.name}
-                    description={party.description}
-                    date={party.date}
-                    createdByMe={party.createdByMe}
-                />
-            ))}
+        <div className="w-100">
+            {/* Заголовок поза скрол-контейнером */}
+            <h4 className="p-2 rounded-top-4" style={partyStyle}>Your Parties</h4>
+
+            {/* Скрол-контейнер для списку партій */}
+            <div className="scroll-container w-100">
+                <div className="list-group w-100">
+                    {parties.map((party, index) => (
+                        <PartyButton
+                            key={index}
+                            partyId={party.partyId}
+                            name={party.name}
+                            description={party.description}
+                            date={party.date}
+                            createdByMe={party.createdByMe}
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };

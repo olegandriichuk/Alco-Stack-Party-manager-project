@@ -16,6 +16,7 @@ import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
 import { GetPartyListAPI } from "../../Services/PartyService";
 import { PartyListGet } from "../../Models/Party.tsx";
+import './HomePage.css';
 
 
 const HomePage: React.FC = () => {
@@ -87,9 +88,9 @@ const HomePage: React.FC = () => {
     // }, []);
 
     const menuButtons = [
-        { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
-        { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
-        { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
+        { text: 'your profile', icon: faUser, color: 'rgba(225, 219, 101, 0.9)', link: '/profile' },
+        { text: 'join party', icon: faCake, color: 'rgba(112, 140, 231, 0.9)', onClick: handleShowJoinParty },
+        { text: 'create party', icon: faUsers, color: 'rgba(224, 122, 122, 0.9)', onClick: handleShowCreateParty },
     ];
 
     const videoStyles : React.CSSProperties = {
@@ -119,7 +120,7 @@ const HomePage: React.FC = () => {
                     backgroundColor: '#DDE4EE',
                     backgroundImage: `url(${backgroundImage})`,
                     backgroundSize: 'cover',
-                    backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
+                    backgroundPosition: isMobile ? '-3px 10px' : '31px 6px',
                     backgroundRepeat: 'no-repeat',
                     backgroundAttachment: 'fixed',
                     minHeight: isMobile ? '100vh' : '100vh',
@@ -144,7 +145,7 @@ const HomePage: React.FC = () => {
                     font-family: 'Halant', serif;
                 }
                 
-                .square-container {
+               .square-container {
                         position: relative;
                         width: 100%;
                         height: auto;
@@ -153,10 +154,27 @@ const HomePage: React.FC = () => {
                         margin: 0 auto;
                         background-color: white;
                         border-radius: 10px;
-                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), /* Основная большая тень */
-                                    0 5px 15px rgba(0, 0, 0, 1); /* Дополнительная мягкая тень */
+                        box-shadow: 0 8px 30px rgba(255, 255, 255, 1), /* Основная большая тень */
+                                    0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */
                         z-index: 1;
                     }
+            
+            // /* Эффект при наведении: увеличиваем элемент только на десктопе */
+            // .square-container:hover {
+            //     transform: perspective(1000px) scale(1.05);
+            // }
+            //
+            // /* Отключаем увеличение для мобильных устройств с помощью медиа-запросов */
+            // @media (max-width: 768px) {
+            //     .square-container {
+            //         transform: none; /* Отключаем любые трансформации */
+            //     }
+            //
+            //     // .square-container:hover {
+            //     //     transform: none; /* Убираем увеличение при наведении */
+            //     // }
+            // }
+
                 
         `}
                 </style>
@@ -227,9 +245,11 @@ const HomePage: React.FC = () => {
                 {showCreatePartyPopUp && (
                     <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty}/>
                 )}
-                <MenuButtonList menuButtons={menuButtons}/>
-                <PartyButtonList parties={parties}/>
 
+                <MenuButtonList menuButtons={menuButtons}/>
+                {/*<div className="slider-list-container">*/}
+                    <PartyButtonList parties={parties}/>
+               {/*// </div>*/}
                 {showJoinPartyPopUp && (
                     <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty}/>
                 )}
