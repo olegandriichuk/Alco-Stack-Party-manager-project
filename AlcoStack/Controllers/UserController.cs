@@ -19,7 +19,8 @@ namespace AlcoStack.Controllers;
         ILogger<UserController> logger,
         IUserAlcoholRepository userAlcoholRepository,
         IUserPartyRepository userPartyRepository,
-        IFileService fileService)
+        IFileService fileService,
+        IWebHostEnvironment webHostEnvironment)
         : ControllerBase
     {
         [HttpPost("login")]
@@ -48,11 +49,13 @@ namespace AlcoStack.Controllers;
                     DateOfBirth = user.DateOfBirth,
                     Address = user.Address.MapToDto(),
                     Phone = user.PhoneNumber,
-                    Photo = user.Photo,
+                    PhotoName = user.PhotoName,
+                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
-                    BackgroundPhoto = user.BackgroundPhoto
+                    FormBackgroundName = user.BackgroundPhotoName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}"
                 }
             );
         } 
@@ -63,27 +66,6 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (registerDto.PhotoFile != null)
-            {
-
-                var photoFileResult = fileService.SaveImage(registerDto.PhotoFile);
-
-                if (photoFileResult.Item1 == 1)
-                    registerDto.Photo = photoFileResult.Item2;
-                else
-                    return StatusCode(500, photoFileResult.Item2);
-            }
-
-            if (registerDto.BackgroundPhotoFile != null)
-            {
-                var backgroundPhotoFileResult = fileService.SaveImage(registerDto.BackgroundPhotoFile);
-
-                if (backgroundPhotoFileResult.Item1 == 1)
-                    registerDto.BackgroundPhoto = backgroundPhotoFileResult.Item2;
-                else
-                    return StatusCode(500, backgroundPhotoFileResult.Item2);
-            }
-
             var user = new User
             {
                 UserName = registerDto.Username,
@@ -92,14 +74,22 @@ namespace AlcoStack.Controllers;
                 // Address = registerDto.Address,
                 Gender = registerDto.Gender,
                 PhoneNumber = registerDto.Phone,
-                Photo = registerDto.Photo,
                 Bio = registerDto.Bio,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                BackgroundPhoto = registerDto.BackgroundPhoto
             };
+            
+            if(registerDto.PhotoFile != null)
+            {
+                user.PhotoName = await SaveImage(registerDto.PhotoFile);
+            }
+            
+            if(registerDto.FormBackgroundFile != null)
+            {
+                user.BackgroundPhotoName = await SaveImage(registerDto.FormBackgroundFile);
+            }
 
             try
             {
@@ -149,10 +139,12 @@ namespace AlcoStack.Controllers;
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
                     Phone = user.PhoneNumber,
-                    Photo = user.Photo,
+                    PhotoName = user.PhotoName,
+                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     Gender = user.Gender,
-                    BackgroundPhoto = user.BackgroundPhoto
+                    FormBackgroundName = user.BackgroundPhotoName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}"
                 };
 
                 return Ok(newUserDto);
@@ -184,6 +176,7 @@ namespace AlcoStack.Controllers;
             
             var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
             
+            
             if (user == null)
                 return NotFound();
             
@@ -196,12 +189,36 @@ namespace AlcoStack.Controllers;
         {
             var username = User.GetUsername();
             var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
-            
+
             if (user == null)
                 return NotFound();
-            
-            return Ok(user);
+
+            // Get the full path to the "Uploads" directory
+            var uploadsDirectory = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads");
+
+            var userDto = new NewUserDto
+            {
+                UserName = user.UserName,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Email = user.Email,
+                Token = tokenService.CreateToken(user),
+                Address = user.Address.MapToDto(),
+                DateOfBirth = user.DateOfBirth,
+                CreatedDate = user.CreatedDate,
+                UpdatedDate = user.UpdatedDate,
+                Phone = user.PhoneNumber,
+                PhotoName = user.PhotoName,
+                PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                FormBackgroundName = user.BackgroundPhotoName,
+                FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}",
+                Bio = user.Bio,
+                Gender = user.Gender
+            };
+
+            return Ok(userDto);
         }
+
         
         [HttpPut("update")]
         [Authorize]
@@ -280,22 +297,18 @@ namespace AlcoStack.Controllers;
     
             if (photoDto.PhotoFile != null)
             {
-                var photoFileResult = fileService.SaveImage(photoDto.PhotoFile);
-        
-                if (photoFileResult.Item1 == 1)
-                    user.Photo = photoFileResult.Item2;
-                else
-                    return StatusCode(500, photoFileResult.Item2);
+                if(user.PhotoName != null)
+                    DeleteImage(user.PhotoName);
+                user.PhotoName = await SaveImage(photoDto.PhotoFile);
+                user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
             }
     
-            if (photoDto.BackgroundPhotoFile != null)
+            if (photoDto.FormBackgroundFile != null)
             {
-                var backgroundPhotoFileResult = fileService.SaveImage(photoDto.BackgroundPhotoFile);
-        
-                if (backgroundPhotoFileResult.Item1 == 1)
-                    user.BackgroundPhoto = backgroundPhotoFileResult.Item2;
-                else
-                    return StatusCode(500, backgroundPhotoFileResult.Item2);
+                if(user.BackgroundPhotoName != null)
+                    DeleteImage(user.BackgroundPhotoName);
+                user.BackgroundPhotoName = await SaveImage(photoDto.FormBackgroundFile);
+                user.BackgroundPhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}";
             }
     
             var result = await userManager.UpdateAsync(user);
@@ -395,4 +408,27 @@ namespace AlcoStack.Controllers;
             
             return StatusCode(500, result.Errors);
         }
+        
+        [NonAction]
+        public async Task<string> SaveImage(IFormFile imageFile)
+        {
+            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+            return imageName;
+        }
+
+        [NonAction]
+        public void DeleteImage(string imageName)
+        {
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
+        }
     }
+    
+    

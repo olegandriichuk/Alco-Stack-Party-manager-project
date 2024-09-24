@@ -1,5 +1,6 @@
 ﻿using AlcoStack.Interface;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AlcoStack.Service;
 
@@ -22,7 +23,7 @@ namespace AlcoStack.Service;
                 var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg" };
                 if (!allowedExtensions.Contains(ext))
                 {
-                    string msg = string.Format("Only {0} extensions are allowed", string.Join(",", allowedExtensions));
+                    string msg = $"Only {string.Join(",", allowedExtensions)} extensions are allowed";
                     return new Tuple<int, string>(0, msg);
                 }
                 string uniqueString = Guid.NewGuid().ToString();
@@ -39,7 +40,7 @@ namespace AlcoStack.Service;
                 return new Tuple<int, string>(0, "Error has occured");
             }
         }
-
+     
         public async Task DeleteImage(string imageFileName)
         {
             var contentPath = env.ContentRootPath;
