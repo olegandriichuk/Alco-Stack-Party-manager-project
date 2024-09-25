@@ -28,9 +28,7 @@ export const registerAPI = async (
     lastName: string,
     phoneNumber: string,
     address: Address,
-    photo: string,
     bio: string,
-    formBackgroundUrl: string,
     gender: number,
     dateOfBirth: string
 ) => {
@@ -43,9 +41,7 @@ export const registerAPI = async (
             lastName: lastName,
             phoneNumber: phoneNumber,
             address: address,
-            photo: photo,
             bio: bio,
-            formBackgroundUrl: formBackgroundUrl,
             gender: gender,
             dateOfBirth: dateOfBirth
         });

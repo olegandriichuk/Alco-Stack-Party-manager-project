@@ -33,13 +33,12 @@ const HomePage: React.FC = () => {
         }
         try {
             const response = await GetPartyListAPI(token);
-            console.log(response);
+
             if (response && response.data) {
                 setParties(response.data); // Update state with the party data
             } else {
                 setParties([]); // If response is undefined or empty, set an empty array
             }
-            console.log(parties);
         } catch (error) {
             console.error('Failed to fetch parties', error);
             toast.error('Failed to fetch parties. Please try again.');
@@ -65,27 +64,6 @@ const HomePage: React.FC = () => {
         setShowJoinPartyPopUp(false);
         UserPartiesGet(); // Refresh the party list after closing the pop-up
     };
-
-    // // Функция для получения текущего уровня масштабирования
-    // const getZoomLevel = () => {
-    //     return window.outerWidth / window.innerWidth;
-    // };
-    //
-    // // Обработчик изменения размера окна (для отслеживания масштабирования)
-    // const handleResize = () => {
-    //     const newZoomLevel = getZoomLevel();
-    //     setZoomLevel(newZoomLevel); // Обновляем состояние с новым уровнем масштабирования
-    // };
-    //
-    // // useEffect для отслеживания изменения размера окна
-    // useEffect(() => {
-    //     window.addEventListener('resize', handleResize);
-    //
-    //     // Убираем обработчик при размонтировании компонента
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
 
     const menuButtons = [
         { text: 'your profile', icon: faUser, color: 'rgba(225, 219, 101, 0.9)', link: '/profile' },
