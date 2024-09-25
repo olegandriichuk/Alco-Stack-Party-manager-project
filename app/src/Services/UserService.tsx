@@ -11,15 +11,12 @@ export const UpdateProfileAPI = async (
     lastName?: string,
     bio?: string,
     dateOfBirth?: string,
-    // photo?: string,
     phoneNumber?: string,
     address?: Address,
-    // formBackgroundUrl?: string,
     gender?: number,
     authToken?: string
 ) => {
     try {
-        // console.log("forggfmBackgroundUrl", formBackgroundUrl);
         const data = await axios.put<UserProfile>(
             api+"account/update",
             {
@@ -49,20 +46,28 @@ export const UpdateProfileAPI = async (
 }
 
 export const UpdatePhotoAPI = async (
-    photo?: string,
-    formBackgroundUrl?: string,
+    photoFile?: File | null,
+    formBackgroundFile?: File | null,
     authToken?: string
 ) => {
     try {
+        const formData = new FormData();
+
+        if (photoFile) {
+            formData.append("PhotoFile", photoFile);
+        }
+
+        if (formBackgroundFile) {
+            formData.append("FormBackgroundFile", formBackgroundFile);
+        }
+
         const data = await axios.patch<UserProfile>(
-            api+"account/updatePhoto",
-            {
-                photo: photo,
-                formBackgroundUrl: formBackgroundUrl,
-            },
+            api + "account/updatePhoto",
+            formData,
             {
                 headers: {
-                    Authorization: `Bearer ${authToken}`
+                    Authorization: `Bearer ${authToken}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             }
         );
@@ -70,4 +75,4 @@ export const UpdatePhotoAPI = async (
     } catch (error) {
         handleError(error);
     }
-}
+};

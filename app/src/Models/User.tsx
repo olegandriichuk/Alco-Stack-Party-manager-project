@@ -15,9 +15,11 @@ export type UserProfileToken = {
     dateOfBirth?: string;
     address?: Address;
     phoneNumber?: string;
-    photo?: string;
+    photoName?: string;
+    photoSrc?: string;
     bio?: string;
-    formBackgroundUrl?: string;
+    formBackgroundName?: string;
+    formBackgroundSrc?: string;
 };
 
 
@@ -32,12 +34,14 @@ export type UserProfile = {
     dateOfBirth?: string | null;
     address?: Address;
     phoneNumber?: string;
-    photo?: string;
+    photoName?: string;
+    photoSrc?: string;
     bio?: string;
-    formBackgroundUrl?: string;
+    formBackgroundName?: string;
+    formBackgroundSrc?: string;
 };
 
 export type UserPhoto = {
-    photo?: string;
-    formBackgroundUrl?: string;
+    photoFile?: File | null;
+    formBackgroundFile?: File | null;
 };
