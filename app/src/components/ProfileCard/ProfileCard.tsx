@@ -23,28 +23,64 @@ interface ProfileCardProps {
     Phone: string;
     Email: string;
     Gender: number;
-    photoUrl: string;
-    formBackgroundUrl: string;
+    photoSrc: string;
+    formBackgroundSrc: string;
 }
 
 const validationSchema = Yup.object().shape({
-    photo: Yup.string().optional().url(),
-    formBackgroundUrl: Yup.string().optional().url(),
+    photoFile: Yup.mixed<File>()
+        .nullable()
+        .optional()
+        .test("fileSize", "File too large", (value) => {
+            return !value || (value && value.size <= 5000000); // 5 MB file size limit
+        })
+        .test("fileType", "Unsupported File Format", (value) => {
+            return (
+                !value ||
+                (value && ["image/jpeg", "image/png", "image/gif"].includes(value.type))
+            );
+        }),
+    formBackgroundFile: Yup.mixed<File>()
+        .nullable()
+        .optional()
+        .test("fileSize", "File too large", (value) => {
+            return !value || (value && value.size <= 5000000); // 5 MB file size limit
+        })
+        .test("fileType", "Unsupported File Format", (value) => {
+            return (
+                !value ||
+                (value && ["image/jpeg", "image/png", "image/gif"].includes(value.type))
+            );
+        }),
 });
 
+const ProfileCard: React.FC<ProfileCardProps> = ({
+                                                     name,
+                                                     Surname,
+                                                     Phone,
+                                                     Gender,
+                                                     photoSrc,
+                                                     formBackgroundSrc,
+                                                     UserName
+                                                 }) => {
+    const [currentPhotoSrc, setCurrentPhotoSrc] = useState(photoSrc);
+    const [currentBackgroundSrc, setCurrentBackgroundSrc] = useState(formBackgroundSrc);
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
 
+    console.log("photoSrc", photoSrc)
+    console.log("photoFile", photoFile);
+    console.log("formBackgroundSrc", formBackgroundSrc);
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Gender , photoUrl, formBackgroundUrl, UserName }) => {
-    const [currentPhotoUrl, setCurrentPhotoUrl] = useState(photoUrl);
-    const [currentBackgroundUrl, setCurrentBackgroundUrl] = useState(formBackgroundUrl);
+    const { token, updateUser } = useAuth();
 
     useEffect(() => {
-        setCurrentPhotoUrl(photoUrl);
-        setCurrentBackgroundUrl(formBackgroundUrl);
-    }, [photoUrl, formBackgroundUrl]);
+        setCurrentPhotoSrc(photoSrc);
+        setCurrentBackgroundSrc(formBackgroundSrc);
+    }, [photoSrc, formBackgroundSrc]);
 
     const profileCardStyle: React.CSSProperties = {
-        backgroundImage: `url(${currentBackgroundUrl})`,
+        backgroundImage: `url(${currentBackgroundSrc})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -55,54 +91,56 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Gender 
         color: 'white'
 
     };
-    // const LinkStyle: React.CSSProperties = {
-    //     textDecoration: 'none',
-    //     color: 'black',
-    // }
 
-
-
-    const { user, token, updateUser } = useAuth();
-
-
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors }
-    } = useForm<UserPhoto>({
+    const { handleSubmit, formState: { errors } } = useForm<UserPhoto>({
         resolver: yupResolver(validationSchema),
     });
 
-    useEffect(() => {
-        if (user) {
-            Object.keys(user).forEach((key) => {
-                setValue(key as keyof UserPhoto, user[key as keyof UserPhoto]);
-            });
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<File | null>>, setUrl: React.Dispatch<React.SetStateAction<string>>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setFile(file);
+            const reader = new FileReader();
+            reader.onload = (x) => {
+                setUrl(x?.target?.result as string);
+            };
+            reader.readAsDataURL(file);
         }
-    }, [user, setValue]);
+    };
 
-    const HandlePhotoChange = async (formData: UserPhoto) => {
+    const handlePhotoUpdate = async (formData: UserPhoto) => {
         if (!token) {
             toast.error("You must be logged in to update your profile");
             return;
         }
+        console.log('Updating profile with data:', photoFile, backgroundFile);
         try {
             const response = await UpdatePhotoAPI(
-                formData.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-                formData.formBackgroundUrl,
+                photoFile,
+                backgroundFile,
                 token
             );
+
             if (response && response.data) {
                 updateUser(response.data);
-                setCurrentPhotoUrl(response.data.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
-                setCurrentBackgroundUrl(response.data.formBackgroundUrl || '');
-                console.log('Profile updated successfully' , response.data);
+                setCurrentPhotoSrc(response.data.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
+                setCurrentBackgroundSrc(response.data.formBackgroundSrc || '');
+                console.log('Profile updated successfully', response.data);
             }
         } catch (error) {
             console.error('Failed to update profile', error);
             toast.error('Failed to update profile. Please try again.');
         }
+    };
+
+    const handleDeletePhoto = () => {
+        setCurrentPhotoSrc("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
+        setPhotoFile(null);
+    };
+
+    const handleDeleteBackground = () => {
+        setCurrentBackgroundSrc('');
+        setBackgroundFile(null);
     };
 
     const [modalShow, setModalShow] = useState(false);
@@ -114,7 +152,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Gender 
 
     const MyVerticallyCenteredModal: React.FC<MyVerticallyCenteredModalProps> = ({ onHide, show }) => {
         const onSubmit = (data: UserPhoto) => {
-            HandlePhotoChange(data);
+            handlePhotoUpdate(data);
             setModalShow(false);
         };
 
@@ -133,27 +171,86 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Gender 
                 </Modal.Header>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Body>
-                        <div className="mb-3">
-                            <label htmlFor="photo" className="form-label">Profile Photo URL</label>
-                            <input
-                                type="text"
-                                id="photo"
-                                className={`form-control ${errors.photo ? 'is-invalid' : ''}`}
-                                placeholder="Enter your photo URL"
-                                {...register('photo')}
-                            />
-                            {errors.photo && <div className="invalid-feedback">{errors.photo.message}</div>}
+                        {/* Profile Photo Section */}
+                        <div className="mb-3 text-center">
+                            <label htmlFor="photoFile" className="form-label">Profile Photo</label>
+                            <div
+                                style={{
+                                    border: '2px dashed #ccc',
+                                    borderRadius: '8px',
+                                    padding: '20px',
+                                    position: 'relative',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '150px',
+                                    height: '150px',
+                                    margin: '0 auto',
+                                    backgroundColor: '#f5f5f5'
+                                }}>
+                                {currentPhotoSrc ? (
+                                    <img
+                                        src={currentPhotoSrc}
+                                        alt="Current Profile"
+                                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                                    />
+                                ) : (
+                                    <span style={{ fontSize: '48px', color: '#ccc' }}>+</span>
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="photoFile"
+                                    className="form-control"
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    onChange={(e) => handleImageChange(e, setPhotoFile, setCurrentPhotoSrc)}
+                                />
+                            </div>
+                            {errors.photoFile && <div className="invalid-feedback text-center">{errors.photoFile.message}</div>}
+                            {currentPhotoSrc && (
+                                <Button variant="danger" className="mt-2" onClick={handleDeletePhoto}>Delete Photo</Button>
+                            )}
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="formBackgroundUrl" className="form-label">Background Photo URL</label>
-                            <input
-                                type="text"
-                                id="formBackgroundUrl"
-                                className={`form-control ${errors.formBackgroundUrl ? 'is-invalid' : ''}`}
-                                placeholder="Enter your background photo URL"
-                                {...register('formBackgroundUrl')}
-                            />
-                            {errors.formBackgroundUrl && <div className="invalid-feedback">{errors.formBackgroundUrl.message}</div>}
+
+                        {/* Background Photo Section */}
+                        <div className="mb-3 text-center">
+                            <label htmlFor="backgroundFile" className="form-label">Background Photo</label>
+                            <div
+                                style={{
+                                    border: '2px dashed #ccc',
+                                    borderRadius: '8px',
+                                    padding: '20px',
+                                    position: 'relative',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '300px',
+                                    height: '150px',
+                                    margin: '0 auto',
+                                    backgroundColor: '#f5f5f5'
+                                }}>
+                                {currentBackgroundSrc ? (
+                                    <img
+                                        src={currentBackgroundSrc}
+                                        alt="Current Background"
+                                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                                    />
+                                ) : (
+                                    <span style={{ fontSize: '48px', color: '#ccc' }}>+</span>
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="backgroundFile"
+                                    className="form-control"
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc)}
+                                />
+                            </div>
+                            {errors.formBackgroundFile && <div className="invalid-feedback text-center">{errors.formBackgroundFile.message}</div>}
+                            {currentBackgroundSrc && (
+                                <Button variant="danger" className="mt-2" onClick={handleDeleteBackground}>Delete Background</Button>
+                            )}
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -173,12 +270,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, Surname, Phone, Gender 
                             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
                         <img
                             style={{
-                                border: '1px solid white',
+                                border: '1px solid black',
                                 borderRadius: '50%',  // This replaces the 'rounded-circle' class
                                 width: '100px',
                                 height: '100px'
                             }}
-                            src={currentPhotoUrl}
+                            src={currentPhotoSrc}
                             alt="User Photo"
                         />
                     </button>

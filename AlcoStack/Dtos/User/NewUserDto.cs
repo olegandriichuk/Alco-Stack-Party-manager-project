@@ -18,9 +18,14 @@ public class NewUserDto
     public DateOnly? DateOfBirth { get; set; }      
     public AddressDto? Address { get; set; }  
     public string? Phone { get; set; }  
-    public string? Photo { get; set; }
     
-    public string? FormBackgroundUrl { get; set; }
+    public string? PhotoName { get; set; }
+    
+    public string? PhotoSrc { get; set; }
+    
+    public string? FormBackgroundName { get; set; }
+    
+    public string? FormBackgroundSrc { get; set; }
     public string? Bio { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; } 

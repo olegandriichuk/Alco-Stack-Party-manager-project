@@ -25,10 +25,6 @@ public class RegisterDto
     public AddressDto? Address { get; set; }  
 
     public string? Phone { get; set; }  
-
-    public string? Photo { get; set; }
-  
-    public string? FormBackgroundUrl { get; set; }
     public string? Bio { get; set; }
     [JsonIgnore]    
     public DateTime CreatedDate { get; set; } = DateTime.Now;

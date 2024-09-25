@@ -7,7 +7,6 @@ namespace AlcoStack.Dtos;
 
 public class UpdateUserPhotoDto
 {
-    public string? Photo { get; set; }
-    
-    public string? FormBackgroundUrl { get; set; }
+    public IFormFile? PhotoFile { get; set; }
+    public IFormFile? FormBackgroundFile { get; set; }
 }

@@ -17,6 +17,7 @@ import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
 import { GetPartyListAPI } from "../../Services/PartyService";
 import { PartyListGet } from "../../Models/Party.tsx";
+// import Employee from '../../components/Random/Random'; // Import the Employee component
 
 const HomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
@@ -31,7 +32,6 @@ const HomePage: React.FC = () => {
         }
         try {
             const response = await GetPartyListAPI(token);
-
             if (response && response.data) {
                 setParties(response.data); // Update state with the party data
             } else {
@@ -68,6 +68,34 @@ const HomePage: React.FC = () => {
         { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
         { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
     ];
+
+    // Static employee data
+    // const staticEmployees = [
+    //     {
+    //         employeeID: 1,
+    //         employeeName: 'John Doe',
+    //         occupation: 'Software Engineer',
+    //         imageName: 'john.png',
+    //         imageSrc: '/img/john.png',
+    //         imageFile: null
+    //     },
+    //     {
+    //         employeeID: 2,
+    //         employeeName: 'Jane Smith',
+    //         occupation: 'Project Manager',
+    //         imageName: 'jane.png',
+    //         imageSrc: '/img/jane.png',
+    //         imageFile: null
+    //     },
+    //     {
+    //         employeeID: 3,
+    //         employeeName: 'Mike Johnson',
+    //         occupation: 'Designer',
+    //         imageName: 'mike.png',
+    //         imageSrc: '/img/mike.png',
+    //         imageFile: null
+    //     }
+    // ];
 
     return (
         <div
@@ -146,6 +174,17 @@ const HomePage: React.FC = () => {
             <h2 className="custom-heading">Your unforgettable night!🎉</h2>
             <MenuButtonList menuButtons={menuButtons}/>
             <PartyButtonList parties={parties}/>
+
+            {/*/!* Render static employees *!/*/}
+            {/*<div className="employee-list">*/}
+            {/*    {staticEmployees.map((employee) => (*/}
+            {/*        <Employee*/}
+            {/*            key={employee.employeeID}*/}
+            {/*            addOrEdit={() => {}}*/}
+            {/*            recordForEdit={employee}*/}
+            {/*        />*/}
+            {/*    ))}*/}
+            {/*</div>*/}
 
             {showCreatePartyPopUp && (
                 <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty} />

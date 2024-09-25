@@ -124,16 +124,16 @@ const ProfilePage: React.FC = () => {
                     </Link>
                 </div>
 
-                <ProfileCard
-                    UserName={user?.userName || ""}
-                    name={user?.firstName || ""}
-                    Surname={user?.lastName || ""}
-                    Phone={user?.phoneNumber || ""}
-                    Email={user?.email || ""}
-                    Gender={user?.gender || 0}
-                    photoUrl={user?.photo || ""}
-                    formBackgroundUrl={user?.formBackgroundUrl || ""}
-                />
+            <ProfileCard
+                UserName={user?.userName || ""}
+                name={user?.firstName || ""}
+                Surname={user?.lastName || ""}
+                Phone={user?.phoneNumber || ""}
+                Email={user?.email || ""}
+                Gender={user?.gender || 0}
+                photoSrc={user?.photoSrc || ""}
+                formBackgroundSrc={user?.formBackgroundSrc || ""}
+            />
 
                 <h3 style={{marginTop: '20px', fontFamily: 'HalantSemiBold', textAlign: 'center'}}>
                     <style>

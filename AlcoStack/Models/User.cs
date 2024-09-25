@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using AlcoStack.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +13,21 @@ public class User : IdentityUser
     public Gender Gender { get; set; } = Gender.Other;
     public DateOnly? DateOfBirth { get; set; }
     public Address? Address { get; set; }
-    public string? Photo { get; set; }
+    [NotMapped]
+    public IFormFile? PhotoFile { get; set; }
+    
+    public string? PhotoName { get; set; }
+    
+    [NotMapped]
+    public string? PhotoSrc { get; set; }
     public string? Bio { get; set; }
-    public string? FormBackgroundUrl { get; set; }
+    
+    public string? FormBackgroundName { get; set; }
+    
+    [NotMapped]
+    public string? FormBackgroundSrc { get; set; }
+    [NotMapped]
+    public IFormFile? FormBackgroundFile { get; set; }
     
     public ICollection<UserAlcohol> Alcohols { get; set; } = new List<UserAlcohol>();
     

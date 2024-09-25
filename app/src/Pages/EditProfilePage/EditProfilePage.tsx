@@ -142,7 +142,7 @@ const EditProfilePage: React.FC = () => {
                     <FontAwesomeIcon icon={faUser} size="2x" color="black" />
                 </Link>
             </div>
-            <div className="card shadow-lg p-3 mb-5 bg-white rounded" style={{ width: '80%', maxWidth: '600px', marginTop: '50px', backgroundImage: `url(${user?.formBackgroundUrl})`, backgroundSize: 'cover', minHeight: '100vh' }}>
+            <div className="card shadow-lg p-3 mb-5 bg-white rounded" style={{ width: '80%', maxWidth: '600px', marginTop: '50px', backgroundImage: `url(${user?.formBackgroundSrc})`, backgroundSize: 'cover', minHeight: '100vh' }}>
                 <div className="card-body">
                     <div className="d-flex flex-column align-items-center">
                         <Button
@@ -156,7 +156,7 @@ const EditProfilePage: React.FC = () => {
                             className="p-0"
                         >
                             <img
-                                src={user?.photo || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}
+                                src={user?.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}
                                 alt={`${user?.userName}'s profile`}
                                 className="rounded-circle"
                                 style={{

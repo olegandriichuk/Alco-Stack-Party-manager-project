@@ -18,7 +18,9 @@ namespace AlcoStack.Controllers;
         SignInManager<User> signInManager,
         ILogger<UserController> logger,
         IUserAlcoholRepository userAlcoholRepository,
-        IUserPartyRepository userPartyRepository)
+        IUserPartyRepository userPartyRepository,
+        IFileService fileService,
+        IWebHostEnvironment webHostEnvironment)
         : ControllerBase
     {
         [HttpPost("login")]
@@ -47,17 +49,19 @@ namespace AlcoStack.Controllers;
                     DateOfBirth = user.DateOfBirth,
                     Address = user.Address.MapToDto(),
                     Phone = user.PhoneNumber,
-                    Photo = user.Photo,
+                    PhotoName = user.PhotoName,
+                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
-                    FormBackgroundUrl = user.FormBackgroundUrl
+                    FormBackgroundName = user.FormBackgroundName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 }
             );
         } 
     
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromForm] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -70,13 +74,11 @@ namespace AlcoStack.Controllers;
                 // Address = registerDto.Address,
                 Gender = registerDto.Gender,
                 PhoneNumber = registerDto.Phone,
-                Photo = registerDto.Photo,
                 Bio = registerDto.Bio,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                FormBackgroundUrl = registerDto.FormBackgroundUrl
             };
 
             try
@@ -127,10 +129,12 @@ namespace AlcoStack.Controllers;
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
                     Phone = user.PhoneNumber,
-                    Photo = user.Photo,
+                    PhotoName = user.PhotoName,
+                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     Gender = user.Gender,
-                    FormBackgroundUrl = user.FormBackgroundUrl
+                    FormBackgroundName = user.FormBackgroundName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 };
 
                 return Ok(newUserDto);
@@ -162,6 +166,7 @@ namespace AlcoStack.Controllers;
             
             var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
             
+            
             if (user == null)
                 return NotFound();
             
@@ -174,12 +179,36 @@ namespace AlcoStack.Controllers;
         {
             var username = User.GetUsername();
             var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
-            
+
             if (user == null)
                 return NotFound();
-            
-            return Ok(user);
+
+            // Get the full path to the "Uploads" directory
+            var uploadsDirectory = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads");
+
+            var userDto = new NewUserDto
+            {
+                UserName = user.UserName,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Email = user.Email,
+                Token = tokenService.CreateToken(user),
+                Address = user.Address.MapToDto(),
+                DateOfBirth = user.DateOfBirth,
+                CreatedDate = user.CreatedDate,
+                UpdatedDate = user.UpdatedDate,
+                Phone = user.PhoneNumber,
+                PhotoName = user.PhotoName,
+                PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                FormBackgroundName = user.FormBackgroundName,
+                FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}",
+                Bio = user.Bio,
+                Gender = user.Gender
+            };
+
+            return Ok(userDto);
         }
+
         
         [HttpPut("update")]
         [Authorize]
@@ -245,28 +274,53 @@ namespace AlcoStack.Controllers;
         
         [HttpPatch("updatePhoto")]
         [Authorize]
-        public async Task<IActionResult> UpdatePhoto([FromBody] UpdateUserPhotoDto  photoDto)
+        public async Task<IActionResult> UpdatePhoto([FromForm] UpdateUserPhotoDto photoDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+    
             var username = User.GetUsername();
             var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == username);
-            
+    
             if (user == null)
                 return NotFound();
-            
-            user.Photo = photoDto.Photo;
-            user.FormBackgroundUrl = photoDto.FormBackgroundUrl;
-            user.UpdatedDate = DateTime.Now;
+    
+            if (photoDto.PhotoFile != null)
+            {
+                if(user.PhotoName != null)
+                    DeleteImage(user.PhotoName);
+                user.PhotoName = await SaveImage(photoDto.PhotoFile);
+                user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
+            }
+            else if (user.PhotoName != null && photoDto.PhotoFile == null)
+            {
+                DeleteImage(user.PhotoName);
+                user.PhotoName = null;
+                user.PhotoSrc = null;
+            }
+    
+            if (photoDto.FormBackgroundFile != null)
+            {
+                if(user.FormBackgroundName != null)
+                    DeleteImage(user.FormBackgroundName);
+                user.FormBackgroundName = await SaveImage(photoDto.FormBackgroundFile);
+                user.FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
+            }
+            else if (user.FormBackgroundName != null && photoDto.FormBackgroundFile == null)
+            {
+                DeleteImage(user.FormBackgroundName);
+                user.FormBackgroundName = null;
+                user.FormBackgroundSrc = null;
+            }
+    
             var result = await userManager.UpdateAsync(user);
-            
+    
             if (result.Succeeded)
                 return Ok(user);
-            
+    
             return StatusCode(500, result.Errors);
         }
-        
+
         [HttpGet("{partyId}/users")]
         public async Task<IActionResult> GetUsersByPartyId(Guid partyId)
         {
@@ -356,4 +410,27 @@ namespace AlcoStack.Controllers;
             
             return StatusCode(500, result.Errors);
         }
+        
+        [NonAction]
+        public async Task<string> SaveImage(IFormFile imageFile)
+        {
+            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+            return imageName;
+        }
+
+        [NonAction]
+        public void DeleteImage(string imageName)
+        {
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
+        }
     }
+    
+    
