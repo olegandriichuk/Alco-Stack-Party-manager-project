@@ -17,9 +17,7 @@ type UserContextType = {
         lastName?: string,
         phoneNumber?: string,
         address?: Address,
-        photo?: string,
         bio?: string,
-        formBackgroundUrl?: string,
         gender?: number,
         dateOfBirth?: string
     ) => void;
@@ -62,9 +60,7 @@ export const UserProvider = ({ children }: Props) => {
         lastName: string = "",
         phoneNumber: string = "",
         address: Address = {},
-        photo: string = "",
         bio: string = "",
-        formBackgroundUrl: string = "",
         gender: number = 0,
         dateOfBirth: string = ""
     ) => {
@@ -78,9 +74,7 @@ export const UserProvider = ({ children }: Props) => {
             lastName,
             phoneNumber,
             address,
-            photo,
             bio,
-            formBackgroundUrl,
             gender,
             dateOfBirth
         };
@@ -99,9 +93,7 @@ export const UserProvider = ({ children }: Props) => {
                 lastName,
                 phoneNumber,
                 address,
-                photo,
                 bio,
-                formBackgroundUrl,
                 gender,
                 dateOfBirth
             );
@@ -111,7 +103,7 @@ export const UserProvider = ({ children }: Props) => {
             console.groupEnd();
 
             if (res) {
-                const { token, userName, email, firstName, lastName, phoneNumber, address, photo, formBackgroundUrl, bio, gender, dateOfBirth } = res.data;
+                const { token, userName, email, firstName, lastName, phoneNumber, address, photoName, photoSrc, bio, formBackgroundName, formBackgroundSrc} = res.data;
 
                 const userObj = {
                     userName: userName,
@@ -120,8 +112,10 @@ export const UserProvider = ({ children }: Props) => {
                     lastName: lastName ?? "",
                     phoneNumber: phoneNumber ?? "",
                     address: address ?? {},
-                    photo: photo ?? "",
-                    formBackgroundUrl: formBackgroundUrl ?? "",
+                    photoName: photoName ?? "",
+                    photoSrc: photoSrc ?? "",
+                    formBackgroundName: formBackgroundName ?? "",
+                    formBackgroundSrc: formBackgroundSrc ?? "",
                     bio: bio ?? "",
                     gender: gender ?? 0,
                     dateOfBirth: dateOfBirth ?? ""
@@ -164,8 +158,10 @@ export const UserProvider = ({ children }: Props) => {
                     lastName: res.data.lastName ?? "",
                     phoneNumber: res.data.phoneNumber ?? "",
                     address: res.data.address ?? {},
-                    photo: res.data.photo ?? "",
-                    formBackgroundUrl: res.data.formBackgroundUrl ?? "",
+                    photoName: res.data.photoName ?? "",
+                    photoSrc: res.data.photoSrc ?? "",
+                    formBackgroundName: res.data.formBackgroundName ?? "",
+                    formBackgroundSrc: res.data.formBackgroundSrc ?? "",
                     bio: res.data.bio ?? "",
                     gender: res.data.gender ?? 2,
                     dateOfBirth: res.data.dateOfBirth ?? ""

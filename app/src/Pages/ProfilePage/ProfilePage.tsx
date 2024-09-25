@@ -11,6 +11,11 @@ import { useAuth } from "../../Context/useAuth.tsx";
 const ProfilePage: React.FC = () => {
     const { user } = useAuth();
 
+    console.log("user", user);
+
+    console.log("formBackgroundSrc", user?.formBackgroundSrc);
+
+
 
     return (
         <div className="container-fluid p-0 d-flex flex-column align-items-center">
@@ -35,8 +40,8 @@ const ProfilePage: React.FC = () => {
                 Phone={user?.phoneNumber || ""}
                 Email={user?.email || ""}
                 Gender={user?.gender || 0}
-                photoUrl={user?.photo || ""}
-                formBackgroundUrl={user?.formBackgroundUrl || ""}
+                photoSrc={user?.photoSrc || ""}
+                formBackgroundSrc={user?.formBackgroundSrc || ""}
             />
 
         </div>
