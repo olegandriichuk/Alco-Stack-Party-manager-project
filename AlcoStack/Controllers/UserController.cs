@@ -54,8 +54,8 @@ namespace AlcoStack.Controllers;
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
-                    FormBackgroundName = user.BackgroundPhotoName,
-                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}"
+                    FormBackgroundName = user.FormBackgroundName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 }
             );
         } 
@@ -80,16 +80,6 @@ namespace AlcoStack.Controllers;
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
             };
-            
-            if(registerDto.PhotoFile != null)
-            {
-                user.PhotoName = await SaveImage(registerDto.PhotoFile);
-            }
-            
-            if(registerDto.FormBackgroundFile != null)
-            {
-                user.BackgroundPhotoName = await SaveImage(registerDto.FormBackgroundFile);
-            }
 
             try
             {
@@ -143,8 +133,8 @@ namespace AlcoStack.Controllers;
                     PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     Gender = user.Gender,
-                    FormBackgroundName = user.BackgroundPhotoName,
-                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}"
+                    FormBackgroundName = user.FormBackgroundName,
+                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 };
 
                 return Ok(newUserDto);
@@ -210,8 +200,8 @@ namespace AlcoStack.Controllers;
                 Phone = user.PhoneNumber,
                 PhotoName = user.PhotoName,
                 PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
-                FormBackgroundName = user.BackgroundPhotoName,
-                FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}",
+                FormBackgroundName = user.FormBackgroundName,
+                FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}",
                 Bio = user.Bio,
                 Gender = user.Gender
             };
@@ -302,13 +292,25 @@ namespace AlcoStack.Controllers;
                 user.PhotoName = await SaveImage(photoDto.PhotoFile);
                 user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
             }
+            else if (user.PhotoName != null && photoDto.PhotoFile == null)
+            {
+                DeleteImage(user.PhotoName);
+                user.PhotoName = null;
+                user.PhotoSrc = null;
+            }
     
             if (photoDto.FormBackgroundFile != null)
             {
-                if(user.BackgroundPhotoName != null)
-                    DeleteImage(user.BackgroundPhotoName);
-                user.BackgroundPhotoName = await SaveImage(photoDto.FormBackgroundFile);
-                user.BackgroundPhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.BackgroundPhotoName}";
+                if(user.FormBackgroundName != null)
+                    DeleteImage(user.FormBackgroundName);
+                user.FormBackgroundName = await SaveImage(photoDto.FormBackgroundFile);
+                user.FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
+            }
+            else if (user.FormBackgroundName != null && photoDto.FormBackgroundFile == null)
+            {
+                DeleteImage(user.FormBackgroundName);
+                user.FormBackgroundName = null;
+                user.FormBackgroundSrc = null;
             }
     
             var result = await userManager.UpdateAsync(user);

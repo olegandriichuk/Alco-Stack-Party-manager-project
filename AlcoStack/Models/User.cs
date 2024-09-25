@@ -22,12 +22,12 @@ public class User : IdentityUser
     public string? PhotoSrc { get; set; }
     public string? Bio { get; set; }
     
-    public string? BackgroundPhotoName { get; set; }
+    public string? FormBackgroundName { get; set; }
     
     [NotMapped]
-    public string? BackgroundPhotoSrc { get; set; }
+    public string? FormBackgroundSrc { get; set; }
     [NotMapped]
-    public IFormFile? BackgroundPhotoFile { get; set; }
+    public IFormFile? FormBackgroundFile { get; set; }
     
     public ICollection<UserAlcohol> Alcohols { get; set; } = new List<UserAlcohol>();
     
