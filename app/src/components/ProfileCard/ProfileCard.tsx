@@ -1,15 +1,16 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
-import { useAuth } from "../../Context/useAuth.tsx";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { toast } from "react-toastify";
+import "./ProfileCard.css";
+import {Link} from "react-router-dom";
+import {useAuth} from "../../Context/useAuth.tsx";
+import {useForm} from "react-hook-form";
+import {UserPhoto} from "../../Models/User.tsx";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {toast} from "react-toastify";
+import {UpdatePhotoAPI} from "../../Services/UserService.tsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { UpdatePhotoAPI } from "../../Services/UserService.tsx";
-import { UserPhoto } from "../../Models/User.tsx";
+import * as Yup from "yup";
 import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
 import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf"
 
@@ -90,10 +91,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         color: 'white'
 
     };
-    // const LinkStyle: React.CSSProperties = {
-    //     textDecoration: 'none',
-    //     color: 'black',
-    // }
 
     const { handleSubmit, formState: { errors } } = useForm<UserPhoto>({
         resolver: yupResolver(validationSchema),
@@ -272,7 +269,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
                         <img
                             style={{
-                                border: '1px solid white',
+                                border: '1px solid black',
                                 borderRadius: '50%',  // This replaces the 'rounded-circle' class
                                 width: '100px',
                                 height: '100px'
@@ -385,3 +382,4 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 };
 
 export default ProfileCard;
+
