@@ -117,6 +117,7 @@ const EditProfilePage: React.FC = () => {
     );
 
     const renderAddressInput = (label: string, id: string, placeholder: string, registerName: keyof Address) => (
+
         <div className="mb-3" key={id}>
             <label htmlFor={id} className="form-label">{label}</label>
             <input

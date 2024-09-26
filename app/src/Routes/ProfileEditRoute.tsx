@@ -11,9 +11,9 @@ const ProfileEditRoute = () => {
     }
 
     return (
-        <ProtectedRoute>
+         <ProtectedRoute>
             <EditProfilePage/>
-        </ProtectedRoute>
+      </ProtectedRoute>
     );
 };
 

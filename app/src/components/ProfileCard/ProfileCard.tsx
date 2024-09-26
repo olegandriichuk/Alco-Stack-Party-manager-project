@@ -10,6 +10,10 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { UpdatePhotoAPI } from "../../Services/UserService.tsx";
 import { UserPhoto } from "../../Models/User.tsx";
+import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
+import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf"
+
+
 
 interface ProfileCardProps {
     UserName: string;
@@ -53,7 +57,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                                      name,
                                                      Surname,
                                                      Phone,
-                                                     Email,
                                                      Gender,
                                                      photoSrc,
                                                      formBackgroundSrc,
@@ -82,7 +85,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         backgroundPosition: 'center',
         width: '90%',
         borderRadius: '20px',
+        background: '#D5D5D5',
+        border : '1px solid white',
+        color: 'white'
+
     };
+    // const LinkStyle: React.CSSProperties = {
+    //     textDecoration: 'none',
+    //     color: 'black',
+    // }
 
     const { handleSubmit, formState: { errors } } = useForm<UserPhoto>({
         resolver: yupResolver(validationSchema),
@@ -112,7 +123,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 backgroundFile,
                 token
             );
-
             if (response && response.data) {
                 updateUser(response.data);
                 setCurrentPhotoSrc(response.data.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
@@ -252,8 +262,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 </form>
             </Modal>
         );
-
-
     };
 
     return (
@@ -264,8 +272,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
                         <img
                             style={{
-                                border: '1px solid black',
-                                borderRadius: '50%',
+                                border: '1px solid white',
+                                borderRadius: '50%',  // This replaces the 'rounded-circle' class
                                 width: '100px',
                                 height: '100px'
                             }}
@@ -273,18 +281,98 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             alt="User Photo"
                         />
                     </button>
-                    <h5 className="card-title">{UserName}</h5>
+                    <h5 className="card-title"
+                        style={{
+                            borderRadius: '10px',
+                            background: 'linear-gradient(90deg, #5C5C5C 16%, #353535 82%)', // Градієнт
+                            padding: '5px 10px',
+                            fontFamily: 'HalantSemiBold' // Застосовуємо шрифт
+                        }}>
+                        <style>
+                            {`
+                                @font-face {
+                                    font-family: 'HalantSemiBold';
+                                    src: url(${HalantSemiBold}) format('truetype');
+                                }
+                            `}
+                        </style>
+                        {UserName}
+                    </h5>
                 </div>
-                <div className="card-text">
-                    <Link to={"/profile/edit"} style={{ textDecoration: 'none', color: 'black' }}>
-                        <button className="btn btn-primary m-2 bg-dark">Edit Profile</button>
-                    </Link>
-                    <ul className="list-unstyled">
-                        <li>Name :&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;{name}</li>
-                        <li>Surname : {Surname}</li>
-                        <li>Phone :&nbsp;&nbsp;&nbsp;&nbsp; {Phone}</li>
-                        <li>Email :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {Email}</li>
-                        <li>Gender: &nbsp;&nbsp;&nbsp; {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}</li>
+                <div className="d-flex flex-grow-1 flex-column">
+                    <div className="d-flex justify-content-end">
+                        <Link to={"/profile/edit"} style={{textDecoration: 'none'}}>
+                            <button className="btn btn-primary btn-lg m-2"
+                                    style={{
+                                        background: '#D8DCE3',
+                                        border: '1px solid white',
+                                        fontFamily: 'HalantSemiBold', // Застосовуємо шрифт
+                                        // Підключаємо імпортований шрифт
+                                    }}>
+                                <style>
+                                    {`
+                    @font-face {
+                        font-family: 'HalantSemiBold';
+                        src: url(${HalantSemiBold}) format('truetype');
+                    }
+                `}
+                                </style>
+                                Edit Profile
+                            </button>
+                        </Link>
+                    </div>
+                    <ul className="list-unstyled" style={{ color: '#FFFFFF', padding: 0, fontFamily: 'InterRegular' }}>
+                        <style>
+                            {`
+                                @font-face {
+                                    font-family: 'InterRegular';
+                                    src: url(${InterRegular}) format('truetype');
+                                }
+                    
+                                .list-unstyled span {
+                                    font-family: 'InterRegular';
+                                }
+                            `}
+                        </style>
+                        <li style={{ marginBottom: '10px' }}>
+                            <span style={{
+                                borderRadius: '10px',
+                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
+                                display: 'inline',
+                                padding: '5px 10px',
+                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
+                            }}>Name :&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;{name}</span>
+                        </li>
+                        <li style={{marginBottom: '10px'}}>
+                            <span style={{
+                                borderRadius: '10px',
+                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
+                                display: 'inline',
+                                padding: '5px 10px',
+                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
+                            }}>Surname : {Surname}</span>
+                        </li>
+                        <li style={{marginBottom: '10px'}}>
+                            <span style={{
+                                borderRadius: '10px',
+                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
+                                display: 'inline',
+                                padding: '5px 10px',
+                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
+                            }}>
+                                Phone :&nbsp;&nbsp;&nbsp;&nbsp; {Phone}
+                            </span>
+                        </li>
+
+                        <li>
+                            <span style={{
+                                borderRadius: '10px',
+                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)',
+                                display: 'inline',
+                                padding: '5px 10px',
+                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
+                            }}>Gender: &nbsp;&nbsp;&nbsp; {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -297,4 +385,3 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 };
 
 export default ProfileCard;
-

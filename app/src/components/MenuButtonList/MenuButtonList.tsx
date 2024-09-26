@@ -34,7 +34,7 @@ const MenuButtonList: React.FC<MenuButtonListProps> = ({ menuButtons }) => {
             </style>
             <div className="row justify-content-center">
                 {menuButtons.map((menuButton, index) => (
-                    <div key={index} className="col-md-4 col-4 mb-4 mt-2">
+                    <div key={index} className="col-md-4 col-8 mb-4 mt-2">
                         <MenuButton
                             text={menuButton.text}
                             icon={menuButton.icon}

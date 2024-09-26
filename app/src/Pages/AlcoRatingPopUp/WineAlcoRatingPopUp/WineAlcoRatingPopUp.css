@@ -1,0 +1,72 @@
+﻿/* Заблюрений фон */
+.midalco-modal-backdrop-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    z-index: 1040;
+}
+
+/* Стиль модального контейнера */
+.midalco-modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 367px;
+    /*background-color: black;*/
+    border-radius: 15px;
+    z-index: 1050;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центр по вертикалі */
+    align-items: center; /* Центр по горизонталі */
+    text-align: center; /* Текст теж по центру */
+}
+
+/* Вміст модального вікна */
+.midalco-modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Центрування елементів */
+    align-items: center; /* Центрування по горизонталі */
+    width: 100%;
+}
+
+.midalco-btn-save {
+    background-color: rgba(213, 213, 213, 0.86); /* Колір Fill (#D5D5D5) з 86% прозорістю */
+    border: 2px solid #90A4AE; /* Колір Stroke (#90A4AE) */
+    border-radius: 50px; /* Заокруглені краї */
+    padding: 15px 30px; /* Великі розміри кнопки */
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 60%; /* Ширина на 100% контейнера */
+    max-width: 300px; /* Максимальна ширина */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Ефект плавного переходу */
+}
+
+.midalco-btn-save:hover {
+    background-color: rgba(190, 190, 190, 0.86); /* Трохи темніший сірий колір при наведенні */
+    border-color: #78909C; /* Трохи темніший колір Stroke при наведенні */
+}
+
+@media (max-width: 768px) {
+    .midalco-modal-container {
+        width: 80%; /* Зменшена ширина для планшетів */
+    }
+}
+
+/* Медіа-запит для екранів шириною до 576px (типові смартфони) */
+@media (max-width: 576px) {
+    .midalco-modal-container {
+        width: 80%; /* Майже повна ширина для мобільних пристроїв */
+    }
+}
