@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { Address } from '../../Models/User';
 import { DatePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
+import backgroundImage from '../../assets/backcov1.svg';
+import Disco from '../../assets/disco.svg';
 
 export type RegisterFormInputs = {
     email: string;
@@ -101,10 +103,36 @@ const RegisterPage: React.FC = () => {
         </div>
     );
 
+    const isMobile = window.innerWidth <= 768;
+
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
-            <div className="card w-100 max-w-md m-3">
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                backgroundColor: '#DDE4EE',
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: isMobile ? '1px 10px' : '15px 10px',
+                backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            <div className="card w-100 max-w-md m-3"
+                 style={{maxWidth: '1000px', backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
                 <div className="card-body p-5">
+                    <div style={{position: 'relative'}}>
+                        <img
+                            src={Disco}
+                            alt="Disco Icon"
+                            width="80"
+                            height="80"
+                            style={{position: 'absolute', top: '-66.5px', right: '1105px'}}
+                        />
+                    </div>
                     <h1 className="card-title mb-4 text-center">Create your account</h1>
                     <form onSubmit={handleSubmit(handleRegister)}>
                         {renderInput('Email', 'email', 'email', 'Email', 'email', errors.email?.message)}
@@ -141,7 +169,7 @@ const RegisterPage: React.FC = () => {
                                 value={dateOfBirthValue}
                                 onChange={(date) => setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)}
                                 placeholder="Select Date"
-                                style={{ width: '100%' }}
+                                style={{width: '100%'}}
                             />
                             {errors.dateOfBirth && <div className="invalid-feedback">{errors.dateOfBirth.message}</div>}
                         </div>

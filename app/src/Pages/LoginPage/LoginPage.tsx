@@ -1,9 +1,12 @@
-﻿import * as Yup from "yup";
+﻿import { useState } from "react";
+import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
 import { useForm } from "react-hook-form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Link} from "react-router-dom";
+import backgroundImage from '../../assets/backcov1.svg';
+import Disco from '../../assets/disco.svg';
 
 type LoginFormsInputs = {
     userName: string;
@@ -27,9 +30,62 @@ const LoginPage = () => {
         loginUser(form.userName, form.password);
     };
 
+    // To detect mobile view
+    const isMobile = window.innerWidth <= 768;
+
+    // Shake effect state
+    const [isShaking, setIsShaking] = useState(false);
+
+    // Handle click event for shake animation
+    const handleIconClick = () => {
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 500); // Stop shaking after 500ms
+    };
+
+    // Define the shake animation using CSS
+    const shakeAnimation = `
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    `;
+
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100">
-            <div className="card w-100 max-w-md">
+        <div
+            style={{
+                backgroundColor: '#DDE4EE',
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: isMobile ? '0px 10px' : '15px 10px',
+                backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            <style>{shakeAnimation}</style>
+
+
+            <div style={{position: 'fixed', top: '-1.5px', left: '5px', zIndex: 1000}}>
+                <img
+                    src={Disco}
+                    alt="Disco Icon"
+                    width="80"
+                    height="80"
+                    style={{
+                        cursor: 'pointer',
+                        animation: isShaking ? 'shake 0.5s' : 'none',
+                    }}
+                    onClick={handleIconClick} // Запуск анимации при клике
+                />
+            </div>
+            <div className="card w-100 max-w-md"
+                 style={{maxWidth: '1000px', backgroundColor: 'rgba(255, 255, 255, 0.6)'}}>
                 <div className="card-body p-5">
                     <h1 className="card-title mb-4 text-center">Sign in to your account</h1>
                     <form onSubmit={handleSubmit(handleLogin)}>

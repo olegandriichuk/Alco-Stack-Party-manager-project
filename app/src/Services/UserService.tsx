@@ -75,4 +75,4 @@ export const UpdatePhotoAPI = async (
     } catch (error) {
         handleError(error);
     }
-};
+}
