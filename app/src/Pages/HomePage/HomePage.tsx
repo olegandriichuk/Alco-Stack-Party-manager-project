@@ -62,9 +62,9 @@ const HomePage: React.FC = () => {
     };
 
     const menuButtons = [
-        { text: 'your profile', icon: faUser, color: '#1dd958', link: '/profile' },
-        { text: 'join party', icon: faCake, color: '#5b7ff0', onClick: handleShowJoinParty },
-        { text: 'create party', icon: faUsers, color: '#ce5659', onClick: handleShowCreateParty },
+        { text: 'your profile', icon: faUser, color: 'rgba(225, 219, 101, 0.9)', link: '/profile' },
+        { text: 'join party', icon: faCake, color: 'rgba(112, 140, 231, 0.9)', onClick: handleShowJoinParty },
+        { text: 'create party', icon: faUsers, color: 'rgba(224, 122, 122, 0.9)', onClick: handleShowCreateParty },
     ];
 
     const videoStyles : React.CSSProperties = {
