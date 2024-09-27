@@ -10,6 +10,7 @@ import backgroundImage from '../../assets/backcov1.svg';
 import video from '../../assets/viddd2.mp4';
 import zaskolko from '../../assets/khoda.mp4';
 import CustomVideoPlayer from '../../components/CustomVideoPlayer/CustomVideoPlayer.tsx';
+import VTfont from '../../assets/fonts/VT323-Regular.ttf';
 
 const WelcomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
@@ -24,6 +25,69 @@ const WelcomePage: React.FC = () => {
         boxSizing: 'border-box',
 
     };
+
+    const rectangleStyles: React.CSSProperties = {
+        width: isMobile ? '300px' : '440px',
+        height: isMobile ? '180px' : '50px',
+        background: 'linear-gradient(180deg, #827E7D 9%, #2B2B2B 31%)',
+        border: '4px solid transparent',
+        borderImage: 'linear-gradient(180deg, #2C2E2E 0%, #161616 100%) 1',
+        marginBottom: '20px',
+        boxSizing: 'border-box',
+        boxShadow: '0 0 0 2px grey',
+        fontFamily: '"VT323", monospace',
+        fontSize: '20px',
+        fontWeight: 'normal',
+        lineHeight: '1',
+        overflow: 'hidden',
+        position: 'relative',
+    };
+
+    const scrollingTextStyles: React.CSSProperties = {
+        position: 'absolute',
+        whiteSpace: 'nowrap', // Prevent text wrapping
+        //animation: 'scrollText 5s linear infinite', // Animation over 5 seconds
+        left: '0', // Start from the left edge of the rectangle
+        fontWeight: 'bold', // You can make the text bold for better visibility
+        animation: 'scrollText 5s linear infinite, blink 1s infinite', // Combine animations
+        color: '#FFFFFF',
+        textShadow: '2px 2px 4px rgba(128, 128, 128, 0.7)', // Grey drop shadow effect
+    };
+
+    const scrollingLine: React.CSSProperties = {
+        position: 'relative',
+        marginTop: '20px',
+        fontWeight: 'bold',
+        //animation: 'scrollText 10s linear infinite',
+        color: '#94B7EF',
+        //whiteSpace: 'nowrap',
+        width: '400%', // Ширина лінії набагато більша за контейнер
+        textShadow: '2px 2px 4px rgba(128, 128, 128, 0.7)', // Grey drop shadow effect
+    };
+
+
+    // const blinkAnimation: React.CSSProperties = {
+    //     position: 'absolute',
+    //     whiteSpace: 'nowrap', // Prevent text wrapping
+    //     animation: 'blink 1s infinite', // Animation over 5 seconds
+    //     left: '0', // Start from the left edge of the rectangle
+    // };
+
+
+    // const textStyles: React.CSSProperties = {
+    //     width: '292px', // Ширина
+    //     height: '20px', // Висота
+    //     color: '#E5CD10', // Жовтий колір тексту (Fill: #E5CD10)
+    //     fontFamily: '"VT323", monospace', // Шрифт VT323
+    //     fontSize: '20px', // Розмір шрифту
+    //     fontWeight: 'normal', // Регулярний текст
+    //     lineHeight: '1', // Лінійна висота
+    //     textAlign: 'center', // Текст вирівняний по центру
+    //     margin: '20px 0', // Відступ зверху і знизу
+    //     filter: 'drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5))', // Drop shadow ефект
+    // };
+
+
 
     return (
         <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
@@ -55,6 +119,11 @@ const WelcomePage: React.FC = () => {
                     font-family: 'Halant-SemiBold';
                     src: url(${HalantSemiBold}) format('truetype');
                 }
+                
+                @font-face {
+                        font-family: 'VT323';
+                        src: url(${VTfont}) format('truetype');
+                }
 
                 h1 {
                     font-family: 'Halant-Bold', sans-serif;
@@ -77,23 +146,27 @@ const WelcomePage: React.FC = () => {
                                     0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */
                         z-index: 1;
                 }
-            
-            // /* Эффект при наведении: увеличиваем элемент только на десктопе */
-            // .square-container:hover {
-            //     transform: perspective(1000px) scale(1.05);
-            // }
-            //
-            // /* Отключаем увеличение для мобильных устройств с помощью медиа-запросов */
-            // @media (max-width: 768px) {
-            //     .square-container {
-            //         transform: none; /* Отключаем любые трансформации */
-            //         transition: none; /* Отключаем анимацию */
-            //     }
-            //
-            //     .square-container:hover {
-            //         transform: none; /* Убираем увеличение при наведении */
-            //     }
-            // }
+           
+                /* Keyframes for scrolling text */
+                @keyframes scrollText {
+                        0% {
+                            transform: translateX(-100%); /* Start off-screen from the left */
+                        }
+                        100% {
+                            transform: translateX(245%); /* End off-screen to the right */
+                        }
+                }
+                
+                
+                
+                @keyframes blink {
+            0%, 100% {
+                opacity: 1; /* Fully visible */
+            }
+            50% {
+                opacity: 0; /* Fully invisible */
+            }
+        }
                 `}
                 </style>
 
@@ -139,7 +212,17 @@ const WelcomePage: React.FC = () => {
                     are
                     the ones you can't remember, with the people you won’t forget. Cheers! 🍻
                 </p>
-                <CustomVideoPlayer videoSrc={zaskolko} />
+                <CustomVideoPlayer videoSrc={zaskolko}/>
+                <div style={rectangleStyles}>
+                    <div style={scrollingTextStyles}>
+                        Welcome to the Party!!!
+                    </div>
+                    <div style={scrollingLine}>
+                        ✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦♫
+
+
+                    </div>
+                </div>
             </div>
             <div className="video-right flex-grow-1">
                 <video className="background-video right"

@@ -2,7 +2,7 @@
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {PartyListGet, PartyPost, PartyDetailGet} from "../Models/Party.tsx";
 
-const api = "https://localhost:7136/api/";
+const api = "http://localhost:5131/api/";
 
 export const CreatePartyAPI = async (
     name: string,

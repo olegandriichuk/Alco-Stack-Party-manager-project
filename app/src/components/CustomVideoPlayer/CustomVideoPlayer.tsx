@@ -26,7 +26,8 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.7)',
         overflow: 'hidden',
         position: 'relative',
-        marginBottom: '60px',
+        marginBottom: '2px',
+        marginTop: '-30px',
         border: '4px solid #333', // Базовий стиль для рамки
         borderRadius: '20px',  // Заокруглення сірої рамки
         width: isMobile ? '300px' : '500px',  // Для мобільних пристроїв ширина буде меншою
@@ -35,11 +36,11 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
     };
 
     const videoStyles: React.CSSProperties = {
-        width: '100%',  // Відео займає всю ширину контейнера
-        height: '100%', // Відео займає всю висоту контейнера
-        objectFit: 'cover', // Відео буде обрізатися для заповнення контейнера без спотворення
-        borderRadius: '15px', // Заокруглення для відео
-        border: '10px solid #000',
+        width: '100%',           // Відео займає всю ширину контейнера
+        height: '100%',          // Відео займає всю висоту контейнера
+        objectFit: 'cover',      // Відео буде обрізатися для заповнення контейнера без спотворення
+        borderRadius: '15px',    // Заокруглення для відео
+        boxShadow: '0 0 0 2px #2C2E2E, 0 0 0 4px #161616', // Імітація додаткових рамок через тіні
     };
 
     return (
