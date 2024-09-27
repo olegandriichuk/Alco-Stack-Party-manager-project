@@ -1,2 +1,25 @@
-﻿
+﻿/* Прокручиваемый список слайдеров */
+/*.slider-list-container {*/
+/*    max-height: 600px; !* Максимальная высота контейнера *!*/
+/*    overflow-y: scroll; !* Всегда показывать скролл, когда необходимо *!*/
+/*    width: 100%; !* Занимает полную ширину родительского контейнера *!*/
+/*    padding: 0 15px; !* Отступы, чтобы не обрезать текст *!*/
+/*    box-sizing: border-box; !* Учет padding в ширине контейнера *!*/
+/*    display: flex;*/
+/*    flex-direction: column; !* Элементы выстраиваются в колонку *!*/
+/*}*/
+
+/*!* Стилизация полосы прокрутки *!*/
+/*.slider-list-container::-webkit-scrollbar {*/
+/*    width: 8px; !* Ширина скроллбара *!*/
+/*}*/
+
+/*.slider-list-container::-webkit-scrollbar-thumb {*/
+/*    background-color: rgba(0, 0, 0, 0.3); !* Цвет скроллбара *!*/
+/*    border-radius: 4px; !* Скругление *!*/
+/*}*/
+
+
+
+
 

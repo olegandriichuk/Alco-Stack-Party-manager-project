@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Halant Semi Bold';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Halant Regular';
+    src: url('../../assets/fonts/halant/Halant-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
