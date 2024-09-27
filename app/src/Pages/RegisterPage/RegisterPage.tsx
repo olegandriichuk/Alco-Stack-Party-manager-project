@@ -22,8 +22,6 @@ export type RegisterFormInputs = {
     dateOfBirth?: string; // ISO 8601 format
     address?: Address;
     phoneNumber?: string;
-    photo?: string;
-    formBackgroundUrl?: string;
     bio?: string;
 };
 
@@ -45,8 +43,6 @@ const validationSchema = Yup.object().shape({
         country: Yup.string().optional(),
     }).optional(),
     phoneNumber: Yup.string().optional(),
-    photo: Yup.string().optional(),
-    formBackgroundUrl: Yup.string().optional(),
     bio: Yup.string().optional(),
 });
 
@@ -205,7 +201,7 @@ const RegisterPage: React.FC = () => {
                             {renderAddressInput('Postal Code', 'addressPostalCode', 'Postal Code', 'postalCode', errors.address?.postalCode?.message)}
                             {renderAddressInput('Country', 'addressCountry', 'Country', 'country', errors.address?.country?.message)}
 
-                            {renderInput('Bio', 'bio', 'text', 'Bio', 'bio', errors.bio?.message)}
+                        {renderInput('Bio', 'bio', 'text', 'Bio', 'bio', errors.bio?.message)}
 
                             <button type="submit" className="btn btn-primary w-100">Sign up</button>
                             <p className="text-center mt-3">

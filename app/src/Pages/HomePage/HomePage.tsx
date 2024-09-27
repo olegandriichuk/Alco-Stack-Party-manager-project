@@ -24,7 +24,6 @@ const HomePage: React.FC = () => {
 
     const { token } = useAuth();
     const [parties, setParties] = useState<PartyListGet[]>([]);
-    //const [zoomLevel, setZoomLevel] = useState(1);
 
     const UserPartiesGet = async () => {
         if (!token) {
@@ -33,7 +32,6 @@ const HomePage: React.FC = () => {
         }
         try {
             const response = await GetPartyListAPI(token);
-
             if (response && response.data) {
                 setParties(response.data); // Update state with the party data
             } else {
@@ -109,16 +107,16 @@ const HomePage: React.FC = () => {
                     font-family: 'JejuHallasan';
                     src: url(${JejuHallasan}) format('truetype');
                 }
-        
+                
                 @font-face {
                     font-family: 'Halant';
                     src: url(${Halant}) format('truetype');
                 }
-    
+
                 .logo-text {
                     font-family: 'JejuHallasan', sans-serif;
                 }
-                
+
                 .custom-heading {
                     font-family: 'Halant', serif;
                 }
