@@ -46,13 +46,18 @@ export const UpdateProfileAPI = async (
 }
 
 export const UpdatePhotoAPI = async (
+    photoChanged: boolean,
+    fromBackgroundChanged: boolean,
     photoFile?: File | null,
     formBackgroundFile?: File | null,
     authToken?: string
 ) => {
     try {
         const formData = new FormData();
-
+        // Append the boolean attributes as strings or numbers
+        formData.append("PhotoChanged", JSON.stringify(photoChanged));
+        formData.append("FromBackgroundChanged", JSON.stringify(fromBackgroundChanged));
+        // Append the file data
         if (photoFile) {
             formData.append("PhotoFile", photoFile);
         }
@@ -61,6 +66,7 @@ export const UpdatePhotoAPI = async (
             formData.append("FormBackgroundFile", formBackgroundFile);
         }
 
+        // Send the request
         const data = await axios.patch<UserProfile>(
             api + "account/updatePhoto",
             formData,
@@ -71,8 +77,9 @@ export const UpdatePhotoAPI = async (
                 }
             }
         );
+
         return data;
     } catch (error) {
         handleError(error);
     }
-};
+}

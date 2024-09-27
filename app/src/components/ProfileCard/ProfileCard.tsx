@@ -28,6 +28,7 @@ interface ProfileCardProps {
 }
 
 const validationSchema = Yup.object().shape({
+    photoChanged: Yup.boolean().required(),
     photoFile: Yup.mixed<File>()
         .nullable()
         .optional()
@@ -40,6 +41,7 @@ const validationSchema = Yup.object().shape({
                 (value && ["image/jpeg", "image/png", "image/gif"].includes(value.type))
             );
         }),
+    formBackgroundChanged: Yup.boolean().required(),
     formBackgroundFile: Yup.mixed<File>()
         .nullable()
         .optional()
@@ -67,6 +69,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     const [currentBackgroundSrc, setCurrentBackgroundSrc] = useState(formBackgroundSrc);
     const [photoFile, setPhotoFile] = useState<File | null>(null);
     const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
+    const [photoChanged, setPhotoChanged] = useState(false);
+    const [formBackgroundChanged, setFormBackgroundChanged] = useState(false);
 
     console.log("photoSrc", photoSrc)
     console.log("photoFile", photoFile);
@@ -86,7 +90,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         backgroundPosition: 'center',
         width: '90%',
         borderRadius: '20px',
-        background: '#D5D5D5',
+        backgroundColor: '#D5D5D5',
         border : '1px solid white',
         color: 'white'
 
@@ -96,7 +100,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         resolver: yupResolver(validationSchema),
     });
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<File | null>>, setUrl: React.Dispatch<React.SetStateAction<string>>) => {
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<File | null>>, setUrl: React.Dispatch<React.SetStateAction<string>>, setChanged: React.Dispatch<React.SetStateAction<boolean>>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             setFile(file);
@@ -105,6 +109,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 setUrl(x?.target?.result as string);
             };
             reader.readAsDataURL(file);
+            setChanged(true);  
         }
     };
 
@@ -116,15 +121,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         console.log('Updating profile with data:', photoFile, backgroundFile);
         try {
             const response = await UpdatePhotoAPI(
+                photoChanged,
+                formBackgroundChanged,
                 photoFile,
                 backgroundFile,
                 token
             );
-
             if (response && response.data) {
                 updateUser(response.data);
                 setCurrentPhotoSrc(response.data.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
                 setCurrentBackgroundSrc(response.data.formBackgroundSrc || '');
+                setPhotoChanged(false);
+                setFormBackgroundChanged(false);
                 console.log('Profile updated successfully', response.data);
             }
         } catch (error) {
@@ -136,11 +144,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     const handleDeletePhoto = () => {
         setCurrentPhotoSrc("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
         setPhotoFile(null);
+        setPhotoChanged(true);
     };
 
     const handleDeleteBackground = () => {
         setCurrentBackgroundSrc('');
         setBackgroundFile(null);
+        setPhotoChanged(true);
     };
 
     const [modalShow, setModalShow] = useState(false);
@@ -152,10 +162,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
     const MyVerticallyCenteredModal: React.FC<MyVerticallyCenteredModalProps> = ({ onHide, show }) => {
         const onSubmit = (data: UserPhoto) => {
+            window.alert("Profile Pictures Updated");
             handlePhotoUpdate(data);
             setModalShow(false);
         };
-
         return (
             <Modal
                 show={show}
@@ -203,7 +213,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     id="photoFile"
                                     className="form-control"
                                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
-                                    onChange={(e) => handleImageChange(e, setPhotoFile, setCurrentPhotoSrc)}
+                                    onChange={(e) => handleImageChange(e, setPhotoFile, setCurrentPhotoSrc, setPhotoChanged)}
                                 />
                             </div>
                             {errors.photoFile && <div className="invalid-feedback text-center">{errors.photoFile.message}</div>}
@@ -244,7 +254,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     id="backgroundFile"
                                     className="form-control"
                                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
-                                    onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc)}
+                                    onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc, setFormBackgroundChanged)}
                                 />
                             </div>
                             {errors.formBackgroundFile && <div className="invalid-feedback text-center">{errors.formBackgroundFile.message}</div>}
@@ -271,7 +281,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                         <img
                             style={{
                                 border: '1px solid black',
-                                borderRadius: '50%',  // This replaces the 'rounded-circle' class
+                                borderRadius: '50%',
                                 width: '100px',
                                 height: '100px'
                             }}
@@ -282,9 +292,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     <h5 className="card-title"
                         style={{
                             borderRadius: '10px',
-                            background: 'linear-gradient(90deg, #5C5C5C 16%, #353535 82%)', // Градієнт
+                            background: 'linear-gradient(90deg, #5C5C5C 16%, #353535 82%)',
                             padding: '5px 10px',
-                            fontFamily: 'HalantSemiBold' // Застосовуємо шрифт
+                            fontFamily: 'HalantSemiBold'
                         }}>
                         <style>
                             {`
@@ -372,8 +382,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             }}>Gender: &nbsp;&nbsp;&nbsp; {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}</span>
                         </li>
                     </ul>
-
-
                 </div>
             </div>
             <MyVerticallyCenteredModal
@@ -385,3 +393,4 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 };
 
 export default ProfileCard;
+

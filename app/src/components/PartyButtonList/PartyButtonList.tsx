@@ -1,5 +1,4 @@
-﻿// src/components/PartyButtonList.tsx
-import React from 'react';
+﻿import React from 'react';
 import PartyButton from '../PartyButton/PartyButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
