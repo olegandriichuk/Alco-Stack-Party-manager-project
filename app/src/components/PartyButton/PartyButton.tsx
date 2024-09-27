@@ -14,7 +14,7 @@ interface PartyButtonProps {
 }
 
 const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, date, createdByMe }) => {
-    const ButtonStyle = { backgroundColor: createdByMe ? '#f07070' : '#708ff0' };
+    const ButtonStyle = { backgroundColor: createdByMe ? 'rgba(255, 49, 49, 0.6)' : 'rgba(33, 85, 255, 0.6)' };
 
     // Using useNavigate to programmatically navigate
     const navigate = useNavigate();
