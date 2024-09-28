@@ -26,12 +26,9 @@ export const UpdateProfileAPI = async (
                 lastName: lastName,
                 bio: bio,
                 dateOfBirth: dateOfBirth,
-                // photo: photo,
                 phoneNumber: phoneNumber,
                 address: address,
-                // formBackgroundUrl: formBackgroundUrl,
                 gender: gender
-
             },
             {
                 headers: {
@@ -47,7 +44,7 @@ export const UpdateProfileAPI = async (
 
 export const UpdatePhotoAPI = async (
     photoChanged: boolean,
-    fromBackgroundChanged: boolean,
+    formBackgroundChanged: boolean,
     photoFile?: File | null,
     formBackgroundFile?: File | null,
     authToken?: string
@@ -56,7 +53,7 @@ export const UpdatePhotoAPI = async (
         const formData = new FormData();
         // Append the boolean attributes as strings or numbers
         formData.append("PhotoChanged", JSON.stringify(photoChanged));
-        formData.append("FromBackgroundChanged", JSON.stringify(fromBackgroundChanged));
+        formData.append("FormBackgroundChanged", JSON.stringify(formBackgroundChanged));
         // Append the file data
         if (photoFile) {
             formData.append("PhotoFile", photoFile);

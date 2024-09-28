@@ -29,6 +29,7 @@ interface ProfileCardProps {
 
 const validationSchema = Yup.object().shape({
     photoChanged: Yup.boolean().required(),
+    formBackgroundChanged: Yup.boolean().required(),
     photoFile: Yup.mixed<File>()
         .nullable()
         .optional()
@@ -41,8 +42,7 @@ const validationSchema = Yup.object().shape({
                 (value && ["image/jpeg", "image/png", "image/gif"].includes(value.type))
             );
         }),
-    formBackgroundChanged: Yup.boolean().required(),
-    formBackgroundFile: Yup.mixed<File>()
+        formBackgroundFile: Yup.mixed<File>()
         .nullable()
         .optional()
         .test("fileSize", "File too large", (value) => {
@@ -57,31 +57,34 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
-                                                     name,
-                                                     Surname,
-                                                     Phone,
-                                                     Gender,
-                                                     photoSrc,
-                                                     formBackgroundSrc,
-                                                     UserName
-                                                 }) => {
+         name,
+         Surname,
+         Phone,
+         Gender,
+         photoSrc,
+         formBackgroundSrc,
+         UserName
+    }) => {
     const [currentPhotoSrc, setCurrentPhotoSrc] = useState(photoSrc);
     const [currentBackgroundSrc, setCurrentBackgroundSrc] = useState(formBackgroundSrc);
     const [photoFile, setPhotoFile] = useState<File | null>(null);
-    const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
+    const [formBackgroundFile, setBackgroundFile] = useState<File | null>(null);
     const [photoChanged, setPhotoChanged] = useState(false);
     const [formBackgroundChanged, setFormBackgroundChanged] = useState(false);
 
-    console.log("photoSrc", photoSrc)
-    console.log("photoFile", photoFile);
-    console.log("formBackgroundSrc", formBackgroundSrc);
+    // console.log("photoSrc", photoSrc)
+    // console.log("photoFile", photoFile);
+    // console.log("formBackgroundSrc", formBackgroundSrc);
 
     const { token, updateUser } = useAuth();
 
     useEffect(() => {
         setCurrentPhotoSrc(photoSrc);
         setCurrentBackgroundSrc(formBackgroundSrc);
+        // console.log("currentBackgroundSrc", currentBackgroundSrc);
     }, [photoSrc, formBackgroundSrc]);
+
+    console.log("currentBackgroundSrc", currentBackgroundSrc);
 
     const profileCardStyle: React.CSSProperties = {
         backgroundImage: `url(${currentBackgroundSrc})`,
@@ -109,22 +112,24 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 setUrl(x?.target?.result as string);
             };
             reader.readAsDataURL(file);
-            setChanged(true);  
+            setChanged(true);
         }
     };
 
-    const handlePhotoUpdate = async (formData: UserPhoto) => {
+    const handlePhotoUpdate = async () => {
         if (!token) {
             toast.error("You must be logged in to update your profile");
             return;
         }
-        console.log('Updating profile with data:', photoFile, backgroundFile);
+        // console.log("formBackgroundChanged", formBackgroundChanged);
+        // console.log("photoChanged", photoChanged);
+        // console.log('Updating profile with data:', photoFile, formBackgroundFile);
         try {
             const response = await UpdatePhotoAPI(
                 photoChanged,
                 formBackgroundChanged,
                 photoFile,
-                backgroundFile,
+                formBackgroundFile,
                 token
             );
             if (response && response.data) {
@@ -133,7 +138,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 setCurrentBackgroundSrc(response.data.formBackgroundSrc || '');
                 setPhotoChanged(false);
                 setFormBackgroundChanged(false);
-                console.log('Profile updated successfully', response.data);
+                // console.log('Profile updated successfully', response.data);
             }
         } catch (error) {
             console.error('Failed to update profile', error);
@@ -142,7 +147,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     };
 
     const handleDeletePhoto = () => {
-        setCurrentPhotoSrc("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
+        setCurrentPhotoSrc('');
         setPhotoFile(null);
         setPhotoChanged(true);
     };
@@ -150,7 +155,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     const handleDeleteBackground = () => {
         setCurrentBackgroundSrc('');
         setBackgroundFile(null);
-        setPhotoChanged(true);
+        setFormBackgroundChanged(true);
     };
 
     const [modalShow, setModalShow] = useState(false);
@@ -159,13 +164,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         show: boolean;
         onHide: () => void;
     }
+    const onSubmit = () => {
+        handlePhotoUpdate();
+        setModalShow(false);
+    };
+
 
     const MyVerticallyCenteredModal: React.FC<MyVerticallyCenteredModalProps> = ({ onHide, show }) => {
-        const onSubmit = (data: UserPhoto) => {
-            window.alert("Profile Pictures Updated");
-            handlePhotoUpdate(data);
-            setModalShow(false);
-        };
+
         return (
             <Modal
                 show={show}
@@ -224,7 +230,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
                         {/* Background Photo Section */}
                         <div className="mb-3 text-center">
-                            <label htmlFor="backgroundFile" className="form-label">Background Photo</label>
+                            <label htmlFor="formBackgroundFile" className="form-label">Background Photo</label>
                             <div
                                 style={{
                                     border: '2px dashed #ccc',
@@ -251,7 +257,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    id="backgroundFile"
+                                    id="formBackgroundFile"
                                     className="form-control"
                                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
                                     onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc, setFormBackgroundChanged)}
@@ -264,7 +270,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button type="submit">Save Changes</Button>
+                        <Button onClick={onSubmit}>Save</Button>
                         <Button onClick={onHide}>Close</Button>
                     </Modal.Footer>
                 </form>

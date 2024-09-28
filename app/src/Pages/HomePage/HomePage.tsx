@@ -76,7 +76,7 @@ const HomePage: React.FC = () => {
         height: isMobile ? '0vh' : '100vh',
         objectFit: 'cover' as const,
         zIndex: -1,
-       boxSizing: 'border-box',
+        boxSizing: 'border-box',
 
     };
 
@@ -100,7 +100,8 @@ const HomePage: React.FC = () => {
                     backgroundRepeat: 'no-repeat',
                     backgroundAttachment: 'fixed',
                     minHeight: isMobile ? '100vh' : '100vh',
-                }}>
+                }}
+            >
                 <style>
                     {`
                 @font-face {
@@ -223,9 +224,7 @@ const HomePage: React.FC = () => {
                 )}
 
                 <MenuButtonList menuButtons={menuButtons}/>
-                {/*<div className="slider-list-container">*/}
-                    <PartyButtonList parties={parties}/>
-               {/*// </div>*/}
+                <PartyButtonList parties={parties}/>
                 {showJoinPartyPopUp && (
                     <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty}/>
                 )}
