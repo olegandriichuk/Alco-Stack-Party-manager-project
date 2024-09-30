@@ -50,12 +50,12 @@ namespace AlcoStack.Controllers;
                     Address = user.Address.MapToDto(),
                     Phone = user.PhoneNumber,
                     PhotoName = user.PhotoName,
-                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                    PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
                     FormBackgroundName = user.FormBackgroundName,
-                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
+                    FormBackgroundSrc = user.FormBackgroundName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 }
             );
         } 
@@ -284,35 +284,51 @@ namespace AlcoStack.Controllers;
     
             if (user == null)
                 return NotFound();
-    
-            if (photoDto.PhotoFile != null)
+
+            if (photoDto.PhotoChanged)
             {
-                if(user.PhotoName != null)
+
+                if (photoDto.PhotoFile != null)
+                {
+                    if (user.PhotoName != null)
+                        DeleteImage(user.PhotoName);
+                    user.PhotoName = await SaveImage(photoDto.PhotoFile);
+                    user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
+                }
+                else if (user.PhotoName != null && photoDto.PhotoFile == null)
+                {
                     DeleteImage(user.PhotoName);
-                user.PhotoName = await SaveImage(photoDto.PhotoFile);
-                user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
+                    user.PhotoName = null;
+                    user.PhotoSrc = null;
+                }
             }
-            else if (user.PhotoName != null && photoDto.PhotoFile == null)
+            else
             {
-                DeleteImage(user.PhotoName);
-                user.PhotoName = null;
-                user.PhotoSrc = null;
+                user.PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
             }
-    
-            if (photoDto.FormBackgroundFile != null)
+            
+            if (photoDto.FormBackgroundChanged)
             {
-                if(user.FormBackgroundName != null)
+
+                if (photoDto.FormBackgroundFile != null)
+                {
+                    if (user.FormBackgroundName != null)
+                        DeleteImage(user.FormBackgroundName);
+                    user.FormBackgroundName = await SaveImage(photoDto.FormBackgroundFile);
+                    user.FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
+                }
+                else if (user.FormBackgroundName != null && photoDto.FormBackgroundFile == null)
+                {
                     DeleteImage(user.FormBackgroundName);
-                user.FormBackgroundName = await SaveImage(photoDto.FormBackgroundFile);
-                user.FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
+                    user.FormBackgroundName = null;
+                    user.FormBackgroundSrc = null;
+                }
             }
-            else if (user.FormBackgroundName != null && photoDto.FormBackgroundFile == null)
+            else
             {
-                DeleteImage(user.FormBackgroundName);
-                user.FormBackgroundName = null;
-                user.FormBackgroundSrc = null;
+                user.FormBackgroundSrc = user.FormBackgroundName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
             }
-    
+
             var result = await userManager.UpdateAsync(user);
     
             if (result.Succeeded)
