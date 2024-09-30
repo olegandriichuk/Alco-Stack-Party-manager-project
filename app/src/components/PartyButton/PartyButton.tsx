@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿// src/components/PartyButton.tsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { faUsers, faCake } from "@fortawesome/free-solid-svg-icons";
@@ -13,11 +14,14 @@ interface PartyButtonProps {
 }
 
 const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, date, createdByMe }) => {
-    const ButtonStyle = { backgroundColor: createdByMe ? '#f07070' : '#708ff0' };
+    const ButtonStyle = { backgroundColor: createdByMe ? 'rgba(255, 49, 49, 0.6)' : 'rgba(33, 85, 255, 0.6)' };
 
     // Using useNavigate to programmatically navigate
     const navigate = useNavigate();
     console.log('button id:', partyId);
+
+    console.log(partyId);
+
 
     const handleButtonClick = () => {
         // Navigate to the party detail page with the specific partyId
@@ -34,6 +38,21 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
         hour: '2-digit',
         minute: '2-digit'
     }).format(new Date(date));
+
+    // const titleStyle = {
+    //     fontFamily: 'Halant Semi Bold',
+    //     fontWeight: 600,
+    // };
+    //
+    // const descriptionStyle = {
+    //     fontFamily: 'Halant Regular',
+    //     fontWeight: 400,
+    // };
+    //
+    // const dateStyle = {
+    //     fontFamily: 'Halant Semi Bold',
+    //     fontWeight: 600,
+    // };
 
     return (
         <button

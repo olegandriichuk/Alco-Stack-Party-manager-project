@@ -1,1 +1,29 @@
+@font-face {
+    font-family: 'Halant Medium';
+    src: url('../../assets/fonts/halant/Halant-Regular.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* src/components/PartyButtonList.css */
+.scroll-container {
+    max-height: 290px; /* Висота контейнера з можливістю скролу */
+    overflow-y: auto; /* Вмикаємо вертикальний скролінг */
+    padding: 10px;
+    border-radius: 5px;
+   /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+}
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px; /* Ширина скролбару */
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #888; /* Колір скролбару */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Колір скролбару при наведенні */
+}
 

@@ -42,6 +42,8 @@ export type UserProfile = {
 };
 
 export type UserPhoto = {
+    photoChanged: boolean;
+    formBackgroundChanged: boolean;
     photoFile?: File | null;
     formBackgroundFile?: File | null;
 };
