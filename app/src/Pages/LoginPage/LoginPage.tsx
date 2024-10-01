@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+﻿import React, {  useState } from 'react';
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
@@ -54,28 +54,16 @@ const LoginPage = () => {
         }
     `;
 
-    const videoStyles : React.CSSProperties = {
-        position: isMobile ? 'static' : 'fixed',
-        top: 0,
-        // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
-        height: isMobile ? '0vh' : '100vh',
-        objectFit: 'cover' as const,
-        zIndex: -1,
-        boxSizing: 'border-box',
-
-    };
-
     return (
-        <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
+        <div className="container-fluid d-flex p-0 full-height-login">
             <div className="video-left flex-grow-1">
-                <video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}}
-                       autoPlay loop muted>
+                <video className="background-video-login left" autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>
             </div>
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container flex-grow-7"
+                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-login flex-grow-7"
                 style={{
                     backgroundColor: '#DDE4EE',
                     backgroundImage: `url(${backgroundImage})`,
@@ -151,8 +139,7 @@ const LoginPage = () => {
                 </div>
             </div>
             <div className="video-right flex-grow-1">
-                <video className="background-video right"
-                       style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
+                <video className="background-video_r-login right" autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>

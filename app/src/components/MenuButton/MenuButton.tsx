@@ -19,6 +19,8 @@ interface MenuButtonProps {
 const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', link, onClick, className }) => {
     const menuButtonStyle: React.CSSProperties = {
         backgroundColor: color,
+        color: "black",
+        border: "none",
     };
 
     return link ? (

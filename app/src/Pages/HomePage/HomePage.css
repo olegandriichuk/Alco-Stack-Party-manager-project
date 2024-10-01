@@ -1,23 +1,84 @@
-﻿/* Прокручиваемый список слайдеров */
-/*.slider-list-container {*/
-/*    max-height: 600px; !* Максимальная высота контейнера *!*/
-/*    overflow-y: scroll; !* Всегда показывать скролл, когда необходимо *!*/
-/*    width: 100%; !* Занимает полную ширину родительского контейнера *!*/
-/*    padding: 0 15px; !* Отступы, чтобы не обрезать текст *!*/
-/*    box-sizing: border-box; !* Учет padding в ширине контейнера *!*/
-/*    display: flex;*/
-/*    flex-direction: column; !* Элементы выстраиваются в колонку *!*/
-/*}*/
+﻿.background-video-home {
+    object-fit: cover ;
+    z-index: -1;
+    box-sizing: border-box;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 45vw;
+    left: 0;
+}
 
-/*!* Стилизация полосы прокрутки *!*/
-/*.slider-list-container::-webkit-scrollbar {*/
-/*    width: 8px; !* Ширина скроллбара *!*/
-/*}*/
+.background-video_r-home {
+    object-fit: cover;
+    z-index: -1;
+    box-sizing: border-box;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 45vw;
+    right: 0;
+}
 
-/*.slider-list-container::-webkit-scrollbar-thumb {*/
-/*    background-color: rgba(0, 0, 0, 0.3); !* Цвет скроллбара *!*/
-/*    border-radius: 4px; !* Скругление *!*/
-/*}*/
+
+@media (max-width: 768px) {
+    .background-video-home, .background-video_r-home {
+        position: static;
+        width: 100%;
+        height: 0;
+    }
+}
+
+.full-height-home {
+    min-height: 100vh;
+    /* Додаємо горизонтальне вирівнювання */
+}
+
+.square-container-home {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-width: 800px;
+    max-height: 1900px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 1), /* Основная большая тень */
+    0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */
+    z-index: 1;
+}
+
+.custom-heading-home {
+    text-align: center;
+    font-family: 'Halant', serif;
+    width: 100%;
+}
+
+.centered-container-home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+@font-face {
+    font-family: 'JejuHallasan';
+    src: url('../../assets/fonts/JejuHallasan-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Halant';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+}
+
+.logo-text {
+    font-family: 'JejuHallasan', sans-serif;
+}
+
+.custom-heading-home {
+    font-family: 'Halant', serif;
+}
 
 
 

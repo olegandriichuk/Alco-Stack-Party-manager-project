@@ -11,8 +11,8 @@ import {UpdatePhotoAPI} from "../../Services/UserService.tsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import * as Yup from "yup";
-import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
-import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf"
+// import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
+// import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf";
 
 
 
@@ -184,82 +184,55 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                         {/* Profile Photo Section */}
                         <div className="mb-3 text-center">
                             <label htmlFor="photoFile" className="form-label">Profile Photo</label>
-                            <div
-                                style={{
-                                    border: '2px dashed #ccc',
-                                    borderRadius: '8px',
-                                    padding: '20px',
-                                    position: 'relative',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '150px',
-                                    height: '150px',
-                                    margin: '0 auto',
-                                    backgroundColor: '#f5f5f5'
-                                }}>
+                            <div className="photo-upload-container">
                                 {currentPhotoSrc ? (
                                     <img
                                         src={currentPhotoSrc}
                                         alt="Current Profile"
-                                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
                                     />
                                 ) : (
-                                    <span style={{ fontSize: '48px', color: '#ccc' }}>+</span>
+                                    <span className="photo-upload-icon">+</span>
                                 )}
                                 <input
                                     type="file"
                                     accept="image/*"
                                     id="photoFile"
-                                    className="form-control"
-                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    className="photo-upload-input"
                                     onChange={(e) => handleImageChange(e, setPhotoFile, setCurrentPhotoSrc, setPhotoChanged)}
                                 />
                             </div>
-                            {errors.photoFile && <div className="invalid-feedback text-center">{errors.photoFile.message}</div>}
+                            {errors.photoFile && <div className="invalid-feedback">{errors.photoFile.message}</div>}
                             {currentPhotoSrc && (
-                                <Button variant="danger" className="mt-2" onClick={handleDeletePhoto}>Delete Photo</Button>
+                                <Button variant="danger" className="mt-2" onClick={handleDeletePhoto}>Delete
+                                    Photo</Button>
                             )}
                         </div>
 
                         {/* Background Photo Section */}
                         <div className="mb-3 text-center">
                             <label htmlFor="backgroundFile" className="form-label">Background Photo</label>
-                            <div
-                                style={{
-                                    border: '2px dashed #ccc',
-                                    borderRadius: '8px',
-                                    padding: '20px',
-                                    position: 'relative',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '300px',
-                                    height: '150px',
-                                    margin: '0 auto',
-                                    backgroundColor: '#f5f5f5'
-                                }}>
+                            <div className="background-upload-container">
                                 {currentBackgroundSrc ? (
                                     <img
                                         src={currentBackgroundSrc}
                                         alt="Current Background"
-                                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
                                     />
                                 ) : (
-                                    <span style={{ fontSize: '48px', color: '#ccc' }}>+</span>
+                                    <span className="background-upload-icon">+</span>
                                 )}
                                 <input
                                     type="file"
                                     accept="image/*"
                                     id="backgroundFile"
-                                    className="form-control"
-                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    className="background-upload-input"
                                     onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc, setFormBackgroundChanged)}
                                 />
                             </div>
-                            {errors.formBackgroundFile && <div className="invalid-feedback text-center">{errors.formBackgroundFile.message}</div>}
+                            {errors.formBackgroundFile &&
+                                <div className="invalid-feedback">{errors.formBackgroundFile.message}</div>}
                             {currentBackgroundSrc && (
-                                <Button variant="danger" className="mt-2" onClick={handleDeleteBackground}>Delete Background</Button>
+                                <Button variant="danger" className="mt-2" onClick={handleDeleteBackground}>Delete
+                                    Background</Button>
                             )}
                         </div>
                     </Modal.Body>
@@ -275,111 +248,32 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     return (
         <div className="card" style={profileCardStyle}>
             <div className="card-body d-flex flex-row">
-                <div className={"p-3 d-flex flex-column justify-content-around align-items-center"}>
-                    <button onClick={() => setModalShow(true)}
-                            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-                        <img
-                            style={{
-                                border: '1px solid black',
-                                borderRadius: '50%',
-                                width: '100px',
-                                height: '100px'
-                            }}
-                            src={currentPhotoSrc}
-                            alt="User Photo"
-                        />
+                <div className="p-3 d-flex flex-column justify-content-around align-items-center">
+                    <button onClick={() => setModalShow(true)} className="profile-photo-button">
+                        <img className="profile-photo" src={currentPhotoSrc} alt="User Photo"/>
                     </button>
-                    <h5 className="card-title"
-                        style={{
-                            borderRadius: '10px',
-                            background: 'linear-gradient(90deg, #5C5C5C 16%, #353535 82%)',
-                            padding: '5px 10px',
-                            fontFamily: 'HalantSemiBold'
-                        }}>
-                        <style>
-                            {`
-                                @font-face {
-                                    font-family: 'HalantSemiBold';
-                                    src: url(${HalantSemiBold}) format('truetype');
-                                }
-                            `}
-                        </style>
-                        {UserName}
-                    </h5>
+                    <h5 className="card-title profile-name">{UserName}</h5>
                 </div>
                 <div className="d-flex flex-grow-1 flex-column">
                     <div className="d-flex justify-content-end">
-                        <Link to={"/profile/edit"} style={{textDecoration: 'none'}}>
-                            <button className="btn btn-primary btn-lg m-2"
-                                    style={{
-                                        background: '#D8DCE3',
-                                        border: '1px solid white',
-                                        fontFamily: 'HalantSemiBold', // Застосовуємо шрифт
-                                        // Підключаємо імпортований шрифт
-                                    }}>
-                                <style>
-                                    {`
-                    @font-face {
-                        font-family: 'HalantSemiBold';
-                        src: url(${HalantSemiBold}) format('truetype');
-                    }
-                `}
-                                </style>
-                                Edit Profile
-                            </button>
+                        <Link to="/profile/edit" style={{textDecoration: 'none'}}>
+                            <Button className="btn-lg m-2 edit-profile-btn">Edit Profile</Button>
                         </Link>
                     </div>
-                    <ul className="list-unstyled" style={{ color: '#FFFFFF', padding: 0, fontFamily: 'InterRegular' }}>
-                        <style>
-                            {`
-                                @font-face {
-                                    font-family: 'InterRegular';
-                                    src: url(${InterRegular}) format('truetype');
-                                }
-                    
-                                .list-unstyled span {
-                                    font-family: 'InterRegular';
-                                }
-                            `}
-                        </style>
-                        <li style={{ marginBottom: '10px' }}>
-                            <span style={{
-                                borderRadius: '10px',
-                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
-                                display: 'inline',
-                                padding: '5px 10px',
-                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
-                            }}>Name :&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;{name}</span>
-                        </li>
-                        <li style={{marginBottom: '10px'}}>
-                            <span style={{
-                                borderRadius: '10px',
-                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
-                                display: 'inline',
-                                padding: '5px 10px',
-                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
-                            }}>Surname : {Surname}</span>
-                        </li>
-                        <li style={{marginBottom: '10px'}}>
-                            <span style={{
-                                borderRadius: '10px',
-                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)', // Градієнт
-                                display: 'inline',
-                                padding: '5px 10px',
-                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
-                            }}>
-                                Phone :&nbsp;&nbsp;&nbsp;&nbsp; {Phone}
-                            </span>
-                        </li>
-
+                    <ul className="list-unstyled profile-details-list">
                         <li>
-                            <span style={{
-                                borderRadius: '10px',
-                                background: 'linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%)',
-                                display: 'inline',
-                                padding: '5px 10px',
-                                color: '#FFFFFF' // Текст білий для контрасту на темному фоні
-                            }}>Gender: &nbsp;&nbsp;&nbsp; {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}</span>
+                            <span>Name: {name}</span>
+                        </li>
+                        <li>
+                            <span>Surname: {Surname}</span>
+                        </li>
+                        <li>
+                            <span>Phone: {Phone}</span>
+                        </li>
+                        <li>
+                        <span>
+                            Gender: {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}
+                        </span>
                         </li>
                     </ul>
                 </div>

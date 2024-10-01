@@ -5,3 +5,154 @@
     overflow: hidden;
     background-color: #333;
 }
+@font-face {
+    font-family: 'HalantSemiBold';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+    /*font-weight: 600;*/
+}
+
+@font-face {
+    font-family: 'InterRegular';
+    src: url('../../assets/fonts/inter/Inter-Regular.otf') format('truetype');
+    font-weight: 400;
+}
+/* Контейнер для завантаження фото */
+.photo-upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    background-color: #f5f5f5;
+}
+
+/* Стиль для завантаженого зображення */
+.photo-upload-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Стиль для кнопки завантаження файлу */
+.photo-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Стиль для іконки завантаження */
+.photo-upload-icon {
+    font-size: 48px;
+    color: #ccc;
+}
+
+/* Стиль для повідомлення про помилки */
+.invalid-feedback {
+    text-align: center;
+}
+/* Контейнер для завантаження фону */
+.background-upload-container {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 150px;
+    margin: 0 auto;
+    background-color: #f5f5f5;
+}
+
+/* Стиль для завантаженого фонової картинки */
+.background-upload-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Стиль для кнопки завантаження файлу */
+.background-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Стиль для іконки завантаження */
+.background-upload-icon {
+    font-size: 48px;
+    color: #ccc;
+}
+
+/* Стиль для повідомлення про помилки */
+.invalid-feedback {
+    text-align: center;
+}
+/* Стилі для фото користувача */
+.profile-photo-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.profile-photo {
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+/* Стиль для назви профілю */
+.profile-name {
+    border-radius: 10px;
+    background: linear-gradient(90deg, #5C5C5C 16%, #353535 82%);
+    padding: 5px 10px;
+    font-family: 'HalantSemiBold';
+}
+
+/* Стиль для кнопки редагування профілю */
+
+.edit-profile-btn {
+    background: #D8DCE3;
+    border: 1px solid white;
+    font-family: 'HalantSemiBold';
+}
+.edit-profile-btn:hover{
+    background: #D8DCE3;
+    border: none;
+}
+/* Стиль для списку деталей профілю */
+.profile-details-list {
+    color: #FFFFFF;
+    padding: 0;
+    font-family: 'InterRegular';
+}
+
+/* Стиль для елементів списку деталей */
+.profile-details-list li {
+    margin-bottom: 10px;
+}
+
+/* Стиль для елементів тексту всередині списку */
+.profile-details-list span {
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%);
+    display: inline;
+    padding: 5px 10px;
+    color: #FFFFFF;
+}

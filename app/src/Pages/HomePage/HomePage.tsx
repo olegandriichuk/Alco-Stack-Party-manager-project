@@ -6,8 +6,8 @@ import Logo from '../../assets/logo.svg';
 import Disco from '../../assets/disco.svg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
-import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
+// import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
+// import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 import backgroundImage from '../../assets/backcov1.svg';
 import video from '../../assets/viddd2.mp4';
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
@@ -69,74 +69,30 @@ const HomePage: React.FC = () => {
         { text: 'create party', icon: faUsers, color: 'rgba(224, 122, 122, 0.9)', onClick: handleShowCreateParty },
     ];
 
-    const videoStyles : React.CSSProperties = {
-        position: isMobile ? 'static' : 'fixed',
-        top: 0,
-        // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
-        height: isMobile ? '0vh' : '100vh',
-        objectFit: 'cover' as const,
-        zIndex: -1,
-       boxSizing: 'border-box',
 
-    };
 
     return (
-        <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
+        <div className="container-fluid d-flex p-0 full-height-home">
 
             <div className="video-left flex-grow-1">
-                <video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
+                <video className="background-video-home left" autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>
             </div>
 
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container flex-grow-7"
+                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-home flex-grow-7"
                 style={{
                     backgroundColor: '#DDE4EE',
                     backgroundImage: `url(${backgroundImage})`,
                     backgroundSize: 'cover',
-                    backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
+                    backgroundPosition: isMobile ? '-3px 10px' : '31px 6px',
                     backgroundRepeat: 'no-repeat',
                     backgroundAttachment: 'fixed',
                     minHeight: isMobile ? '100vh' : '100vh',
                 }}>
-                <style>
-                    {`
-                @font-face {
-                    font-family: 'JejuHallasan';
-                    src: url(${JejuHallasan}) format('truetype');
-                }
-                
-                @font-face {
-                    font-family: 'Halant';
-                    src: url(${Halant}) format('truetype');
-                }
 
-                .logo-text {
-                    font-family: 'JejuHallasan', sans-serif;
-                }
-
-                .custom-heading {
-                    font-family: 'Halant', serif;
-                }
-                
-                .square-container {
-                        position: relative;
-                        width: 100%;
-                        height: auto;
-                        max-width: 800px;
-                        max-height: 900px;
-                        margin: 0 auto;
-                        background-color: white;
-                        border-radius: 10px;
-                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), /* Основная большая тень */
-                                    0 5px 15px rgba(0, 0, 0, 1); /* Дополнительная мягкая тень */
-                        z-index: 1;
-                    }
-                
-        `}
-                </style>
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div className="disco-container" style={{marginTop: '-1.5px'}}>
                         <img
@@ -177,43 +133,45 @@ const HomePage: React.FC = () => {
                 </span>
                 </div>
 
-                <div className="centered-container">
-                    <h2 className="custom-heading">Your party, your rules!</h2>
-                    <h2 className="custom-heading">Your unforgettable night!🎉</h2>
+                <div className="centered-container-home">
+                    <h2 className="custom-heading-home">Your party, your rules!</h2>
+                    <h2 className="custom-heading-home">Your unforgettable night!🎉</h2>
                 </div>
 
-                <style>
-                    {`
-                    .custom-heading {
-                        text-align: center;
-                        font-family: 'Halant', serif;
-                        width: 100%;
-                    }
-            
-                    .centered-container {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        width: 100%;
-                    }
-                `}
-                </style>
+                {/*<style>*/}
+                {/*    {`*/}
+                {/*    .custom-heading {*/}
+                {/*        text-align: center;*/}
+                {/*        font-family: 'Halant', serif;*/}
+                {/*        width: 100%;*/}
+                {/*    }*/}
+
+                {/*    .centered-container {*/}
+                {/*        display: flex;*/}
+                {/*        flex-direction: column;*/}
+                {/*        justify-content: center;*/}
+                {/*        align-items: center;*/}
+                {/*        width: 100%;*/}
+                {/*    }*/}
+                {/*`}*/}
+                {/*</style>*/}
 
 
                 {showCreatePartyPopUp && (
                     <CreatePartyPopUp show={showCreatePartyPopUp} handleClose={handleCloseCreateParty}/>
                 )}
-                <MenuButtonList menuButtons={menuButtons}/>
-                <PartyButtonList parties={parties}/>
 
+                <MenuButtonList menuButtons={menuButtons}/>
+                {/*<div className="slider-list-container">*/}
+                <PartyButtonList parties={parties}/>
+                {/*// </div>*/}
                 {showJoinPartyPopUp && (
                     <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty}/>
                 )}
 
             </div>
             <div className="video-right flex-grow-1">
-                <video className="background-video right" style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
+                <video className="background-video_r-home right" autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>

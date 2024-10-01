@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import './ChooseAlcoButton.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import HalantB from '../../assets/fonts/halant/Halant-Bold.ttf';
+//import HalantB from '../../assets/fonts/halant/Halant-Bold.ttf';
 
 interface AlcoButtonProps {
     text: string;
@@ -24,19 +24,19 @@ const AlcoButton: React.FC<AlcoButtonProps> = ({ text, icon, color = 'primary', 
             onClick={onClick} // Виконати функцію при натисканні
         >
             <span className={`choose-alco-button-text ${className}`}>
-                <style>
-                    {`
-                        @font-face {
-                            font-family: 'HalantB';
-                            src: url(${HalantB}) format('truetype');
-                        }
+                {/*<style>*/}
+                {/*    {`*/}
+                {/*        @font-face {*/}
+                {/*            font-family: 'HalantB';*/}
+                {/*            src: url(${HalantB}) format('truetype');*/}
+                {/*        }*/}
 
-                        .choose-alco-button-text {
-                            font-family: 'HalantB', serif;
-                            color: #484545
-                        }
-                    `}
-                </style>
+                {/*        .choose-alco-button-text {*/}
+                {/*            font-family: 'HalantB', serif;*/}
+                {/*            color: #484545*/}
+                {/*        }*/}
+                {/*    `}*/}
+                {/*</style>*/}
                 {text}
             </span>
             <img src={icon} alt="" style={{width: '29px', height: '29px'}}/> {/* Іконка кнопки */}

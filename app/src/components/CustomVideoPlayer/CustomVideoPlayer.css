@@ -1,0 +1,32 @@
+.player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000; /* Чорний фон контейнера */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2px;
+    margin-top: -30px;
+    border: 4px solid #333; /* Базовий стиль для рамки */
+    border-radius: 20px; /* Заокруглення сірої рамки */
+    padding: 10px;
+}
+
+.player-container.mobile {
+    width: 300px; /* Для мобільних пристроїв ширина буде меншою */
+    height: 180px; /* Для мобільних пристроїв висота буде меншою */
+}
+
+.player-container.desktop {
+    width: 500px; /* Для десктопних пристроїв ширина більша */
+    height: 300px; /* Для десктопних пристроїв висота більша */
+}
+
+.video {
+    width: 100%; /* Відео займає всю ширину контейнера */
+    height: 100%; /* Відео займає всю висоту контейнера */
+    object-fit: cover; /* Відео буде обрізатися для заповнення контейнера без спотворення */
+    border-radius: 15px; /* Заокруглення для відео */
+    box-shadow: 0 0 0 2px #2C2E2E, 0 0 0 4px #161616; /* Імітація додаткових рамок через тіні */
+}

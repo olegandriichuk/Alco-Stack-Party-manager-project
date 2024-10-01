@@ -1,0 +1,144 @@
+.background-video-welcome {
+    object-fit: cover ;
+    z-index: -1;
+    box-sizing: border-box;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 45vw;
+    left: 0;
+}
+
+.background-video_r-welcome {
+    object-fit: cover;
+    z-index: -1;
+    box-sizing: border-box;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 45vw;
+    right: 0;
+}
+
+
+@media (max-width: 768px) {
+    .background-video-welcome, .background-video_r-welcome {
+        position: static;
+        width: 100%;
+        height: 0;
+    }
+}
+
+.full-height-welcome {
+    min-height: 100vh;
+    /* Додаємо горизонтальне вирівнювання */
+}
+
+.square-container-welcome {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-width: 800px;
+    max-height: 1900px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 1), /* Основная большая тень */
+    0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */
+    z-index: 1;
+}
+
+@font-face {
+    font-family: 'Halant-Bold';
+    src: url('../../assets/fonts/halant/Halant-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Halant-SemiBold';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'VT323';
+    src: url('../../assets/fonts/VT323-Regular.ttf') format('truetype');
+}
+
+/*h1 {*/
+/*    font-family: 'Halant-Bold', sans-serif;*/
+/*}*/
+
+
+.welcome {
+    font-family: 'Halant-SemiBold', sans-serif;
+}
+
+
+/* Стиль для прямокутника */
+.rectangle {
+    background: linear-gradient(180deg, #827E7D 9%, #2B2B2B 31%);
+    border: 4px solid transparent;
+    border-image: linear-gradient(180deg, #2C2E2E 0%, #161616 100%) 1;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 2px grey;
+    font-family: "VT323", monospace;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.rectangle-mobile {
+    width: 300px;
+    height: 50px;
+}
+
+.rectangle-desktop {
+    width: 440px;
+    height: 50px;
+}
+
+.scrolling-text-welcome {
+    position: absolute;
+    white-space: nowrap; /* Запобігаємо переносу тексту */
+    left: 0; /* Починаємо з лівого краю */
+    font-weight: bold; /* Жирний текст */
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(128, 128, 128, 0.7); /* Сірий тіньовий ефект */
+    animation: scrollText-welcome 5s linear infinite, blink-welcome 1s infinite; /* Анімації */
+}
+
+/* Keyframes for scrolling text */
+@keyframes scrollText-welcome {
+    0% {
+        transform: translateX(-100%); /* Start off-screen from the left */
+    }
+    100% {
+        transform: translateX(245%); /* End off-screen to the right */
+    }
+}
+
+
+
+@keyframes blink-welcome {
+    0%, 100% {
+        opacity: 1; /* Fully visible */
+    }
+    50% {
+        opacity: 0; /* Fully invisible */
+    }
+}
+
+.scrolling-line-welcome {
+    position: relative;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #94B7EF;
+    width: 400%; /* Ширина лінії набагато більша за контейнер */
+    text-shadow: 2px 2px 4px rgba(128, 128, 128, 0.7); /* Сірий тіньовий ефект */
+    /* Додаємо анімацію, якщо це потрібно */
+    /* animation: scrollText 10s linear infinite; */
+}
+
+

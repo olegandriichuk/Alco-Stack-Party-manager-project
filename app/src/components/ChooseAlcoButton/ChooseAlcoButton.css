@@ -29,3 +29,12 @@
         opacity: 1;
     }
 }
+@font-face {
+    font-family: 'HalantB';
+    src: url('../../assets/fonts/halant/Halant-Bold.ttf') format('truetype');
+}
+
+.choose-alco-button-text {
+    font-family: 'HalantB', serif;
+    color: #484545;
+}

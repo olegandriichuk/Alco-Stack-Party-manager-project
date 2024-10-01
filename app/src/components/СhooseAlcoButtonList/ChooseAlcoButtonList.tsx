@@ -19,7 +19,7 @@ const ChooseAlcoButtonList: React.FC<ChooseAlcoButtonListProps> = ({ alcoButtons
         <div className="alco-container d-flex flex-column align-items-center">  {/* Використовуємо flexbox для центрування */}
             <div className="row justify-content-center">
                 {alcoButtons.map((button, index) => (
-                    <div key={index} className="col-12 col-md-10 mb-4 d-flex justify-content-center">
+                    <div key={index} className="col-12 col-md-12 mb-4 d-flex justify-content-center">
                         <ChooseAlcoButton
                             text={button.text}
                             icon={button.icon}
