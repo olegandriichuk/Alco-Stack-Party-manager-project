@@ -17,10 +17,12 @@ interface MenuButtonProps {
 }
 
 const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', link, onClick, className }) => {
+    const isMobile = window.innerWidth <= 768;
     const menuButtonStyle: React.CSSProperties = {
         backgroundColor: color,
         color: "black",
         border: "none",
+        fontSize: isMobile ? "14px" : "16px"
     };
 
     return link ? (

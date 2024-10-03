@@ -136,8 +136,22 @@
     background: #D8DCE3;
     border: none;
 }
+@media (max-width: 768px) {
+    .edit-profile-btn {
+        width: 160px; /* Встановлюємо ширину кнопки */
+        height: 29px; /* Встановлюємо висоту кнопки */
+        font-size: 20px; /* Зменшуємо розмір шрифту для телефону */
+        border-radius: 8px; /* Заокруглені краї */
+        background: #D8DCE3; /* Світлий фон */
+        text-align: center; /* Вирівнюємо текст по центру */
+        padding: 0; /* Встановлюємо padding на 0 для точного розміру */
+        /*margin-top: -40px;*/
+        /*top: 30px;*/
+    }
+}
 /* Стиль для списку деталей профілю */
 .profile-details-list {
+    margin-top: 10px;
     color: #FFFFFF;
     padding: 0;
     font-family: 'InterRegular';
