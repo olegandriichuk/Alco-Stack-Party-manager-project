@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
             </div>
 
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container flex-grow-7"
+                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-home flex-grow-7"
                 style={{
                     backgroundColor: '#DDE4EE',
                     backgroundImage: `url(${backgroundImage})`,
@@ -147,23 +147,6 @@ const HomePage: React.FC = () => {
                     <h2 className="custom-heading-home">Your unforgettable night!🎉</h2>
                 </div>
 
-                {/*<style>*/}
-                {/*    {`*/}
-                {/*    .custom-heading {*/}
-                {/*        text-align: center;*/}
-                {/*        font-family: 'Halant', serif;*/}
-                {/*        width: 100%;*/}
-                {/*    }*/}
-
-                {/*    .centered-container {*/}
-                {/*        display: flex;*/}
-                {/*        flex-direction: column;*/}
-                {/*        justify-content: center;*/}
-                {/*        align-items: center;*/}
-                {/*        width: 100%;*/}
-                {/*    }*/}
-                {/*`}*/}
-                {/*</style>*/}
 
 
                 {showCreatePartyPopUp && (

@@ -25,16 +25,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 150px;
-    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
     margin: 0 auto;
     background-color: #f5f5f5;
 }
 
 /* Стиль для завантаженого зображення */
 .photo-upload-container img {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 150px;
+    max-height: 150px;
     object-fit: cover;
 }
 
@@ -59,7 +59,7 @@
 .invalid-feedback {
     text-align: center;
 }
-/* Контейнер для завантаження фону */
+ Контейнер для завантаження фону
 .background-upload-container {
     border: 2px dashed #ccc;
     border-radius: 8px;
@@ -76,12 +76,12 @@
 
 /* Стиль для завантаженого фонової картинки */
 .background-upload-container img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 300px;
+    height: 150px;
     object-fit: cover;
 }
 
-/* Стиль для кнопки завантаження файлу */
+ Стиль для кнопки завантаження файлу
 .background-upload-input {
     position: absolute;
     top: 0;

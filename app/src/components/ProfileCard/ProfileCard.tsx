@@ -230,7 +230,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     margin: '0 auto',
                                     backgroundColor: '#f5f5f5'
                                 }}>
-                                <label htmlFor="backgroundFile" className="form-label">Background Photo</label>
+                                {/*<label htmlFor="backgroundFile" className="form-label">Background Photo</label>*/}
                                 <div className="background-upload-container">
                                     {currentBackgroundSrc ? (
                                         <img
