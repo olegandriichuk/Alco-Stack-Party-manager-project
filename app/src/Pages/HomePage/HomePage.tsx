@@ -69,20 +69,29 @@ const HomePage: React.FC = () => {
         { text: 'create party', icon: faUsers, color: 'rgba(224, 122, 122, 0.9)', onClick: handleShowCreateParty },
     ];
 
+    const videoStyles : React.CSSProperties = {
+        position: isMobile ? 'static' : 'fixed',
+        top: 0,
+        // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
+        height: isMobile ? '0vh' : '100vh',
+        objectFit: 'cover' as const,
+        zIndex: -1,
+        boxSizing: 'border-box',
 
+    };
 
     return (
-        <div className="container-fluid d-flex p-0 full-height-home">
+        <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
 
             <div className="video-left flex-grow-1">
-                <video className="background-video-home left" autoPlay loop muted>
+                <video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>
             </div>
 
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-home flex-grow-7"
+                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container flex-grow-7"
                 style={{
                     backgroundColor: '#DDE4EE',
                     backgroundImage: `url(${backgroundImage})`,
@@ -171,7 +180,7 @@ const HomePage: React.FC = () => {
 
             </div>
             <div className="video-right flex-grow-1">
-                <video className="background-video_r-home right" autoPlay loop muted>
+                <video className="background-video right" style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
                     <source src={video} type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>
