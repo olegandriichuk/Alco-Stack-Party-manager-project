@@ -6,32 +6,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 //import HalantBold from '../../assets/fonts/halant/Halant-Bold.ttf';
 //import HalantSemiBold from '../../assets/fonts/halant/Halant-SemiBold.ttf';
-import backgroundImage from '../../assets/backcov1.svg';
-import video from '../../assets/viddd2.mp4';
-import zaskolko from '../../assets/khoda.mp4';
-import CustomVideoPlayer from '../../components/CustomVideoPlayer/CustomVideoPlayer.tsx';
-//import VTfont from '../../assets/fonts/VT323-Regular.ttf';
+import backgroundImage from '../../assets/backgroundFinal.svg';
+// import video from '../../assets/viddd2.mp4';
+// import zaskolko from '../../assets/khoda.mp4';
+// import CustomVideoPlayer from '../../components/CustomVideoPlayer/CustomVideoPlayer.tsx';
 import './WelcomePage.css';
 const WelcomePage: React.FC = () => {
     const isMobile = window.innerWidth <= 768;
 
     return (
-        <div className="container-fluid d-flex p-0 full-height-welcome">
+        <div className="container-fluid d-flex p-0 full-height-welcome"
+             style={{
+                 backgroundImage: `url(${backgroundImage})`,
+                 backgroundSize: 'cover',
+             }}>
             <div className="video-left flex-grow-1">
-                <video className="background-video-welcome left" autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
+                {/*<video className="background-video-welcome left" autoPlay loop muted>*/}
+                {/*    <source src={video} type="video/mp4"/>*/}
+                {/*    Your browser does not support the video tag.*/}
+                {/*</video>*/}
             </div>
             <div
                 className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-welcome flex-grow-7"
                 style={{
-                    backgroundColor: '#DDE4EE', // Цвет фона
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: isMobile ? '0px, 10px' : '12px, -10px',
-                    backgroundRepeat: 'no-repeat',
-                    minHeight: '100vh',
+                    //backgroundColor: '#DDE4EE', // Цвет фона
+                    //backgroundImage: `url(${backgroundImage})`,
+                    // backgroundSize: 'cover',
+                    // backgroundPosition: isMobile ? '0px, 10px' : '12px, -10px',
+                    // backgroundRepeat: 'no-repeat',
+                    // minHeight: '100vh',
                 }}>
         {/*        <style>*/}
         {/*            {`*/}
@@ -137,24 +140,19 @@ const WelcomePage: React.FC = () => {
                     are
                     the ones you can't remember, with the people you won’t forget. Cheers! 🍻
                 </p>
-                <CustomVideoPlayer videoSrc={zaskolko}/>
-                <div className={`rectangle ${isMobile ? 'rectangle-mobile' : 'rectangle-desktop'}`}>
-                    <div className="scrolling-text-welcome">
-                        Welcome to the Party!!!
-                    </div>
-                    <div className="scrolling-line-welcome">
-                        ✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦♫
+                {/*<CustomVideoPlayer videoSrc={zaskolko}/>*/}
+                {/*<div className={`rectangle ${isMobile ? 'rectangle-mobile' : 'rectangle-desktop'}`}>*/}
+                {/*    <div className="scrolling-text-welcome">*/}
+                {/*        Welcome to the Party!!!*/}
+                {/*    </div>*/}
+                {/*    <div className="scrolling-line-welcome">*/}
+                {/*        ✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦✦♪✦♫✦♪✦♫✦♪✦♫✦♪✦♫*/}
 
 
-                    </div>
-                </div>
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
-            <div className="video-right flex-grow-1">
-            <video className="background-video_r-welcome right" autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+
         </div>
     );
 };
