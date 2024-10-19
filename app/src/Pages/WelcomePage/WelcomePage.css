@@ -141,4 +141,13 @@
     /* animation: scrollText 10s linear infinite; */
 }
 
+.text-center-welcome {
+    font-family: 'Halant', serif;
+    font-size: 21px !important; /* За замовчуванням */
+}
 
+@media (min-width: 768px) {
+    .text-center-welcome {
+        font-size: 36px !important; /* Для комп'ютерів */
+    }
+}

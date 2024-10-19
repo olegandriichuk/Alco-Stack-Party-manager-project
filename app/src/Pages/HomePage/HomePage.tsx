@@ -33,7 +33,9 @@ const HomePage: React.FC = () => {
         try {
             const response = await GetPartyListAPI(token);
             if (response && response.data) {
-                setParties(response.data); // Update state with the party data
+                setParties(response.data);
+                console.log(`lololol ${response.data}`)
+                console.log(parties);// Update state with the party data
             } else {
                 setParties([]); // If response is undefined or empty, set an empty array
             }
@@ -143,8 +145,9 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="centered-container-home">
-                    <h2 className="custom-heading-home">Your party, your rules!</h2>
-                    <h2 className="custom-heading-home">Your unforgettable night!🎉</h2>
+                    <h2 className="custom-heading-home">Your party, your rules!
+                        <p>Your unforgettable night!🎉</p>
+                    </h2>
                 </div>
 
 

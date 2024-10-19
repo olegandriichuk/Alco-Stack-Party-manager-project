@@ -113,7 +113,7 @@ const WelcomePage: React.FC = () => {
                     </Link>
                 </div>
 
-                <h2 className="text-2xl md:text-4xl lg:text-5xl m-1 mt-3 mb-2 text-center">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl m-1 mt-3 mb-2 text-center-welcome">
                     WELCOME TO ALKO STACK!!!
                 </h2>
 

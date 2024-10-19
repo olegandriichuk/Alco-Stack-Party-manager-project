@@ -78,6 +78,13 @@
 
 .custom-heading-home {
     font-family: 'Halant', serif;
+    font-size: 25px !important; /* За замовчуванням */
+}
+
+@media (min-width: 768px) {
+    .custom-heading-home {
+        font-size: 36px !important; /* Для комп'ютерів */
+    }
 }
 
 

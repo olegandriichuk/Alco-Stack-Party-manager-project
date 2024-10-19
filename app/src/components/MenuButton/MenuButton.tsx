@@ -22,7 +22,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', 
         backgroundColor: color,
         color: "black",
         border: "none",
-        fontSize: isMobile ? "14px" : "16px"
+        fontSize: isMobile ? "13px" : "16px"
     };
 
     return link ? (
