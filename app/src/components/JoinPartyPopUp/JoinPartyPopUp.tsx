@@ -53,24 +53,25 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
         <>
             {show && <div className="modal-backdrop" />} {/* Add blurred backdrop */}
             <Modal open={show} onClose={handleClose}>
-                <Modal.Header>
+                <Modal.Header className="text-center w-100">
                     <Modal.Title>Join Party</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column align-items-center">
                         <div className="form-group">
-                            <label>Party ID</label>
                             <input
                                 type="text"
                                 className="form-control"
+                                placeholder="Enter ID to join the party"
                                 {...register("partyId")}
                             />
                             <span className="text-danger">{errors.partyId?.message}</span>
                         </div>
-                        <Button type="submit" appearance="primary" className="mt-3">Join Party</Button>
+                        <Button type="submit" className="join-button">Confirm</Button>
                     </form>
                 </Modal.Body>
             </Modal>
+
         </>
     );
 }

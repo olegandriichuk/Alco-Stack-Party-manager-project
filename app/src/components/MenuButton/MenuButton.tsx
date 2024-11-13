@@ -4,40 +4,50 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Link } from "react-router-dom";
-
+import bg from "../../assets/button_profile.svg";
 
 
 interface MenuButtonProps {
     text: string;
     icon: IconDefinition;
-    color: string;
+   // color: string;
     link?: string; // Optional link prop
     onClick?: () => void; // Optional onClick prop
     className?: string;
 }
 
-const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, color = 'primary', link, onClick, className }) => {
+const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, link, onClick, className }) => {
     const isMobile = window.innerWidth <= 768;
     const menuButtonStyle: React.CSSProperties = {
-        backgroundColor: color,
+        background: 'rgba(255, 255, 255, 0.3)',
+        backdropFilter: 'blur(20px)',
+        backgroundImage: `url(${bg})`,
+        backgroundSize: 'auto',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
         color: "black",
         border: "none",
-        fontSize: isMobile ? "13px" : "16px"
+        borderRadius: 16,
+        fontSize: isMobile ? "13px" : "16px",
+        width: "170px",
+        height: "100px",
     };
 
     return link ? (
         <Link to={link} style={{ textDecoration: 'none' }}>
-            <button className={`btn btn-${color} menu-button`} style={menuButtonStyle}>
-                <FontAwesomeIcon icon={icon} size="2x" />
-                <span className={`menu-button-text ${className}`}>{text}</span>
+            <button className={`menu-button ${className}`} style={menuButtonStyle}>
+                <FontAwesomeIcon icon={icon} size="2x" className="mb-2" />
+                <span className="menu-button-text">{text}</span>
             </button>
         </Link>
     ) : (
-        <button className={`btn btn-${color} menu-button`} style={menuButtonStyle} onClick={onClick}>
-            <FontAwesomeIcon icon={icon} size="2x" />
-            <span className={`menu-button-text ${className}`}>{text}</span>
+        <button className={`menu-button ${className}`} style={menuButtonStyle} onClick={onClick}>
+            <FontAwesomeIcon icon={icon} size="2x" className="mb-2" />
+            <span className="menu-button-text">{text}</span>
         </button>
     );
 };
+
+
 
 export default MenuButton;

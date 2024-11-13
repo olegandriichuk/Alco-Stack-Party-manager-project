@@ -23,6 +23,12 @@
 }
 
 /* Ensure that the modal itself is above the blurred backdrop */
-.rs-modal {
-    z-index: 1050; /* Ensure it's above the backdrop */
+.rs-modal-content {
+    background: rgba(255, 255, 255, 0);
+    background-image: url("../../assets/popupBack.svg");
+    background-size: auto; /* Забезпечує повне покриття фону */
+    background-repeat: no-repeat; /* Запобігає повторенню фону */
+    background-position: center; /* Центрує фон */
+    border-radius: 10px; /* Додає закруглені кути, якщо необхідно */
+    backdrop-filter: blur(20px);
 }

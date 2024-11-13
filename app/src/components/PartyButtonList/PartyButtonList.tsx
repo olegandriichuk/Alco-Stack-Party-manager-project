@@ -17,7 +17,7 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
     return (
         <div className="w-100">
             {/* Заголовок поза скрол-контейнером */}
-            <h4 className="party-header p-2 rounded-top-4">Your Parties</h4>
+            <h4 className="party-header">Your Parties</h4>
 
             {/* Скрол-контейнер для списку партій */}
             <div className="scroll-container w-100">

@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 // import JejuHallasan from '../../assets/fonts/JejuHallasan-Regular.ttf';
 // import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
-import backgroundImage from '../../assets/backcov1.svg';
-import video from '../../assets/viddd2.mp4';
+import backgroundImage from '../../assets/backgroundFinal.svg';
+//import video from '../../assets/viddd2.mp4';
+
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
 import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
 import { useAuth } from "../../Context/useAuth.tsx";
@@ -66,43 +67,46 @@ const HomePage: React.FC = () => {
     };
 
     const menuButtons = [
-        { text: 'your profile', icon: faUser, color: 'rgba(225, 219, 101, 0.9)', link: '/profile' },
-        { text: 'join party', icon: faCake, color: 'rgba(112, 140, 231, 0.9)', onClick: handleShowJoinParty },
-        { text: 'create party', icon: faUsers, color: 'rgba(224, 122, 122, 0.9)', onClick: handleShowCreateParty },
+        { text: 'your profile', icon: faUser, link: '/profile' },
+        { text: 'join party', icon: faCake, onClick: handleShowJoinParty },
+        { text: 'create party', icon: faUsers, onClick: handleShowCreateParty },
     ];
 
-    const videoStyles : React.CSSProperties = {
-        position: isMobile ? 'static' : 'fixed',
-        top: 0,
-        // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
-        height: isMobile ? '0vh' : '100vh',
-        objectFit: 'cover' as const,
-        zIndex: -1,
-        boxSizing: 'border-box',
-
-    };
+    // const videoStyles : React.CSSProperties = {
+    //     position: isMobile ? 'static' : 'fixed',
+    //     top: 0,
+    //     // width: isMobile ? '100%' : `${28 / zoomLevel}%`,
+    //     height: isMobile ? '0vh' : '100vh',
+    //     objectFit: 'cover' as const,
+    //     zIndex: -1,
+    //     boxSizing: 'border-box',
+    //
+    // };
 
     return (
-        <div className="container-fluid d-flex p-0" style={{minHeight: '100vh'}}>
+        <div className="container-fluid d-flex  p-0 full-height-home" style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'cover',
+        }} >
 
             <div className="video-left flex-grow-1">
-                <video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
+                {/*<video className="background-video left" style={{...videoStyles, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>*/}
+                {/*    <source src={video} type="video/mp4"/>*/}
+                {/*    Your browser does not support the video tag.*/}
+                {/*</video>*/}
             </div>
 
-            <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-home flex-grow-7"
-                style={{
-                    backgroundColor: '#DDE4EE',
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: isMobile ? '-3px 10px' : '31px 6px',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                    minHeight: isMobile ? '100vh' : '100vh',
-                }}>
+            <div className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-home flex-grow-7"
+                // style={{
+                //     backgroundColor: '#DDE4EE',
+                //     backgroundImage: `url(${backgroundImage})`,
+                //     backgroundSize: 'cover',
+                //     backgroundPosition: isMobile ? '-3px 10px' : '31px 6px',
+                //     backgroundRepeat: 'no-repeat',
+                //     backgroundAttachment: 'fixed',
+                //     minHeight: isMobile ? '100vh' : '100vh',
+                // }}
+                >
 
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div className="disco-container" style={{marginTop: '-1.5px'}}>
@@ -148,7 +152,7 @@ const HomePage: React.FC = () => {
                     <h2 className="custom-heading-home">Your party, your rules!
                         <p>Your unforgettable night!🎉</p>
                     </h2>
-                </div>
+
 
 
 
@@ -163,14 +167,14 @@ const HomePage: React.FC = () => {
                 {showJoinPartyPopUp && (
                     <JoinPartyPopUp show={showJoinPartyPopUp} handleClose={handleCloseJoinParty}/>
                 )}
-
+                </div>
             </div>
-            <div className="video-right flex-grow-1">
-                <video className="background-video right" style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+            {/*<div className="video-right flex-grow-1">*/}
+            {/*    <video className="background-video right" style={{...videoStyles, right: 0, width: isMobile ? '100%' : '45vw',}} autoPlay loop muted>*/}
+            {/*        <source src={video} type="video/mp4"/>*/}
+            {/*        Your browser does not support the video tag.*/}
+            {/*    </video>*/}
+            {/*</div>*/}
 
         </div>
     );

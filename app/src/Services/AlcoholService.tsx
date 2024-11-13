@@ -44,7 +44,7 @@ export const UpdateAlcoholRatingsAPI = async (
     authToken?: string | null
 ) => {
     try {
-        console.log("ahberkherh",ratings);
+        // console.log("ahberkherh",ratings);
 
         const response = await axios.patch<SliderAlcoholPatch[]>(
             `${api}account/${userName}/${type}/ratings`,

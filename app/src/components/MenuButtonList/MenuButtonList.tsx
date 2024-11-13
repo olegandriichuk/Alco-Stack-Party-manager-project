@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 interface MenuButton {
     text: string;
     icon: IconDefinition;
-    color: string;
+    //color: string;
     link?: string; // Optional link prop
     onClick?: () => void; // Optional onClick prop
 }
@@ -20,13 +20,13 @@ interface MenuButtonListProps {
 const MenuButtonList: React.FC<MenuButtonListProps> = ({ menuButtons }) => {
     return (
         <div className="container">
-            <div className="row justify-content-center">
+            <div className="menu-button-list d-flex justify-content-center">
                 {menuButtons.map((menuButton, index) => (
-                    <div key={index} className="col-md-4 col-4 mb-4 mt-2">
+                    <div key={index} className="menu-button-wrapper mb-4 mt-2">
                         <MenuButton
                             text={menuButton.text}
                             icon={menuButton.icon}
-                            color={menuButton.color}
+                           // color={menuButton.color}
                             link={menuButton.link}
                             onClick={menuButton.onClick}
                             className="custom-font"

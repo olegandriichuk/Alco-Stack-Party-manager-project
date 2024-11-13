@@ -5,12 +5,66 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    backdrop-filter: blur(10px); /* Apply the blur effect */
-    z-index: 1040; /* Make sure it stays behind the modal */
+    background: rgba(255, 255, 255, 0); /* Напівпрозорий фон для ефекту "заморожування" */
+    backdrop-filter: blur(10px); /* Застосування більшого значення розмиття */
+    z-index: 1040; /* Робимо так, щоб було позаду модального вікна */
 }
-
 /* Ensure the modal itself is on top */
 .rs-modal {
+
     z-index: 1050; /* Higher z-index to stay on top of the backdrop */
 }
+.rs-modal-content{
+    background: rgba(255, 255, 255, 0);
+    background-image: url("../../assets/popupBack.svg");
+    background-size: auto; /* Забезпечує повне покриття фону */
+    background-repeat: no-repeat; /* Запобігає повторенню фону */
+    background-position: center; /* Центрує фон */
+    border-radius: 10px; /* Додає закруглені кути, якщо необхідно */
+    backdrop-filter: blur(20px);
+}
+/* JoinPartyPopUp.css */
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрує елементи по горизонталі */
+    justify-content: center; /* Центрує елементи по вертикалі */
+}
+
+.form-group {
+    width: 100%;
+    /*max-width: 400px; !* Максимальна ширина для інпуту *!*/
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 100px;
+    /*border: 1px solid #ccc;*/
+}
+
+/* Стиль для кнопки */
+.join-button {
+    background-color: black;
+    color: white;
+    width: 40%;
+    /*max-width: 400px; !* Максимальна ширина кнопки *!*/
+    padding: 10px;
+    border-radius: 100px;
+    border: none;
+    align-items: center; /* Центрує елементи по горизонталі */
+    justify-content: center; /* Центрує елементи по вертикалі */
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+.join-button:hover {
+    color: white;
+    background-color: black; /* Залишається чорною */
+    transform: scale(1.05); /* Трохи збільшується (на 5%) */
+}
+/* popupBack */
+
+
+

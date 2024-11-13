@@ -12,7 +12,7 @@ import backgroundImage from '../../assets/backgroundFinal.svg';
 // import CustomVideoPlayer from '../../components/CustomVideoPlayer/CustomVideoPlayer.tsx';
 import './WelcomePage.css';
 const WelcomePage: React.FC = () => {
-    const isMobile = window.innerWidth <= 768;
+    //const isMobile = window.innerWidth <= 768;
 
     return (
         <div className="container-fluid d-flex p-0 full-height-welcome"
@@ -128,8 +128,9 @@ const WelcomePage: React.FC = () => {
                     a
                     personalized party form that makes you the star! Whether you're a Margarita maestro or a Beer pong
                     legend, fill out your details, and let Alko Stack craft the perfect bash just for you.
+                    It’s like having a party planner in your pocket!
                     <br/><br/>
-                    It’s like having a party planner in your pocket! Create and Invite: The More, The Merrier! Creating
+                    Create and Invite: The More, The Merrier! Creating
                     a
                     party on Alko Stack is as easy as popping a bottle of bubbly. Just a few taps, and voilà – you’ve
                     got a
