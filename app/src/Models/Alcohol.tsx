@@ -4,3 +4,7 @@ export type AlcoholGet = {
     photo: string;
     description: string;
 }
+export type SliderAlcoholPatch = {
+    id: string;
+    rating: number;
+}

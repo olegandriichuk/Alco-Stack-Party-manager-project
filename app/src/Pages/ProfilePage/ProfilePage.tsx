@@ -16,9 +16,9 @@ import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/L
 import WineAlcoRatingPopUp from '../AlcoRatingPopUp/WineAlcoRatingPopUp/WineAlcoRatingPopUp';
 import LiquorRatingPopUP from '../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP';
 import StrongAlcoRatingPopUp from '../AlcoRatingPopUp/StrongAlcoRatingPopUp/StrongAlcoRatingPopUp';
-import backgroundImage1 from '../../assets/backcov1.svg';
+// import backgroundImage1 from '../../assets/backcov1.svg';
 //import HalantSemiBold from '../../assets/fonts/halant/Halant-SemiBold.ttf';
-import video from '../../assets/viddd2.mp4';
+// import video from '../../assets/viddd2.mp4';
 import './ProfilePage.css';
 
 
@@ -66,18 +66,18 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="container-fluid d-flex p-0 full-height-profile">
-            <div className="video-left flex-grow-1">
-                <video className="background-video-profile left" autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+            {/*<div className="video-left flex-grow-1">*/}
+            {/*    <video className="background-video-profile left" autoPlay loop muted>*/}
+            {/*        <source src={video} type="video/mp4"/>*/}
+            {/*        Your browser does not support the video tag.*/}
+            {/*    </video>*/}
+            {/*</div>*/}
 
             <div
                 className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-profile flex-grow-7"
                 style={{
-                    backgroundColor: '#DDE4EE',
-                    backgroundImage: `url(${backgroundImage1})`,
+                    backgroundColor: 'white',
+                    // backgroundImage: `url(${backgroundImage1})`,
                     backgroundSize: 'cover',
                     backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
                     backgroundRepeat: 'no-repeat',
@@ -142,12 +142,12 @@ const ProfilePage: React.FC = () => {
                 <LiquorRatingPopUP show={showLiquorModal} handleClose={handleCloseModal}/>
                 <StrongAlcoRatingPopUp show={showStrongAlcoModal} handleClose={handleCloseModal}/>
             </div>
-            <div className="video-right flex-grow-1">
-                <video className="background-video_r-profile right" autoPlay loop muted>
-                    <source src={video} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+            {/*<div className="video-right flex-grow-1">*/}
+            {/*    <video className="background-video_r-profile right" autoPlay loop muted>*/}
+            {/*        <source src={video} type="video/mp4"/>*/}
+            {/*        Your browser does not support the video tag.*/}
+            {/*    </video>*/}
+            {/*</div>*/}
 
         </div>
     );

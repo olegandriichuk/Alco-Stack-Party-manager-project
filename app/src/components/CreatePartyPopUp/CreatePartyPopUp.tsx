@@ -62,7 +62,7 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
 
     return (
         <>
-            {show && <div className="modal-backdrop" />} {/* Add this backdrop */}
+            {show && <div className="modal-backdrop create-party" />} {/* Add this backdrop */}
             <Modal open={show} onClose={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Create New Party</Modal.Title>

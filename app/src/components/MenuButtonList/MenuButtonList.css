@@ -8,3 +8,15 @@
         font-family: 'Halant', serif;
     }
 
+    .menu-button-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Центрування кнопок */
+        gap: 40px; /* Відстань між кнопками */
+        padding: 20px 0; /* Відступи для верхньої і нижньої частини */
+    }
+
+    .menu-button-wrapper {
+        flex: 0 1 auto; /* Дозволяє кнопкам мати фіксовані розміри */
+        text-align: center;
+    }

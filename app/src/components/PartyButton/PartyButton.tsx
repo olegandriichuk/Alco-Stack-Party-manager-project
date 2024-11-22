@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { faUsers, faCake } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import party_button from "../../assets/party_buttons.svg";
 
 interface PartyButtonProps {
     partyId: string;
@@ -14,7 +15,18 @@ interface PartyButtonProps {
 }
 
 const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, date, createdByMe }) => {
-    const ButtonStyle = { backgroundColor: createdByMe ? 'rgba(255, 49, 49, 0.6)' : 'rgba(33, 85, 255, 0.6)' };
+    const ButtonStyle = {
+        // backgroundColor: createdByMe ? 'rgba(255, 49, 49, 0.6)' : 'rgba(33, 85, 255, 0.6)',
+        backgroundImage: `url(${party_button})`  , // Використовуємо url() для фону
+        backgroundSize: 'cover', // Забезпечує повне покриття фону
+        backgroundRepeat: 'no-repeat', // Запобігає повторенню фону
+        backgroundPosition: 'center', // Центрує фон
+        borderTopLeftRadius: '10px',
+        borderTopRightRadius: '10px',
+        borderBottomRightRadius: '10px',
+        borderBottomLeftRadius: '10px',
+        padding: '10px'
+    };
 
     // Using useNavigate to programmatically navigate
     const navigate = useNavigate();
@@ -56,7 +68,7 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
 
     return (
         <button
-            className="btn party-button m-1"
+            className="btn party-button w-100 m-1 "
             style={ButtonStyle}
             onClick={handleButtonClick}  // Add click handler for navigation
         >

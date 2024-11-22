@@ -7,19 +7,24 @@
 
 /* Стилі для заголовку "Your Parties" */
 .party-header {
-    background: linear-gradient(to right, rgba(74, 67, 67, 0.65), rgba(176, 159, 159, 0.65));
-    color: #FFFFFF;
+    background-image: url('../../assets/party_buttons.svg');
+    color: #000000;
     font-family: 'Halant Medium';
-    padding: 10px;
-    border-radius: 5px 5px 0 0; /* Скруглення для верха */
+    padding: 11px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
 }
 
 /* Скрол-контейнер для списку партій */
 .scroll-container {
-    max-height: 290px; /* Висота контейнера з можливістю скролу */
+    max-height: 190px; /* Висота контейнера з можливістю скролу */
     overflow-y: auto; /* Вмикаємо вертикальний скролінг */
-    padding: 10px;
-    border-radius: 5px;
+    /*margin-bottom: 5px;*/
+    padding: 5px;
+    /*border-radius: 10px;*/
     /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
 }
 
