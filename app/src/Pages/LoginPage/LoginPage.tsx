@@ -45,7 +45,7 @@ const LoginPage = () => {
 
             </div>
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-login flex-grow-7">
+                className="container-fluid-login p-0 d-flex flex-column align-items-center custom-background square-container-login flex-grow-7">
                 <div>
                     <img
                         src={Disco}

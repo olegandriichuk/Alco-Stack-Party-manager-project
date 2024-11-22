@@ -1,19 +1,21 @@
-﻿import React, {forwardRef} from 'react';
+﻿import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useState } from "react";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAuth } from '../../Context/useAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { Address } from '../../Models/User';
-import DatePicker from "react-datepicker";
+//import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'rsuite/dist/rsuite.min.css';
 import backgroundImage from '../../assets/backgroundFinal.svg';
 import Disco from '../../assets/disco.svg';
 import './RegisterPage.css';
-import './datepicker.css';
-import icon_calendar from '../../assets/icon _calendar_.svg';
+//import './datepicker.css';
+//import icon_calendar from '../../assets/icon _calendar_.svg';
+import DatePickerComponent from '../../components/DateTimePicker/DateTimePicker.tsx';
 
 export type RegisterFormInputs = {
     email: string;
@@ -27,13 +29,6 @@ export type RegisterFormInputs = {
     phoneNumber?: string;
     bio?: string;
 };
-
-interface CustomInputProps {
-    value?: string;
-    onClick?: () => void;
-    placeholder?: string;
-}
-
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -56,38 +51,33 @@ const validationSchema = Yup.object().shape({
     bio: Yup.string().optional(),
 });
 
-const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
-    ({ value, onClick, placeholder }, ref) => (
-        <div className="custom-input-wrapper">
-            <input
-                className="custom-input-register form-control"
-                onClick={onClick}
-                ref={ref}
-                value={value || ''}
-                placeholder={placeholder || 'Select date'}
-                readOnly
-            />
-            <div className="input-group-append" onClick={onClick}>
-                <img
-                    src={icon_calendar}
-                    alt="Calendar Icon"
-                    className="calendar-icon-register"
-                />
-            </div>
-        </div>
-    )
-);
+// const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
+//     <div>
+//         <input
+//             className="custom-input-register form-control"
+//             onClick={onClick}
+//             ref={ref}
+//             value={value}
+//             placeholder={placeholder}
+//             readOnly
+//         />
+//         <div className="input-group-append" onClick={onClick}>
+//             <img src={icon_calendar} alt="Calendar Icon" className="calendar-icon-register" />
+//         </div>
+//     </div>
+// ));
 
 const RegisterPage: React.FC = () => {
     const { registerUser } = useAuth();
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<RegisterFormInputs>({
+    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormInputs>({
         resolver: yupResolver(validationSchema),
     });
+    const [dateOfBirth, setDateOfBirth] = useState<string | undefined>(undefined);
+
 
     const handleRegister = (form: RegisterFormInputs) => {
-        console.log("registering user", form);
         const formattedDateOfBirth = form.dateOfBirth ? new Date(form.dateOfBirth).toISOString().split('T')[0] : undefined;
-        console.log("formattedDateOfBirth", formattedDateOfBirth);
+        console.log("registering user", form);
         registerUser(
             form.email,
             form.userName,
@@ -102,10 +92,12 @@ const RegisterPage: React.FC = () => {
         );
     };
 
-    const dateOfBirth = watch('dateOfBirth');
-    // const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
+    //const dateOfBirth = watch('dateOfBirth');
+    //const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
 
-
+    const handleDateChange = (newDate: string | undefined) => {
+        setDateOfBirth(newDate);
+    };
 
     const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof RegisterFormInputs, error?: string) => (
         <div className="mb-3">
@@ -149,7 +141,7 @@ const RegisterPage: React.FC = () => {
              }}>
             <div className="video-left flex-grow-1"></div>
 
-            <div className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-register flex-grow-7">
+            <div className="container-fluid-register p-0 d-flex flex-column align-items-center custom-background square-container-register flex-grow-7">
                 <div>
                     <img
                         src={Disco}
@@ -190,15 +182,15 @@ const RegisterPage: React.FC = () => {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="dateOfBirth">Date of Birth</label>
-                                <DatePicker
-                                    selected={dateOfBirth ? new Date(dateOfBirth) : null}
-                                    onChange={(date) =>
-                                        setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)
-                                    }
-                                    customInput={<CustomInput />}
+
+                                <DatePickerComponent
+                                    value={dateOfBirth}
+                                    onChange={handleDateChange}
+
                                 />
-                                {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
+                                {errors.dateOfBirth && (
+                                    <div className="invalid-feedback-register">{errors.dateOfBirth.message}</div>
+                                )}
                             </div>
 
 

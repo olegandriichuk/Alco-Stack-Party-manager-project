@@ -94,7 +94,9 @@ h1.card-title-register {
     padding: 10px 15px; /* Отступы внутри поля для комфорта */
     font-size: 16px; /* Размер текста */
     box-sizing: border-box; /* Включаем внутренние отступы в расчет ширины */
-    width: 500px;
+    width: 100%;
+    max-width: 480px; /* Максимальна ширина */
+    margin: 0 auto; /* Центрування */
 }
 .custom-input-register:focus {
     border-color: #90A4AE; /* Оставляем обводку при фокусе */

@@ -168,7 +168,7 @@ export const DeletePartyAPI = async (
 
 export const GetPartyAlcoholVolumeAPI = async (
     partyId: string,
-    isClicked: boolean, // Передаємо isClicked як параметр
+   // isClicked: boolean, // Передаємо isClicked як параметр
     authToken?: string | null
 ) => {
     try {
@@ -178,9 +178,6 @@ export const GetPartyAlcoholVolumeAPI = async (
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
-                params: {
-                    isClicked, // Додаємо параметр isClicked
-                },
             }
         );
         return data;
@@ -189,21 +186,7 @@ export const GetPartyAlcoholVolumeAPI = async (
     }
 };
 
-export const CheckIsClickedAPI = async (partyId: string, authToken?: string | null) => {
-    try {
-        const data = await axios.get<{ isClicked: boolean }>(
-            `${api}party/${partyId}/is-clicked`,
-            {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            }
-        );
-        return data;
-    } catch (error) {
-        handleError(error);
-    }
-};
+
 
 export const UpdateWillBeBoughtAPI = async (
     partyId: string,

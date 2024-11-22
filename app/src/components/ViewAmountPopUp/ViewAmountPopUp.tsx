@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 import { AlcoholVolume } from "../../Models/Alcohol.tsx";
-import { GetPartyAlcoholVolumeAPI, CheckIsClickedAPI } from "../../Services/PartyService.tsx"; // Додайте новий API для перевірки
+import { GetPartyAlcoholVolumeAPI } from "../../Services/PartyService.tsx";
 import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
 
@@ -14,38 +14,19 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
     const { token } = useAuth();
     const [alcoholVolumes, setAlcoholVolumes] = useState<AlcoholVolume[]>([]); // State to hold fetched alcohol volumes
     const [loading, setLoading] = useState<boolean>(false); // Loading state
-    const [isClicked, setIsClicked] = useState<boolean>(false); // Local isClicked state
 
     useEffect(() => {
         if (show) {
-            checkIsClicked(); // Перевірка стану `isClicked` на бекенді
             fetchAlcoholVolumes();
         }
     }, [show]);
 
-    const checkIsClicked = async () => {
-        try {
-            const response = await CheckIsClickedAPI(partyId, token); // Виклик API для перевірки стану
-            if (response && response.data) {
-                setIsClicked(response.data.isClicked);
-            }
-        } catch (error) {
-            console.error("Error checking isClicked state:", error);
-            toast.error("Failed to check isClicked state.");
-        }
-    };
-
     const fetchAlcoholVolumes = async () => {
         setLoading(true);
         try {
-
-            const response = await GetPartyAlcoholVolumeAPI(partyId, isClicked, token); // Передаємо isClicked на бекенд
+            const response = await GetPartyAlcoholVolumeAPI(partyId, token);
             if (response && response.data) {
-                setAlcoholVolumes(response.data.alcoholVolume); // Припускаємо, що відповідь містить alcoholVolume
-                if (!isClicked) {
-                    // Якщо це перший клік, оновлюємо стан
-                    setIsClicked(true);
-                }
+                setAlcoholVolumes(response.data.alcoholVolume); // Assuming response contains alcoholVolume
             } else {
                 setAlcoholVolumes([]);
                 toast.error("Failed to fetch alcohol volumes.");
@@ -56,10 +37,6 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleButtonClick = () => {
-        fetchAlcoholVolumes(); // Виклик функції для оновлення обсягів
     };
 
     if (!show) return null;
@@ -84,9 +61,6 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
                             )}
                         </ul>
                     )}
-                    <button className="btn btn-primary mt-3" onClick={handleButtonClick}>
-                        {isClicked ? "Refresh Volumes" : "Calculate Volumes"}
-                    </button>
                     <button className="btn btn-secondary mt-3" onClick={handleClose}>
                         Close
                     </button>
