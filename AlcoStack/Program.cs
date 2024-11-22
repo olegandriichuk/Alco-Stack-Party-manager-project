@@ -11,6 +11,8 @@ using AlcoStack.Repositories;
 using AlcoStack.Service;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,10 +99,13 @@ builder.Services.AddScoped<IAlcoholRepository, AlcoholRepository>();
 builder.Services.AddScoped<IUserAlcoholRepository, UserAlcoholRepository>();
 builder.Services.AddScoped<IPartyRepository, PartyRepository>();
 builder.Services.AddScoped<IUserPartyRepository, UserPartyRepository>();
+builder.Services.AddScoped<IPartyUserAlcoholRepository, PartyUserAlcoholRepository>();
 builder.Services.AddScoped<IPartyAlcoholRepository, PartyAlcoholRepository>();
+builder.Services.AddScoped<IPartyAlcoholVolumeService, PartyAlcoholVolumeService>();
 builder.Services.AddScoped<IAlcoholRankingService, AlcoholRankingService>();
 builder.Services.AddHttpClient<ICocktailService, CocktailService>();
 builder.Services.AddScoped<IFileService, FileService>();
+
 
 
 

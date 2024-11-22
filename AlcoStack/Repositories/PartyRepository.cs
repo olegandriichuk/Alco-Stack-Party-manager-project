@@ -32,7 +32,8 @@ public class PartyRepository(AppDataContext context,  IPartyAlcoholRepository pa
         existingParty.Photo = party.Photo;
         existingParty.Name = party.Name;
         existingParty.Description = party.Description;
-        existingParty.Date = party.Date;
+        existingParty.date = party.date;
+        existingParty.preparationDate = party.preparationDate;
         existingParty.Location = party.Location;
         if ((existingParty.Liquors != party.Liquors) && party.Liquors)
         {

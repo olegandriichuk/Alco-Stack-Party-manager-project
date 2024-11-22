@@ -20,6 +20,9 @@ namespace AlcoStack.Data
         public DbSet<UserAlcohol> UserAlcohols { get; set; }
         
         public DbSet<PartyAlcohol> PartyAlcohols { get; set; }
+        
+        public DbSet<PartyUserAlcohol> PartyUserAlcohols { get; set; }  
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -86,13 +89,35 @@ namespace AlcoStack.Data
                 .HasOne(pa => pa.Party)
                 .WithMany(p => p.Alcohols)
                 .HasForeignKey(pa => pa.PartyId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PartyAlcohol>()
                 .HasOne(pa => pa.Alcohol)
                 .WithMany(a => a.Parties)
                 .HasForeignKey(pa => pa.AlcoholId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<PartyUserAlcohol>()
+                .HasKey(upa => new { upa.UserName, upa.PartyId, upa.AlcoholId });
+
+            modelBuilder.Entity<PartyUserAlcohol>()
+                .HasOne(upa => upa.User)
+                .WithMany(u => u.PartyUserAlcohols)
+                .HasForeignKey(upa => upa.UserName)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PartyUserAlcohol>()
+                .HasOne(upa => upa.Party)
+                .WithMany(p => p.PartyUserAlcohols)
+                .HasForeignKey(upa => upa.PartyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PartyUserAlcohol>()
+                .HasOne(upa => upa.Alcohol)
+                .WithMany(a => a.PartyUserAlcohols)
+                .HasForeignKey(upa => upa.AlcoholId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Seed roles
             List<IdentityRole> roles = new List<IdentityRole>

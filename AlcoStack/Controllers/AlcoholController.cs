@@ -18,7 +18,9 @@ public class AlcoholController(
     UserManager<User> userManager,
     SignInManager<User> signinManager,
     IUserAlcoholRepository userAlcoholRepository,
-    IPartyAlcoholRepository partyAlcoholRepository)
+    IPartyAlcoholRepository partyAlcoholRepository,
+    IAlcoholRankingService alcoholRankingService
+    )
     : ControllerBase
 {
     
@@ -124,6 +126,30 @@ public class AlcoholController(
         
         return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
     }
+
+    [HttpPatch("{partyId}/{rankLimit}")]
+    public async Task<IActionResult> UpdateAllAlcoholsByRank(Guid partyId, int rankLimit)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        // Call the service method to update rankings
+        await alcoholRankingService.SetAlcoholRanksForParty(partyId, rankLimit);
+
+        
+
+        // Fetch updated alcohols after ranking update
+        var alcohols = await _partyAlcoholRepository.GetByRankAsync(partyId);
+
+        if (alcohols == null || !alcohols.Any())
+        {
+            return NotFound("No alcohols found for the specified party.");
+        }
+
+        return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
+    }
+
+    
     // [Authorize]
     // [HttpPut("{Id}")]
     // public async Task<IActionResult> UpdateAlcohol(Guid Id, [FromBody] UpdateAlcoholDto alcoholDto)
@@ -159,8 +185,8 @@ public class AlcoholController(
             return NotFound();
         }
         
-        var alcohols = await _userAlcoholRepository.GetAlcoholsByUserNameAsync(userName);
-        return Ok(alcohols.Select(alcohol => alcohol.MapToDto()));
+        var alcohols = await _userAlcoholRepository.GetAlcoholRatingsByUserNameAsync(userName);
+        return Ok(alcohols);
     }
     
     [HttpGet("{partyId}PartyAlcohol")]
