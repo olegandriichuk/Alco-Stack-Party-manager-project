@@ -62,3 +62,51 @@ export const UpdateAlcoholRatingsAPI = async (
         handleError(error);
     }
 };
+
+export const GETAlcoholRatingsAPI = async (
+    userName: string | undefined,
+    authToken?: string | null
+) => {
+    try {
+        const response = await axios.get<SliderAlcoholPatch[]>(
+            `${api}alcohol/${userName}UserAlcohol`, // Ensure correct endpoint URL
+
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+
+        // Assuming the response contains an array of objects with AlcoholId and Rating
+        // const alcoholRatings = response.data.map(item => ({
+        //     AlcoholId: item.id,
+        //     rating: item.rating
+        // }));
+         // console.log("ALCOHOL Raitngs:", alcoholRatings);
+        return response;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export const UpdateAllAlcoholsByRankAPI = async (
+    rankLimit: number,
+    partyId: string,
+    authToken?: string | null
+) => {
+    try {
+        const response = await axios.patch<AlcoholGet[]>(
+            `${api}alcohol/${partyId}/${rankLimit}`, // Correct endpoint URL
+            {}, // Empty body if the API does not require one
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`, // Add the token to headers
+                },
+            }
+        );
+        return response.data; // Return the updated alcohol list
+    } catch (error) {
+        handleError(error); // Handle errors using your error handler
+    }
+};

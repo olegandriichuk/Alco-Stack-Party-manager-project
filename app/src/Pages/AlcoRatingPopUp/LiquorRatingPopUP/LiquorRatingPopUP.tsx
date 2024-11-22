@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import './LiquorRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
 import apricot_brandy from "../../../assets/Apricot brandy.jpg";
@@ -6,24 +6,65 @@ import triple_sec from "../../../assets/triple-sec.jpg";
 import amaretto from "../../../assets/Amaretto.jpg";
 import coffee_liquor from "../../../assets/Coffee liqueur.jpg";
 import kahlua from "../../../assets/Kahlua.jpg";
-import { UpdateAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
-import {useAuth} from "../../../Context/useAuth.tsx"; // Імпортуємо сервіс для збереження
-
+import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
+import {useAuth} from "../../../Context/useAuth.tsx";
+//import {SliderAlcoholPatch} from "../../../Models/Alcohol.tsx"; // Імпортуємо сервіс для збереження
+import { toast } from "react-toastify";
 interface LiquorRatingPopUpProps {
     show: boolean;
     handleClose: () => void;
-
+    // onRatingSave: () => void;
 }
 
 const LiquorRatingPopUp: React.FC<LiquorRatingPopUpProps> = ({ show, handleClose}) => {
     const { user, token } = useAuth();
+
     const [sliders, setSliders] = useState([
-        { id: "ba8e7109-b4f8-47fe-961e-5edbd2806c53", label: 'Apricot brandy', value: 0, imageSrc: apricot_brandy, toggle: false },
-        { id: "fc3ae631-8ef2-4eee-a683-673c78ec3fed", label: 'Triple sec', value: 0, imageSrc: triple_sec, toggle: false },
-        { id: "e2541991-14ba-49bc-8572-95bdbd3f72e7", label: 'Amaretto', value: 0, imageSrc: amaretto, toggle: false },
-        { id: "453479c2-f227-4d2c-82b0-9d9b4f1b09c3", label: 'Coffee liqueur', value: 0, imageSrc: coffee_liquor, toggle: false },
-        { id: "b65b2a98-a10e-4f46-bd07-f321524b4973", label: 'Kahlua', value: 0, imageSrc: kahlua, toggle: false },
+        { id: '302002bb-75cf-4f3e-bcfa-879094873128', label: 'Apricot brandy', value: 0, imageSrc: apricot_brandy, toggle: false },
+        { id: '775ca315-06ed-46c3-8c25-8eb11c06eb43', label: 'Triple sec', value: 0, imageSrc: triple_sec, toggle: false },
+        { id: '9bc1c58a-6065-4525-9a9b-03faeca93557', label: 'Amaretto', value: 0, imageSrc: amaretto, toggle: false },
+        { id: '80575096-0f64-4ef4-8e1c-bb73eecb2cab', label: 'Coffee liqueur', value: 0, imageSrc: coffee_liquor, toggle: false },
+        { id: 'c5c71908-0a99-4e14-9b46-0008919c14e5', label: 'Kahlua', value: 0, imageSrc: kahlua, toggle: false },
     ]);
+
+    const fetchUserRatings = async () => {
+        if (!token) {
+            toast.error("You must be logged in to view your ratings");
+            return;
+        }
+        try {
+
+            const response = await GETAlcoholRatingsAPI(user?.userName, token);
+            // console.log("RESPONSE:", response);
+            if (response && response.data) {
+                console.log("Response Data:", response.data);
+
+                const updatedSliders = sliders.map(slider => {
+                    console.log("Slider ID:", slider.id);
+                    console.log("Rating ID: ", response.data.find(alcohol => alcohol.alcoholId === slider.id));
+                    const ratingData = response.data.find(alcohol => alcohol.alcoholId === slider.id);
+                    if (ratingData) {
+                        console.log("Found Rating Data:", ratingData);
+                    } else {
+                        console.log("No match found for Slider ID:", slider.id);
+                    }
+                    return ratingData ? { ...slider, value: ratingData.rating } : slider;
+                });
+
+                setSliders(updatedSliders);
+            } else {
+                setSliders(sliders.map(slider => ({ ...slider, value: 0 }))); // Reset to default if no data
+            }
+        } catch (error) {
+            console.error('Failed to fetch ratings', error);
+            toast.error('Failed to fetch ratings. Please try again.');
+            setSliders(sliders.map(slider => ({ ...slider, value: 0 }))); // Reset to default in case of error
+        }
+    };
+
+    useEffect(() => {
+        fetchUserRatings(); // Fetch ratings when component mounts
+    }, []);
     const [isSaving, setIsSaving] = useState(false); // Додано стан для індикації збереження
 
     // Обробник зміни значення слайдера
@@ -52,6 +93,7 @@ const LiquorRatingPopUp: React.FC<LiquorRatingPopUpProps> = ({ show, handleClose
         try {
             const result = await UpdateAlcoholRatingsAPI(user.userName, type, ratings, token);
             console.log("Updated ratings:", result);
+            // onRatingSave();
             handleClose(); // Закрити вікно після успішного збереження
         } catch (error) {
             console.error("Failed to update ratings", error);

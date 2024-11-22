@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { Modal, Button, DatePicker, Input, Toggle } from 'rsuite';
 import { PartyDetailPut } from '../../Models/Party.tsx';
 import './PartySettingsPopUp.css';
+
 import { toast } from 'react-toastify';
 
 // Define validation schema with Yup
@@ -12,7 +13,45 @@ const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     description: yup.string().optional(),
     photo: yup.string().optional(),
-    date: yup.string().required("Date is required"),
+    date: yup
+        .string()
+        .required("Date is required"),
+        // .test(
+        //     "is-future-date",
+        //     "Date must be today or in the future",
+        //     function (value) {
+        //         if (!value) return false; // Ensure value is provided
+        //         const selectedDate = new Date(value);
+        //         const today = new Date();
+        //         today.setHours(0, 0, 0, 0); // Reset today's time to midnight for comparison
+        //         return selectedDate >= today;
+        //     }
+        // ),
+    preparationDate: yup
+        .string()
+        .required("Preparation Date is required")
+        // .test(
+        //     "is-before-date",
+        //     "Preparation Date must be earlier than the event date",
+        //     function (value) {
+        //         const { date } = this.parent;
+        //         if (!value || !date) return true; // Skip if either is missing
+        //         const preparationDate = new Date(value);
+        //         const eventDate = new Date(date);
+        //         return preparationDate < eventDate;
+        //     }
+        // )
+        // .test(
+        //     "not-today",
+        //     "Preparation Date cannot be today",
+        //     function (value) {
+        //         if (!value) return true;
+        //         const preparationDate = new Date(value).toISOString().split("T")[0];
+        //         const today = new Date().toISOString().split("T")[0];
+        //         return preparationDate !== today;
+        //     }
+        // )
+    ,
     location: yup.string().optional(),
     liquors: yup.boolean().required(),
     lowAlcohol: yup.boolean().required(),
@@ -25,6 +64,7 @@ interface PartySettingsPopUpProps {
     name: string;
     description: string;
     date: string; // date passed as a string (ISO format)
+    preparationDate: string;
     photo: string;
     location: string;
     liquors: boolean;
@@ -41,6 +81,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
         name,
         description,
         date,
+        preparationDate,
         photo,
         location,
         liquors,
@@ -60,7 +101,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
         formState: { errors }
     } = useForm<PartyDetailPut>({
         resolver: yupResolver(validationSchema),
-        defaultValues: { name, description, date, photo, location, liquors, lowAlcohol, midAlcohol, highAlcohol, rankLimit }
+        defaultValues: { name, description, date, preparationDate, photo, location, liquors, lowAlcohol, midAlcohol, highAlcohol, rankLimit }
     });
 
     const watchLiquors = watch("liquors", liquors);
@@ -70,8 +111,13 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
 
     const onSubmit: SubmitHandler<PartyDetailPut> = async (data) => {
         try {
-            await onSave(data); // Use the onSave callback
-            // toast.success("Party updated successfully!");
+            // console.log("Data in party settings:", data);
+            // await onSave(data); // Use the onSave callback
+            // // toast.success("Party updated successfully!");
+            // onClose();
+            data.date = new Date(data.date).toISOString();
+            data.preparationDate = new Date(data.preparationDate).toISOString();
+            await onSave(data);
             onClose();
         } catch (error) {
             console.error("Failed to update party", error);
@@ -79,18 +125,37 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
         }
     };
 
+    // useEffect(() => {
+    //     if (show) {
+    //         // Set initial date when modal opens
+    //         if (date) {
+    //             setValue('date', new Date(date).toISOString());
+    //         }
+    //         if (preparationDate) {
+    //             setValue('preparationDate', new Date(preparationDate).toISOString());
+    //         }
+    //         const dropdown = document.querySelector('.rs-picker-dropdown');
+    //         if (dropdown) {
+    //             document.getElementById('portal-root')?.appendChild(dropdown);
+    //         }
+    //     }
+    // }, [show, date, preparationDate, setValue]);
+
     useEffect(() => {
         if (show) {
-            // Set initial date when modal opens
             if (date) {
-                setValue('date', new Date(date).toISOString());
+                // Конвертуємо дату з UTC у локальний час
+                const localDate = new Date(date).toLocaleString('sv-SE').replace(' ', 'T');
+                setValue('date', localDate);
             }
-            const dropdown = document.querySelector('.rs-picker-dropdown');
-            if (dropdown) {
-                document.getElementById('portal-root')?.appendChild(dropdown);
+            if (preparationDate) {
+                const localPreparationDate = new Date(preparationDate).toLocaleString('sv-SE').replace(' ', 'T');
+                setValue('preparationDate', localPreparationDate);
             }
         }
-    }, [show, date, setValue]);
+    }, [show, date, preparationDate, setValue]);
+
+
 
     return (
         <>
@@ -129,16 +194,39 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                 onChange={(value) => {
                                     if (value) {
                                         const localDate = new Date(value);
-                                        setValue("date", localDate.toISOString());
+                                        setValue("date", localDate.toLocaleString('sv-SE').replace(' ', 'T')); // Зберегти у локальному форматі ISO
                                     } else {
                                         setValue("date", "");
                                     }
                                 }}
                                 placement="auto"
                                 block
-                                ranges={[]}  // Remove preset ranges if any
+                                ranges={[]} // Remove preset ranges if any
                             />
                             <p className="text-danger">{errors.date?.message}</p>
+                        </div>
+
+                        {/* Preparation Date Section */}
+                        <div className="mb-3">
+                            <label htmlFor="preparationDate" className="form-label">Preparation Date and Time</label>
+                            <DatePicker
+                                format="yyyy-MM-dd HH:mm"
+                                oneTap
+                                value={new Date(watch('preparationDate'))} // Watch the preparationDate value
+                                onChange={(value) => {
+                                    if (value) {
+                                        const localDate = new Date(value);
+                                        setValue("preparationDate", localDate.toLocaleString('sv-SE').replace(' ', 'T')); // Локальний час
+                                    } else {
+                                        setValue("preparationDate", "");
+                                    }
+                                }}
+                                placement="auto"
+                                block
+                                ranges={[]} // Remove preset ranges if any
+                            />
+
+                            <p className="text-danger">{errors.preparationDate?.message}</p>
                         </div>
 
                         <div className="mb-3">
@@ -212,6 +300,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
             </Modal>
         </>
     );
+
 };
 
 export default PartySettingsPopUp;

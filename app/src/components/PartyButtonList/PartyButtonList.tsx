@@ -15,7 +15,8 @@ interface PartyButtonListProps {
 
 const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
     return (
-        <div className="w-100">
+        <div className="w-
+        100">
             {/* Заголовок поза скрол-контейнером */}
             <h4 className="party-header">Your Parties</h4>
 

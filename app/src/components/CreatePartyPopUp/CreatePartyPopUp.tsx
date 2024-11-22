@@ -13,7 +13,44 @@ import { useEffect } from "react";
 const validationSchema = yup.object().shape({
     name: yup.string().optional(),
     description: yup.string().optional(),
-    date: yup.string().required("Date is required"),
+    date: yup
+        .string()
+        .required("Date is required")
+        .test(
+            "is-future-date",
+            "Date must be today or in the future",
+            function (value) {
+                if (!value) return false; // Ensure value is provided
+                const selectedDate = new Date(value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Reset today's time to midnight for comparison
+                return selectedDate >= today;
+            }
+        ),
+    preparationDate: yup
+        .string()
+        .required("Preparation Date is required")
+        .test(
+            "is-before-date",
+            "Preparation Date must be earlier than the event date",
+            function (value) {
+                const { date } = this.parent;
+                if (!value || !date) return true; // Skip if either is missing
+                const preparationDate = new Date(value);
+                const eventDate = new Date(date);
+                return preparationDate < eventDate;
+            }
+        )
+        .test(
+            "not-today",
+            "Preparation Date cannot be today",
+            function (value) {
+                if (!value) return true;
+                const preparationDate = new Date(value).toISOString().split("T")[0];
+                const today = new Date().toISOString().split("T")[0];
+                return preparationDate !== today;
+            }
+        ),
     photo: yup.string().optional(),
     location: yup.string().optional(),
 });
@@ -38,7 +75,7 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
         }
     }, [show]);
 
-    const onSubmit = async (data: { name?: string; description?: string; date: string; photo?: string; location?: string; }) => {
+    const onSubmit = async (data: { name?: string; description?: string; date: string; preparationDate:string; photo?: string; location?: string; }) => {
         console.log("Create party form submitted");
         console.log(data.date);
         try {
@@ -46,6 +83,7 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                 data.name || "",
                 data.description || "",
                 data.date,
+                data.preparationDate,
                 data.photo || "",
                 data.location || "",
                 user?.userName,
@@ -97,7 +135,7 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                                     if (value) {
                                         const localDate = new Date(value);
                                         console.log("Local Date:", localDate);
-                                        localDate.setHours(localDate.getHours() + 2);
+                                        localDate.setHours(localDate.getHours() + 1);
                                         setValue("date", localDate.toISOString());
                                     } else {
                                         setValue("date", "");
@@ -110,7 +148,29 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                             <p className="text-danger">{errors.date?.message}</p>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="photo" className="form-label">Photo URL</label>
+                            <label htmlFor="preparationDate" className="form-label">Preparation Date and Time</label>
+                            <DatePicker
+                                format="yyyy-MM-dd HH:mm"
+                                oneTap
+                                onChange={(value) => {
+                                    if (value) {
+                                        const localDate = new Date(value);
+                                        console.log("Preparation Local Date:", localDate);
+                                        localDate.setHours(localDate.getHours() + 1); // Adjust timezone if needed
+                                        setValue("preparationDate", localDate.toISOString());
+                                    } else {
+                                        setValue("preparationDate", "");
+                                    }
+                                }}
+                                placement="auto"
+                                block
+                                ranges={[]} // Remove preset ranges if any
+                            />
+                            <p className="text-danger">{errors.preparationDate?.message}</p>
+                        </div>
+
+                        <div className="mb-3">
+                        <label htmlFor="photo" className="form-label">Photo URL</label>
                             <input
                                 type="text"
                                 className="form-control"

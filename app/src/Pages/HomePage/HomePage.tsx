@@ -21,7 +21,7 @@ import './HomePage.css';
 
 
 const HomePage: React.FC = () => {
-    const isMobile = window.innerWidth <= 768;
+    // const isMobile = window.innerWidth <= 768;
 
     const { token } = useAuth();
     const [parties, setParties] = useState<PartyListGet[]>([]);

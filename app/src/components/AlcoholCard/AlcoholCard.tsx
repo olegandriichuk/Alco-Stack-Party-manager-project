@@ -23,7 +23,7 @@ const AlcoholCard: React.FC<AlcoholCardProps> = ({ alcohol }) => {
     };
 
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '50px', height: '50px' }}>
             <Card.Img variant="top" src={alcohol.photo} alt={alcohol.name} />
             <Card.Body>
                 <Card.Title>{alcohol.name}</Card.Title>

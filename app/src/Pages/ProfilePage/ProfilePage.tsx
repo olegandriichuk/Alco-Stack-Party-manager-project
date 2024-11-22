@@ -85,26 +85,6 @@ const ProfilePage: React.FC = () => {
                     minHeight: isMobile ? '100vh' : '100vh',
                 }}>
 
-
-                {/*        <style>*/}
-                {/*            {`*/}
-                {/*        */}
-                {/*        .square-container {*/}
-                {/*                position: relative;*/}
-                {/*                width: 100%;*/}
-                {/*                height: auto;*/}
-                {/*                max-width: 800px;*/}
-                {/*                max-height: 900px;*/}
-                {/*                margin: 0 auto;*/}
-                {/*                background-color: white;*/}
-                {/*                border-radius: 10px;*/}
-                {/*                box-shadow: 0 8px 30px rgba(255, 255, 255, 1), /* Основная большая тень */}
-                {/*                            0 5px 15px rgba(255, 255, 255, 1); /* Дополнительная мягкая тень */}
-                {/*                z-index: 1;*/}
-                {/*        }*/}
-                {/*        */}
-                {/*`}*/}
-                {/*        </style>*/}
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div>
                         <img
@@ -142,12 +122,7 @@ const ProfilePage: React.FC = () => {
                 <LiquorRatingPopUP show={showLiquorModal} handleClose={handleCloseModal}/>
                 <StrongAlcoRatingPopUp show={showStrongAlcoModal} handleClose={handleCloseModal}/>
             </div>
-            {/*<div className="video-right flex-grow-1">*/}
-            {/*    <video className="background-video_r-profile right" autoPlay loop muted>*/}
-            {/*        <source src={video} type="video/mp4"/>*/}
-            {/*        Your browser does not support the video tag.*/}
-            {/*    </video>*/}
-            {/*</div>*/}
+
 
         </div>
     );

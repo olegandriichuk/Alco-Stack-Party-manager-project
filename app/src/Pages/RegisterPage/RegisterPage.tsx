@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, {forwardRef} from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -28,6 +28,13 @@ export type RegisterFormInputs = {
     bio?: string;
 };
 
+interface CustomInputProps {
+    value?: string;
+    onClick?: () => void;
+    placeholder?: string;
+}
+
+
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -49,21 +56,27 @@ const validationSchema = Yup.object().shape({
     bio: Yup.string().optional(),
 });
 
-const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
-    <div>
-        <input
-            className="custom-input-register form-control"
-            onClick={onClick}
-            ref={ref}
-            value={value}
-            placeholder={placeholder}
-            readOnly
-        />
-        <div className="input-group-append" onClick={onClick}>
-            <img src={icon_calendar} alt="Calendar Icon" className="calendar-icon-register" />
+const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
+    ({ value, onClick, placeholder }, ref) => (
+        <div className="custom-input-wrapper">
+            <input
+                className="custom-input-register form-control"
+                onClick={onClick}
+                ref={ref}
+                value={value || ''}
+                placeholder={placeholder || 'Select date'}
+                readOnly
+            />
+            <div className="input-group-append" onClick={onClick}>
+                <img
+                    src={icon_calendar}
+                    alt="Calendar Icon"
+                    className="calendar-icon-register"
+                />
+            </div>
         </div>
-    </div>
-));
+    )
+);
 
 const RegisterPage: React.FC = () => {
     const { registerUser } = useAuth();
@@ -72,8 +85,9 @@ const RegisterPage: React.FC = () => {
     });
 
     const handleRegister = (form: RegisterFormInputs) => {
-        const formattedDateOfBirth = form.dateOfBirth ? new Date(form.dateOfBirth).toISOString().split('T')[0] : undefined;
         console.log("registering user", form);
+        const formattedDateOfBirth = form.dateOfBirth ? new Date(form.dateOfBirth).toISOString().split('T')[0] : undefined;
+        console.log("formattedDateOfBirth", formattedDateOfBirth);
         registerUser(
             form.email,
             form.userName,
@@ -89,7 +103,7 @@ const RegisterPage: React.FC = () => {
     };
 
     const dateOfBirth = watch('dateOfBirth');
-    const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
+    // const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
 
 
 
@@ -176,18 +190,15 @@ const RegisterPage: React.FC = () => {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="dateOfBirth" className="input_titles-register">Date of Birth</label>
+                                <label htmlFor="dateOfBirth">Date of Birth</label>
                                 <DatePicker
-                                    selected={dateOfBirthValue}
-                                    onChange={(date) => setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)}
-                                    dateFormat="yyyy-MM-dd"
-                                    placeholderText="Select Date"
-                                    customInput={<CustomInput/>}
-                                    className="react-datepicker"
+                                    selected={dateOfBirth ? new Date(dateOfBirth) : null}
+                                    onChange={(date) =>
+                                        setValue('dateOfBirth', date ? date.toISOString().split('T')[0] : undefined)
+                                    }
+                                    customInput={<CustomInput />}
                                 />
-                                {errors.dateOfBirth && (
-                                    <div className="invalid-feedback-register">{errors.dateOfBirth.message}</div>
-                                )}
+                                {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
                             </div>
 
 

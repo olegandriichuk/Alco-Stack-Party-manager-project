@@ -1,0 +1,13 @@
+.Toastify {
+    display: none;
+}
+.cocktails-section {
+    position: relative;
+}
+
+.view-cocktails-button {
+
+    top: 10px; /* Adjust the distance from the top of the page */
+    right: 10px; /* Adjust the distance from the right edge of the page */
+    z-index: 1000; /* Ensure the button is above other elements */
+}

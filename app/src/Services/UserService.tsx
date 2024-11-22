@@ -1,7 +1,8 @@
 ﻿import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {UserProfile, Address} from "../Models/User.tsx";
-
+ import {PartyUserAlcohol} from "../Models/Party.tsx"
+// import {AlcoholVolume} from "../Models/Alcohol.tsx";
 const api = "http://localhost:5131/api/";
 
 export const UpdateProfileAPI = async (
@@ -80,3 +81,39 @@ export const UpdatePhotoAPI = async (
         handleError(error);
     }
 }
+
+
+
+
+
+export const UpdateAlcoholVolumeAPI = async (
+    partyId: string,
+    payload: PartyUserAlcohol,
+    authToken?: string
+) => {
+    try {
+        // Filter out unnecessary fields
+
+        console.log("Filtered Payload:", payload);
+
+        // Send the PATCH request
+        const response = await axios.patch(
+            `${api}party/${partyId}/update-volume`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        console.log("Response:", response.data);
+
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
+

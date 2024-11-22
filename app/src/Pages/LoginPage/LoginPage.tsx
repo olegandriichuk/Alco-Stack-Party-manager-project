@@ -32,7 +32,7 @@ const LoginPage = () => {
     };
 
     // To detect mobile view
-    const isMobile = window.innerWidth <= 768;
+    // const isMobile = window.innerWidth <= 768;
 
 
     return (

@@ -1,18 +1,11 @@
 ﻿import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
-import {PartyListGet, PartyPost, PartyDetailGet} from "../Models/Party.tsx";
+import {PartyListGet, PartyPost, PartyDetailGet, PartyUserAlcohol} from "../Models/Party.tsx";
 
 const api = "http://localhost:5131/api/";
 
 export const CreatePartyAPI = async (
-    name: string,
-    description: string,
-    date: string,
-    photo: string,
-    location: string,
-    creatorUserName?: string,
-    authToken?: string | null
-) => {
+    name: string, description: string, date: string, preparationDate:string, photo: string, location: string, creatorUserName?: string, authToken?: string | null) => {
     try {
         const data = await axios.post<PartyPost>(
             api+"party/create",
@@ -20,6 +13,7 @@ export const CreatePartyAPI = async (
                 name: name,
                 description: description,
                 date: date,
+                preparationDate: preparationDate,
                 photo: photo,
                 location: location,
                 creatorUserName: creatorUserName
@@ -97,6 +91,7 @@ export const UpdatePartyAPI = async (
     name?: string,
     description?: string,
     date?: string,
+    preparationDate?: string,
     photo?: string,
     location?: string,
     liquors?: boolean,
@@ -107,12 +102,29 @@ export const UpdatePartyAPI = async (
     authToken?: string | null
 ) => {
     try {
+        console.log("Data before send:", date);
+        if (date) {
+            const originalDate = new Date(date);
+            originalDate.setHours(originalDate.getHours() + 1);
+            date = originalDate.toISOString();
+        }
+
+        // Додати 1 годину до `preparationDate`, якщо вона задана
+        if (preparationDate) {
+            const originalPrepDate = new Date(preparationDate);
+            originalPrepDate.setHours(originalPrepDate.getHours() + 1);
+            preparationDate = originalPrepDate.toISOString();
+        }
+
+        console.log("Data before send (with +1h):", { date, preparationDate });
+
         const data = await axios.put<PartyDetailGet>(
             `${api}party/${partyId}`,
             {
                 name: name,
                 description: description,
                 date: date,
+                preparationDate: preparationDate,
                 photo: photo,
                 location: location,
                 liquors: liquors,
@@ -138,6 +150,7 @@ export const DeletePartyAPI = async (
     authToken?: string | null
 ) => {
     try {
+        // console.log("DATA:");
         const data = await axios.delete(
             `${api}party/${partyId}`,
             {
@@ -146,10 +159,79 @@ export const DeletePartyAPI = async (
                 }
             }
         );
+        // console.log("DATA:", data);
         return data;
     } catch (error) {
         handleError(error);
     }
 };
 
+export const GetPartyAlcoholVolumeAPI = async (
+    partyId: string,
+    isClicked: boolean, // Передаємо isClicked як параметр
+    authToken?: string | null
+) => {
+    try {
+        const data = await axios.get<PartyUserAlcohol>(
+            `${api}party/${partyId}/alcohol-volumes`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                params: {
+                    isClicked, // Додаємо параметр isClicked
+                },
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
 
+export const CheckIsClickedAPI = async (partyId: string, authToken?: string | null) => {
+    try {
+        const data = await axios.get<{ isClicked: boolean }>(
+            `${api}party/${partyId}/is-clicked`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export const UpdateWillBeBoughtAPI = async (
+    partyId: string,
+    payload: PartyUserAlcohol,
+    authToken?: string
+) => {
+    try {
+        // Filter out unnecessary fields
+
+        console.log("WILL BE BOUGHT:", payload);
+
+        // Send the PATCH request
+        const response = await axios.patch(
+            `${api}party/${partyId}/update-alcohol-purchases`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        console.log("Response:", response.data);
+
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
