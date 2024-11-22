@@ -3,6 +3,7 @@ using AlcoStack.Extensions;
 using AlcoStack.Interface;
 using AlcoStack.Models;
 using AlcoStack.Mappers;
+using AlcoStack.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace AlcoStack.Controllers;
 
             var user = await userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
-            if (user == null) return Unauthorized("Invalid username!");
+            if (user == null) return Unauthorized("Invalid username or password!");
 
             var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
@@ -61,7 +62,7 @@ namespace AlcoStack.Controllers;
         } 
     
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterDto registerDto)
+        public async Task<IActionResult> Register( RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -357,24 +358,51 @@ namespace AlcoStack.Controllers;
             return Ok(await userAlcoholRepository.AddAsync(userName, alcoholId));
         }
         
-        [HttpPatch("{userName}/update-volume/{alcoholId}")]
-        public async Task<IActionResult> UpdateVolume(string userName, Guid alcoholId, [FromBody] int volume)
+        [HttpPatch("update-volume/{alcoholName}")]
+        public async Task<IActionResult> UpdateVolume( string alcoholName, [FromBody] int volume)
         {
+            var userName = User.GetUsername();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
         
-            return Ok(await userAlcoholRepository.UpdateVolumeAsync(userName, alcoholId, volume));
+            return Ok(await userAlcoholRepository.UpdateVolumeAsync(userName, alcoholName, volume));
         }
        
-    
-        [HttpPatch("{userName}/update-rating/{alcoholId}")]
-        public async Task<IActionResult> UpdateRating(string userName, Guid alcoholId, [FromBody] int rating)
+        [Authorize]
+        [HttpPatch("update-rating/{alcoholId}")]
+        public async Task<IActionResult> UpdateRating(Guid alcoholId, [FromBody] int rating)
         {
+            var userName = User.GetUsername();
+            
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
         
             return Ok(await userAlcoholRepository.UpdateRatingAsync(userName, alcoholId, rating));
         }
+        
+        [HttpPatch("{userName}/{type}/ratings")]
+        public async Task<IActionResult> UpdateAlcoholRatingsByType(string userName, AlcoType type, [FromBody] List<UpdateAlcoholRatingDto> ratings)
+        {
+            if (ratings == null || !ratings.Any())
+            {
+                return BadRequest("Рейтинги не можуть бути порожніми");
+            }
+
+          
+            var updatedUserAlcohols = await userAlcoholRepository.UpdateAlcoholRatingsByTypeAsync(userName, type, ratings);
+
+            
+            var result = updatedUserAlcohols.Select(ua => new
+            {
+                ua.AlcoholId,
+                ua.Rating
+            });
+
+            return Ok(result);
+        }
+
+       
+
         
         [HttpDelete("{userName}/delete/{alcoholId}")]
         public async Task<IActionResult> DeleteUserAlcohol(string userName, Guid alcoholId)
