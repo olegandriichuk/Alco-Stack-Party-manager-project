@@ -61,16 +61,7 @@ public class PartyUserAlcoholRepository(AppDataContext context) : IPartyUserAlco
                 {
                     userPartyAlcoholEntry.Volume = volumeUpdate.Volume;
                 }
-                /*else
-                {
-                    context.PartyUserAlcohols.Add(new PartyUserAlcohol
-                    {
-                        UserId = user.Id, // Ensure this matches the FK column
-                        PartyId = partyId,
-                        AlcoholId = alcohol.Id,
-                        Volume = volumeUpdate.Volume
-                    });
-                }*/
+                
 
                 updatedVolumes.Add(new AlcoholVolumeDto
                 {

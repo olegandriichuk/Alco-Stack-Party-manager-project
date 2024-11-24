@@ -114,8 +114,7 @@ public class UserRepository(AppDataContext context) : IUserRepository
         context.UserParties.Remove(userParty);
     }
 
-    // Finally, remove the user
-//    context.Users.Remove(user);
+   
 
     // Save changes to the database
     await context.SaveChangesAsync();

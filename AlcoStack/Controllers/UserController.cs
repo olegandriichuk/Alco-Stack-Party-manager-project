@@ -234,11 +234,7 @@ namespace AlcoStack.Controllers;
             if (currentUser == null)
                 return Unauthorized();
     
-            // Ensure the email in the DTO matches the current user's email
-            /*
-            if (currentUser.Email != userDto.Email)
-                return Forbid();
-                */
+            
     
             // Update username if it has changed
             if (currentUser.UserName != userDto.Username)
@@ -362,7 +358,7 @@ namespace AlcoStack.Controllers;
         {
             if (ratings == null || !ratings.Any())
             {
-                return BadRequest("Рейтинги не можуть бути порожніми");
+                return BadRequest("Ratings cannot be empty");
             }
 
           

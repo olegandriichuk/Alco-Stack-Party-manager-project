@@ -150,28 +150,7 @@ public class AlcoholController(
     }
 
     
-    // [Authorize]
-    // [HttpPut("{Id}")]
-    // public async Task<IActionResult> UpdateAlcohol(Guid Id, [FromBody] UpdateAlcoholDto alcoholDto)
-    // {
-    //     if (!ModelState.IsValid)
-    //         return BadRequest(ModelState);
-    //     
-    //     var alcohol = await _alcoholRepository.GetAlcoholByIdAsync(Id);
-    //     if (alcohol == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     
-    //     alcohol.Name = alcoholDto.Name;
-    //     alcohol.Type = alcoholDto.Type;
-    //     alcohol.Photo = alcoholDto.Photo;
-    //     alcohol.Description = alcoholDto.Description;
-    //     
-    //     await _alcoholRepository.UpdateAlcoholAsync(alcohol);
-    //     return NoContent();
-    // }
-    //
+    
     
     [HttpGet("{userName}UserAlcohol")]
     public async Task<IActionResult> GetAlcoholUsers(string userName)

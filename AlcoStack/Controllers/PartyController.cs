@@ -172,14 +172,7 @@ public class PartyController(
         return Ok(await partyAlcoholRepository.GetAlcoholsByPartyIdAsync(partyId));
     }
     
-    // [HttpGet("{userName}/userParties")]
-    // public async Task<IActionResult> GetPartiesByUserName(string userName)
-    // {
-    //     if (!ModelState.IsValid)
-    //         return BadRequest(ModelState);
-    //     
-    //     return Ok(await userPartyRepository.GetByUserNameAsync(userName));
-    // }
+    
     
     [Authorize]
     [HttpGet("userParties")]
