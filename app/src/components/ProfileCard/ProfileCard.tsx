@@ -11,11 +11,13 @@ import {UpdatePhotoAPI} from "../../Services/UserService.tsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import * as Yup from "yup";
+import Photobg from "../../assets/photobackground.svg"
+// import backgroundImage from "../../assets/backgroundFinal.svg";
 // import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
 // import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf";
-
-
-
+import updateFoto from "../../assets/updatefoto.svg"
+import editprof from "../../assets/edit profile.svg";
+import alcopopup from "../../assets/alcopopup.svg";
 interface ProfileCardProps {
     UserName: string;
     name: string;
@@ -83,17 +85,17 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         setCurrentBackgroundSrc(formBackgroundSrc);
     }, [photoSrc, formBackgroundSrc]);
 
-    console.log("currentBackgroundSrc", currentBackgroundSrc);
+    // console.log("currentBackgroundSrc", currentBackgroundSrc);
 
     const profileCardStyle: React.CSSProperties = {
-        backgroundImage: `url(${currentBackgroundSrc})`,
+        // backgroundImage: `url(${currentBackgroundSrc})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         width: '90%',
         borderRadius: '20px',
-        backgroundColor: '#D5D5D5',
-        border : '1px solid white',
+        backgroundColor: 'transparent',
+        border : 'transparent',
         color: 'white'
 
     };
@@ -151,11 +153,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         setPhotoChanged(true);
     };
 
-    const handleDeleteBackground = () => {
-        setCurrentBackgroundSrc('');
-        setBackgroundFile(null);
-        setFormBackgroundChanged(true);
-    };
+    // const handleDeleteBackground = () => {
+    //     setCurrentBackgroundSrc('');
+    //     setBackgroundFile(null);
+    //     setFormBackgroundChanged(true);
+    // };
 
     const [modalShow, setModalShow] = useState(false);
 
@@ -172,117 +174,149 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     const MyVerticallyCenteredModal: React.FC<MyVerticallyCenteredModalProps> = ({ onHide, show }) => {
 
         return (
+            <>
+                {show && <div className="modal-backdrop-profile" />}
             <Modal
                 show={show}
                 onHide={onHide}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                style={{ maxWidth: "500px", height: "600px", margin: "auto" , position: 'fixed',
+                    top: '10%',
+                    left: '35%',
+                    borderRadius: '16px',
+                    zIndex: '1050',
+                    // Вище, ніж у заблюреного фону
+
+            }} // Зробити вужче та вищим
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Update Profile Pictures
-                    </Modal.Title>
-                </Modal.Header>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    style={{
+                        backgroundImage: `url(${alcopopup})`,
+                        backgroundSize: "cover", // Забезпечує повне покриття фону
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
+                        border: "3px solid #50C5FF",
+
+                    }}
+                >
                     <Modal.Body>
                         {/* Profile Photo Section */}
                         <div className="mb-3 text-center">
-                            <label htmlFor="photoFile" className="form-label">Profile Photo</label>
+                            <label htmlFor="photoFile" className="form-label-profile-photo">
+                                Profile Photo
+                            </label>
                             <div className="photo-upload-container">
                                 {currentPhotoSrc ? (
-                                    <img
-                                        src={currentPhotoSrc}
-                                        alt="Current Profile"
-                                    />
+                                    <img src={currentPhotoSrc} alt="Current Profile" />
                                 ) : (
-                                    <span className="photo-upload-icon">+</span>
+                                    <div
+                                        className="photo-upload-icon"
+                                        style={{
+                                            // Вище, ніж у заблюреного фону
+                                            width: "110px",
+                                            height: "110px",
+                                            borderRadius: "50%",
+                                            backgroundImage:`url(${Photobg})`,
+                                            backgroundSize: 'cover', // Забезпечує повне покриття фону
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundPosition: "center",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            // justifyContent: "center",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        {/* Icon inside the circle */}
+                                    </div>
                                 )}
                                 <input
                                     type="file"
                                     accept="image/*"
                                     id="photoFile"
                                     className="photo-upload-input"
-                                    onChange={(e) => handleImageChange(e, setPhotoFile, setCurrentPhotoSrc, setPhotoChanged)}
+                                    onChange={(e) =>
+                                        handleImageChange(
+                                            e,
+                                            setPhotoFile,
+                                            setCurrentPhotoSrc,
+                                            setPhotoChanged
+                                        )
+                                    }
                                 />
                             </div>
-                            {errors.photoFile && <div className="invalid-feedback">{errors.photoFile.message}</div>}
+                            {errors.photoFile && (
+                                <div className="invalid-feedback">{errors.photoFile.message}</div>
+                            )}
                             {currentPhotoSrc && (
-                                <Button variant="danger" className="mt-2" onClick={handleDeletePhoto}>Delete
-                                    Photo</Button>
+                                <Button
+                                    variant="danger"
+                                    className="mt-2"
+                                    onClick={handleDeletePhoto}
+                                >
+                                    Delete Photo
+                                </Button>
                             )}
                         </div>
-
-                        {/* Background Photo Section */}
-                        <div className="mb-3 text-center">
-                            <label htmlFor="formBackgroundFile" className="form-label">Background Photo</label>
-                            <div
-                                style={{
-                                    border: '2px dashed #ccc',
-                                    borderRadius: '8px',
-                                    padding: '20px',
-                                    position: 'relative',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '300px',
-                                    height: '150px',
-                                    margin: '0 auto',
-                                    backgroundColor: '#f5f5f5'
-                                }}>
-                                {/*<label htmlFor="backgroundFile" className="form-label">Background Photo</label>*/}
-                                <div className="background-upload-container">
-                                    {currentBackgroundSrc ? (
-                                        <img
-                                            src={currentBackgroundSrc}
-                                            alt="Current Background"
-                                        />
-                                    ) : (
-                                        <span className="background-upload-icon">+</span>
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        id="backgroundFile"
-                                        className="background-upload-input"
-                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
-                                        onChange={(e) => handleImageChange(e, setBackgroundFile, setCurrentBackgroundSrc, setFormBackgroundChanged)}
-                                    />
-                                </div>
-                            </div> {/* This div was not properly closed */}
-                            {errors.formBackgroundFile &&
-                                <div className="invalid-feedback">{errors.formBackgroundFile.message}</div>}
-                            {currentBackgroundSrc && (
-                                <Button variant="danger" className="mt-2" onClick={handleDeleteBackground}>Delete
-                                    Background</Button>
-                            )}
-                        </div>
-
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={onSubmit}>Save</Button>
-                        <Button onClick={onHide}>Close</Button>
+                    <Modal.Footer style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Button onClick={onSubmit} style={{ backgroundColor: "#000000", color: 'white' }}>
+                            Save
+                        </Button>
+                        <Button onClick={onHide} variant="secondary" style={{ backgroundColor: "#000000", color: 'white' }}>
+                            Close
+                        </Button>
                     </Modal.Footer>
                 </form>
             </Modal>
+
+
+            </>
         );
     };
 
     return (
         <div className="card" style={profileCardStyle}>
+
             <div className="card-body d-flex flex-row">
                 <div className="p-3 d-flex flex-column justify-content-around align-items-center">
-                    <button onClick={() => setModalShow(true)} className="profile-photo-button">
-                        <img className="profile-photo" src={currentPhotoSrc} alt="User Photo"/>
+                    <button onClick={() => setModalShow(true)} className="profile-photo-button"
+                    style={{backgroundImage:`url(${Photobg})`,
+                        backgroundSize: 'cover', // Забезпечує повне покриття фону
+                        backgroundRepeat: 'no-repeat',
+                        color: "black",// Запобігає повторенню фону
+                        backgroundPosition: 'center',
+                        border: '3px solid #50C5FF'}}>
+                        <img className="profile-photo" src={currentPhotoSrc} />
                     </button>
-                    <h5 className="card-title profile-name">{UserName}</h5>
+                    <h5 className="card-title profile-name">
+                        Username:
+                        <br/>
+                        <span style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>{UserName}</span>
+                    </h5>
                 </div>
                 <div className="d-flex flex-grow-1 flex-column">
                     <div className="d-flex justify-content-end">
                         <Link to="/profile/edit" style={{textDecoration: 'none'}}>
-                            <Button className="btn-lg m-2 edit-profile-btn">Edit Profile</Button>
+                            <Button
+                                className="btn-lg m-2 edit-profile-btn"
+                                style={{
+                                    padding: '0', // Видаляємо внутрішні відступи
+                                    background: `url(${editprof}) no-repeat center center`, // Встановлюємо зображення як фон
+                                    backgroundSize: 'contain', // Масштабування зображення
+                                    width: '297px', // Встановлюємо ширину кнопки
+                                    height: '120px', // Встановлюємо висоту кнопки
+                                }}
+                            />
                         </Link>
                     </div>
+
                     <ul className="list-unstyled profile-details-list">
                         <li>
                             <span>Name: {name}</span>

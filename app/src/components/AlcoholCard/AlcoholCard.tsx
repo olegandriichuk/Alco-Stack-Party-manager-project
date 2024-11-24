@@ -1,42 +1,47 @@
 ﻿import React from 'react';
-import { Card } from 'react-bootstrap';
+import alcorankback from "../../assets/alcorankback.svg";
 import { AlcoholGet } from '../../Models/Alcohol.tsx';
 
-// Define the type for the component props
+// Типы данных для пропсов компонента
 export type AlcoholCardProps = {
     alcohol: AlcoholGet;
+    rank: number;
 };
 
-// Define the AlcoholCard component
-const AlcoholCard: React.FC<AlcoholCardProps> = ({ alcohol }) => {
-    // Determine the alcohol type label based on the numeric value
-    const getAlcoholTypeLabel = (type: number) => {
-        return type === 0
-            ? 'Liquor'
-            : type === 1
-                ? 'Low Alcohol'
-                : type === 2
-                    ? 'Mid Alcohol'
-                    : type === 3
-                        ? 'High Alcohol'
-                        : 'Unknown';
-    };
-
+// Компонент AlcoholCard
+const AlcoholCard: React.FC<AlcoholCardProps> = ({ alcohol, rank }) => {
     return (
-        <Card style={{ width: '50px', height: '50px' }}>
-            <Card.Img variant="top" src={alcohol.photo} alt={alcohol.name} />
-            <Card.Body>
-                <Card.Title>{alcohol.name}</Card.Title>
-                <Card.Text>
-                    {alcohol.description}
-                </Card.Text>
-                <Card.Footer>
-                    <small className="text-muted">
-                        Type: {getAlcoholTypeLabel(alcohol.type)}
-                    </small>
-                </Card.Footer>
-            </Card.Body>
-        </Card>
+        <div
+            style={{
+                width: '520px', // Подстраиваем ширину под список
+                height: '50px', // Высота карточки
+                backgroundImage: `url(${alcorankback})`, // Фон карточки
+                backgroundSize: 'cover', // Полное покрытие фона
+                backgroundPosition: 'center', // Центрирование фона
+                borderRadius: '8px', // Закругленные углы
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: 'none', // Убираем обводку
+                color: 'white', // Цвет текста
+                fontFamily: 'Halant, serif', // Используем шрифт Halant
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', // Эффект тени для текста
+                textAlign: 'center', // Центрирование текста
+                fontSize: '1.5rem', // Размер текста
+            }}
+        >
+            {alcohol.name} {/* Название алкоголя */}
+            <span
+                style={{
+                    position: 'absolute', // Позиционируем относительно контейнера
+                    right: '30px',
+                    fontSize: '1.5rem',
+                    fontFamily: 'Halant, serif', // Шрифт для номера
+                }}
+            >
+                {rank}
+            </span>
+        </div>
     );
 };
 

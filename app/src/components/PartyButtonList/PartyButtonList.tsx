@@ -2,6 +2,7 @@
 import PartyButton from '../PartyButton/PartyButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './PartyButtonList.css';
+import party_button from "../../assets/your party.svg";
 
 interface PartyButtonListProps {
     parties: {
@@ -16,13 +17,18 @@ interface PartyButtonListProps {
 const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
     return (
         <div className="w-
-        100">
+        100"   style={{
+            width: '600px'
+        }}>
             {/* Заголовок поза скрол-контейнером */}
-            <h4 className="party-header">Your Parties</h4>
+            <div className="party-header"
+            style={{backgroundImage: `url(${party_button})`,backgroundSize: "cover",
+                width: '600px', height: '60px'
+            }}></div>
 
             {/* Скрол-контейнер для списку партій */}
-            <div className="scroll-container w-100">
-                <div className="list-group w-100">
+            <div className="scroll-container ">
+                <div className="list-group ">
                     {parties.map((party, index) => (
                         <PartyButton
                             key={index}

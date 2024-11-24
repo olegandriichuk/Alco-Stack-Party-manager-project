@@ -117,3 +117,39 @@ export const UpdateAlcoholVolumeAPI = async (
     }
 };
 
+export const leavePartyAPI = async (
+    partyId: string,
+    authToken?: string | null
+) => {
+    try {
+        // console.log("DATA:");
+        const data = await axios.delete(
+            `${api}account/${partyId}LeaveParty`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+        // console.log("DATA:", data);
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export const DeleteAccountAPI = async (username: string, authToken: string | null) => {
+    try {
+        const response = await axios.delete(
+            `${api}account/${username}`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
+

@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import './PartyPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,16 +13,26 @@ import { useAuth } from '../../Context/useAuth.tsx';
 import PartySettingsPopUp from '../../components/PartySettingsPopUp/PartySettingsPopUp.tsx';
 import AlcoholList from '../../components/AlcoholCardList/AlcoholCardList';
 import {CocktailGet, CocktailDetailsGet} from "../../Models/Cocktail.tsx";
-import CocktailList from "../../components/CocktailCardList/CocktailCardList.tsx";
+import CocktailPopup from "../../components/CocktailPopup/CocktailPopup.tsx";
 import { toast } from 'react-toastify';
 //import LiquorRatingPopUp from "../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP.tsx";
 import {GetCocktailListAPI, GetCocktailDetailsAPI} from '../../Services/CocktailService.tsx';
-import CocktailDetailsCard from "../../components/CocktailDetailsCard/CocktailDetailsCard.tsx";
 import DescriptionPopUp from "../../components/DescriptionPopUp/DescriptionPopUp.tsx"; // Import the new component
 import CountdownTimer from '../../components/CountdownTimer/CountdownTimer.tsx';
 import ViewAmountPopUp   from "../../components/ViewAmountPopUp/ViewAmountPopUp.tsx";
 import SelectAlcoholPopUp from "../../components/SelectAlcoholPopUp/SelectAlcoholPopUp.tsx";
-// PartyPage Component
+import backgroundImage from "../../assets/backgroundFinal.svg";
+import buttonDescription from "../../assets/descr.svg";
+import editIcon from "../../assets/editparty.svg";
+import deleteIcon from "../../assets/Delete.svg";
+import leaveIcon from "../../assets/Leave.svg";
+import homeIcon from '../../assets/Home.svg';
+import viewcocktails from "../../assets/viewcocktails.svg";
+import selectamount from "../../assets/selectamount.svg";
+import updateRankingButton from '../../assets/updaterankingButton.svg'
+import viewamount from '../../assets/viewamount.svg'
+import {leavePartyAPI} from '../../Services/UserService.tsx'
+
 const PartyPage: React.FC = () => {
     const { partyId } = useParams<{ partyId: string }>();
     const [party, setParty] = useState<PartyDetailGet | null>(null);
@@ -42,6 +52,9 @@ const PartyPage: React.FC = () => {
     const [isFinalState, setIsFinalState] = useState(false);
     const handleShowDescription = () => setShowDescription(true);
     const handleCloseDescription = () => setShowDescription(false);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     // Fetch party details when partyId changes
     useEffect(() => {
         const fetchPartyDetails = async () => {
@@ -71,6 +84,10 @@ const PartyPage: React.FC = () => {
 
     const handleOpenSelectAmount = () => {
         setShowSelectAmountPopUp(true);
+    };
+
+    const handleBackToCocktails = () => {
+        setSelectedCocktailDetails(null); // Сбрасываем выбранные детали
     };
 
     // Function to close the SelectAlcoholPopUp
@@ -157,6 +174,10 @@ const PartyPage: React.FC = () => {
 
 
     const handleViewCocktails = async () => {
+        if (isLoading) return; // Если уже идет загрузка, игнорируем повторный вызов
+
+        setIsLoading(true); // Устанавливаем состояние загрузки
+
         try {
             // const ingredientNames = alcohols.map((alcohol) => alcohol.name);
             // const ingredientNamesString = ingredientNames.join(", ");
@@ -179,6 +200,7 @@ const PartyPage: React.FC = () => {
             //console.log("Fetching details for cocktail ID gggggg:", cocktails[0].Id);
             const filteredCocktails = removeDuplicates(combinedCocktails);
             setCocktails(filteredCocktails);
+            setIsPopupOpen(true);
             console.log("Filtered cocktails:", filteredCocktails);
             if (filteredCocktails.length > 0) {
                 toast.success("Cocktails loaded successfully!");
@@ -188,8 +210,22 @@ const PartyPage: React.FC = () => {
         } catch (error) {
             console.error("Error fetching cocktails:", error);
             toast.error("Failed to load cocktails");
+        } finally {
+            setIsLoading(false); // Сбрасываем состояние загрузки
         }
     };
+
+    const handleClosePopup = () => {
+        setIsPopupOpen(false); // Закрываем попап
+
+        // Отключаем кнопку на 5 секунд
+        setIsDisabled(true);
+        setTimeout(() => {
+            setIsDisabled(false); // Снимаем блокировку через 5 секунд
+        }, 5000);
+    };
+
+
 
     const handleCocktailDetails = async (id: string) => {
         try {
@@ -230,6 +266,21 @@ const PartyPage: React.FC = () => {
             toast.error("Failed to delete party");
         }
     }
+
+    const leaveParty = async () => {
+        try {
+            const response = await leavePartyAPI(partyId!, token); // Виклик API для виходу з вечірки
+            if (!response) {
+                toast.error("Failed to leave party");
+                return;
+            }
+            toast.success("Party leaved successfully!");
+            window.location.href = "/home";
+        } catch (error) {
+            console.error("Error leaving the party:", error);
+            toast.error("An error occurred while trying to leave the party.");
+        }
+    };
 
     // Handle save action from modal
     const handleSave = async (updatedParty: PartyDetailPut) => {
@@ -282,66 +333,29 @@ const PartyPage: React.FC = () => {
 
     return (
         <div
-            className="container-fluid p-0 d-flex flex-column align-items-start"
+            className="container-fluid-partypage p-0 d-flex full-height-partypage"
             style={{
-                minHeight: '100vh',
-                overflowY: 'auto',
-                width: '100%',
-                padding: '20px'
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundAttachment: 'fixed' // Фиксируем фон
             }}
         >
-             Countdown Timer
-            {party?.preparationDate && (
-                <CountdownTimer
-                    preparationDate={party.preparationDate}
-                    eventDate={party.date}
-                    onTimerComplete={handleTimerComplete}
-                    //allowAlcoholUpdate={allowAlcoholUpdate}
-                />
-            )}
+            <div className="video-left flex-grow-1"></div>
 
-            {/* Кнопка Select Amount */}
-            <div className="mt-3">
-                {isFinalState ? (
-                    <button
-                        className="btn btn-outline-primary"
-                        onClick={handleOpenViewAmount} // Open View Amount popup
-                    >
-                        View Amount
-                    </button>
-                ) : (
-                    <button
-                        className="btn btn-outline-primary"
-                        onClick={handleOpenSelectAmount} // Open Select Amount popup
-                        disabled={!allowSelect} // Disable button if allowSelect is false
-                    >
-                        Select Amount
-                    </button>
-                )}
+            <div
+                className="container-fluid-partypage p-0 d-flex flex-column align-items-center custom-background square-container-partypage flex-grow-7">
+                <div
+                    className="party-id-display"
+                    style={{
+                        position: 'absolute',
+                        top: '20px', // Расположить выше заголовка
+                        left: '35%', // Центрировать горизонтально
+                        transform: 'translateX(-50%)', // Точное центрирование
+                        zIndex: 1000, // Убедиться, что элемент находится выше
+                    }}
+                >
+                    <div className="party-id-container">
 
-
-            {/* Select Amount PopUp */}
-            <SelectAlcoholPopUp
-                show={showSelectAmountPopUp}
-                handleClose={handleCloseSelectAmount}
-                alcohols={alcohols}
-                partyId={partyId!}
-            />
-
-            {/* View Amount PopUp */}
-                <ViewAmountPopUp
-                    show={showViewAmountPopUp}
-                    handleClose={handleCloseViewAmount}
-                    partyId={partyId!} // Pass the party ID
-                />
-
-
-            </div>
-
-            <div className="d-flex justify-content-between align-items-center w-100">
-                <div className="d-flex align-items-center">
-                    <img src={Disco} alt="Party Icon" width="80" height="80"/>
-                    <div className="party-id-display ms-4">
                         <div className="input-group">
                             <input
                                 id="partyIdInput"
@@ -350,120 +364,343 @@ const PartyPage: React.FC = () => {
                                 readOnly
                                 className="form-control"
                                 aria-label="Party ID"
+                                style={{
+                                    width: '200px', // Установите ширину поля
+                                    textAlign: 'center', // Центрируем текст
+                                }}
                             />
                             <button
                                 className="btn btn-outline-secondary"
                                 onClick={handleCopy}
                                 aria-label="Copy Party ID"
+                                style={{
+                                    marginLeft: '10px', // Отступ от текстового поля
+                                }}
                             >
-                                <FontAwesomeIcon icon={faCopy} />
+                                <FontAwesomeIcon icon={faCopy}/>
                             </button>
                         </div>
-                        {copied && <small className="text-success mt-2">Copied!</small>}
                     </div>
+                    {copied && (
+                        <small
+                            className="text-success mt-2"
+                            style={{
+                                display: 'block',
+                                textAlign: 'center',
+                            }}
+                        >
+                            Copied!
+                        </small>
+                    )}
                 </div>
 
-                {/* Party Description Button */}
-                {/* Party Description Button */}
-                <button
-                    className="btn btn-outline-info"
-                    style={{ position: 'absolute', top: '20px', right: '20px' }}
-                    onClick={handleShowDescription}
+                <h2
+                    className="main-text-partypage"
+                    style={{
+                        position: 'absolute',
+                        top: '80px', // Расположение от верхнего края
+                        left: '35%', // Горизонтальное центрирование
+                        transform: 'translateX(-50%)', // Сдвиг для точного центрирования
+                        zIndex: 1000, // Поверх остальных элементов
+                        textAlign: 'center', // Центрирование текста
+                    }}
                 >
-                    Party Description
-                </button>
-            </div>
-            {/* Description PopUp */}
-            {showDescription && (
-                <DescriptionPopUp
-                    description={party?.description || 'No description available'}
-                    liquors={party!.liquors}
-                    lowAlcohol={party!.lowAlcohol}
-                    midAlcohol={party!.midAlcohol}
-                    highAlcohol={party!.highAlcohol}
-                    typesOfAlcohol={alcohols.length} // Number of alcohol types
-                    onClose={handleCloseDescription}
-                />
-            )}
-            {party && (
-                <div className="party-details mt-4">
-                    <h2>{party.name}</h2>
-                    <p>{party.description}</p>
-                    {party.photo && <img src={party.photo} alt="Party" className="party-photo" />}
-                    <p>Date: {new Date(party.date).toLocaleDateString()}</p>
-                    <p>Location: {party.location}</p>
-                    <p>Liquors: {party.liquors ? "Yes" : "No"}</p>
-                    <p>Low Alcohol: {party.lowAlcohol ? "Yes" : "No"}</p>
-                    <p>Mid Alcohol: {party.midAlcohol ? "Yes" : "No"}</p>
-                    <p>High Alcohol: {party.highAlcohol ? "Yes" : "No"}</p>
-                    <p>Rank Limit: {party.rankLimit}</p>
-                    <p>Created by me: {party.createdByMe ? "Yes" : "No"}</p>
-                    {party.createdByMe && (
-                        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-                            Edit
-                        </button>
-                    )}
-                    {party.createdByMe && (
-                        <button className="btn btn-danger" onClick={deleteParty}>
-                            Delete
-                        </button>
-                    )}
-                </div>
-            )}
+                    WELCOME to {party!.name}!!!
+                </h2>
 
-            {alcohols.length > 0 && (
-                <div className="mt-4">
-                    <h3>Alcohols</h3>
-                    <AlcoholList alcohols={alcohols} />
-                    <button
-                        className="btn btn-outline-primary mt-3"
-                        onClick={handleUpdateRanking}
-                    >
-                        Update Alko Ranking
-                    </button>
-                </div>
-            )}
 
-            <div className="cocktails-section">
-                <div className="view-cocktails-button">
-                    <button
-                        className="btn btn-outline-secondary"
-                        onClick={handleViewCocktails}
-                    >
-                        View Cocktails
-                    </button>
+                <div>
+                    <img
+                        src={Disco}
+                        alt="Disco Icon"
+                        className="party-icon-partypage"
+                    />
                 </div>
-                <h3>Cocktails</h3>
-                <CocktailList
-                    cocktails={cocktails}
-                    onClickCocktail={handleCocktailDetails} // Pass handler to CocktailList
-                />
-                {selectedCocktailDetails && (
-                    <div>
-                        <h3>Cocktail Details</h3>
-                        <CocktailDetailsCard cocktail={selectedCocktailDetails} />
+
+                <Link
+                    to="/home"
+                    className="home-link-welcome"
+                    aria-label="Go to Homepage"
+                    style={{
+                        position: 'absolute', // Для фиксации в углу
+                        top: '-25px', // Сдвиг от верхнего края
+                        right: '10px', // Сдвиг от правого края
+                    }}
+                >
+                    <img
+                        src={homeIcon}
+                        alt="Home Icon"
+                        style={{
+                            width: '120px', // Изменение ширины
+                            height: '120px', // Изменение высоты
+                        }}
+                    />
+                </Link>
+
+                {party && (
+                    <div className="party-details mt-4">
+
+
+                        {/*<p>Created by me: {party.createdByMe ? "Yes" : "No"}</p>*/}
+                        {party.createdByMe && (
+                            <button
+                                className="btn-edit-partypage"
+                                onClick={() => setShowModal(true)}
+                                aria-label="Edit Party"
+                            >
+                                <img src={editIcon} alt="Edit Party"/>
+                            </button>
+                        )}
+
+                        {party.createdByMe && (
+                            <button
+                                className="btn-delete-partypage"
+                                onClick={deleteParty}
+                                aria-label="Delete Party"
+                            >
+                                <img src={deleteIcon} alt="Delete Party"/>
+                            </button>
+                        )}
+                        {!party.createdByMe && (
+                            <button className="btn-leave-partypage"
+                                    onClick={leaveParty}
+                                    aria-label="Leave Pary"
+                            >
+                                <img src={leaveIcon} alt="Leave Party"/>
+                            </button>
+                        )}
                     </div>
                 )}
-            </div>
 
-            {party && (
-                <PartySettingsPopUp
-                    name={party.name}
-                    description={party.description || ""}
-                    date={party.date}
-                    preparationDate={party.preparationDate}
-                    photo={party.photo || ""}
-                    location={party.location || ""}
-                    liquors={party.liquors}
-                    lowAlcohol={party.lowAlcohol}
-                    midAlcohol={party.midAlcohol}
-                    highAlcohol={party.highAlcohol}
-                    rankLimit={party.rankLimit}
-                    show={showModal}
-                    onClose={() => setShowModal(false)}
-                    onSave={handleSave}
-                />
-            )}
+
+
+                <div className="d-flex justify-content-between align-items-center w-100">
+
+
+                    {/* Party Description Button */}
+                    {/* Party Description Button */}
+                    <button
+                        className="btn"
+                        style={{
+                            position: 'absolute',
+                            top: '306px',
+                            right: '423px', // Положение кнопки справа
+                            padding: 0, // Убираем отступы внутри кнопки
+                            border: 'none', // Убираем обводку кнопки
+                            background: 'transparent', // Прозрачный фон
+                        }}
+                        onClick={handleShowDescription}
+                    >
+                        <img
+                            src={buttonDescription}
+                            alt="Party Description"
+                            style={{
+                                width: '200px', // Размер изображения (можно изменить)
+                                height: '100px', // Высота изображения
+                                cursor: 'pointer', // Указываем, что элемент кликабельный
+                            }}
+                        />
+                    </button>
+                </div>
+                {/* Description PopUp */}
+                {showDescription && (
+                    <DescriptionPopUp
+                        name={party?.name || 'Unnamed Party'} // Fallback value for name
+                        description={party?.description || 'No description available'}
+                        photo={party?.photo}
+                        date={new Date(party?.date || '').toLocaleDateString()} // Provide fallback for date
+                        location={party?.location || 'Unknown location'} // Fallback value for location
+                        liquors={party?.liquors || false}
+                        lowAlcohol={party?.lowAlcohol || false}
+                        midAlcohol={party?.midAlcohol || false}
+                        highAlcohol={party?.highAlcohol || false}
+                        rankLimit={party?.rankLimit || 0} // Default rank limit
+                        onClose={handleCloseDescription}
+                    />
+                )}
+
+                {party?.preparationDate && (
+                    <CountdownTimer
+                        preparationDate={party.preparationDate}
+                        eventDate={party.date}
+                        onTimerComplete={handleTimerComplete}
+
+                    />
+                )}
+
+                {/* Кнопка Select Amount */}
+                <div className="mt-3">
+                    {isFinalState ? (
+                        <button
+                            className="btn"
+                            onClick={handleOpenViewAmount} // Open View Amount popup
+                            style={{
+                                position: 'absolute',
+                                top: '307px',
+                                left: '350px', // Расположение кнопки
+                                padding: 0, // Убираем отступы
+                                border: 'none', // Убираем рамку  background: 'transparent', // Прозрачный фон
+
+                            }}
+                        >
+                            <img
+                                src={viewamount}
+                                alt="Select Amount"
+                                style={{
+                                    width: '200px', // Ширина изображения
+                                    height: '100px', // Высота изображения
+                                    cursor: 'pointer', // Курсор для кликабельности
+
+                                }}
+                            />
+                        </button>
+                    ) : (
+                        <button
+                            className="btn"
+                            style={{
+                                position: 'absolute',
+                                top: '307px',
+                                left: '350px', // Расположение кнопки
+                                padding: 0, // Убираем отступы
+                                border: 'none', // Убираем рамку  background: 'transparent', // Прозрачный фон
+
+                            }}
+                            onClick={handleOpenSelectAmount}
+                            disabled={!allowSelect} // Отключаем кнопку, если флаг `allowSelect` равен false
+                        >
+                            <img
+                                src={selectamount}
+                                alt="Select Amount"
+                                style={{
+                                    width: '200px', // Ширина изображения
+                                    height: '100px', // Высота изображения
+                                    cursor: 'pointer', // Курсор для кликабельности
+
+                                }}
+                            />
+                        </button>
+                    )}
+
+
+                    {/* Select Amount PopUp */}
+                    <SelectAlcoholPopUp
+                        show={showSelectAmountPopUp}
+                        handleClose={handleCloseSelectAmount}
+                        alcohols={alcohols}
+                        partyId={partyId!}
+                    />
+
+                    {/* View Amount PopUp */}
+                    <ViewAmountPopUp
+                        show={showViewAmountPopUp}
+                        handleClose={handleCloseViewAmount}
+                        partyId={partyId!} // Pass the party ID
+                    />
+
+
+                </div>
+
+
+
+                <div className="mt-4">
+                    <AlcoholList alcohols={alcohols}/>
+                    <button
+                        className="btn"
+                        onClick={handleUpdateRanking}
+                        style={{
+                            position: "absolute",
+                            top: "450px",
+                            left: "550px",
+                            padding: 0, // Убираем внутренние отступы
+                            border: "none", // Убираем границы
+                            background: "transparent", // Прозрачный фон
+                            cursor: "pointer", // Указываем, что элемент кликабельный
+                        }}
+                    >
+                        <img
+                            src={updateRankingButton}
+                            alt="Update Alko Ranking"
+                            style={{
+                                width: "40px", // Установите размер изображения
+                                height: "40px", // Автоматическое соотношение сторон
+                            }}
+                        />
+                    </button>
+                </div>
+
+
+                <div className="btn">
+                    <button
+                        className="btn"
+                        style={{
+                            position: 'absolute',
+                            top: '306px',
+                            left: '5px',
+                            padding: 0,
+                            border: 'none',
+                            background: 'transparent',
+                            opacity: isLoading || isDisabled ? 0.6 : 1,
+                            cursor: isLoading || isDisabled ? 'not-allowed' : 'pointer',
+                        }}
+                        onClick={handleViewCocktails}
+                        disabled={isLoading || isDisabled}
+                    >
+                        <img
+                            src={viewcocktails}
+                            alt="View Cocktails"
+                            style={{
+                                width: '200px',
+                                height: '100px',
+                                cursor: 'pointer',
+                            }}
+                        />
+                    </button>
+                    {/* Условный рендеринг текста */}
+                    {(isLoading || isDisabled) && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: '280px', // Рядом с кнопкой
+                                left: '30px',
+                                color: 'white',
+                                fontSize: '16px',
+                                fontFamily: 'Halant, sans-serif',
+                                textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+                            }}
+                        >
+                            Updating cocktails...
+                        </div>
+                    )}
+                    <CocktailPopup
+                        cocktails={cocktails}
+                        details={selectedCocktailDetails}
+                        onClickCocktail={handleCocktailDetails} // Передаем обработчик для выбора коктейля
+                        onBackToCocktails={handleBackToCocktails}
+                        isOpen={isPopupOpen}
+                        onClose={handleClosePopup}
+                    />
+
+                </div>
+
+                {party && (
+                    <PartySettingsPopUp
+                        name={party.name}
+                        description={party.description || ""}
+                        date={party.date}
+                        preparationDate={party.preparationDate}
+                        photo={party.photo || ""}
+                        location={party.location || ""}
+                        liquors={party.liquors}
+                        lowAlcohol={party.lowAlcohol}
+                        midAlcohol={party.midAlcohol}
+                        highAlcohol={party.highAlcohol}
+                        rankLimit={party.rankLimit}
+                        show={showModal}
+                        onClose={() => setShowModal(false)}
+                        onSave={handleSave}
+                    />
+                )}
+            </div>
         </div>
     );
 

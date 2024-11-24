@@ -1,15 +1,17 @@
 ﻿import React, { useState, useEffect } from "react";
 import './LiquorRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
-import apricot_brandy from "../../../assets/Apricot brandy.jpg";
-import triple_sec from "../../../assets/triple-sec.jpg";
-import amaretto from "../../../assets/Amaretto.jpg";
-import coffee_liquor from "../../../assets/Coffee liqueur.jpg";
-import kahlua from "../../../assets/Kahlua.jpg";
+import apricot_brandy from "../../../assets/alcophotos/apricot brandy.svg";
+import triple_sec from "../../../assets/alcophotos/tripple sec.svg";
+import amaretto from "../../../assets/alcophotos/amaretto.svg";
+import coffee_liquor from "../../../assets/alcophotos/coffe lik.svg";
+import kahlua from "../../../assets/alcophotos/kahlua.svg";
 import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
 import {useAuth} from "../../../Context/useAuth.tsx";
 //import {SliderAlcoholPatch} from "../../../Models/Alcohol.tsx"; // Імпортуємо сервіс для збереження
 import { toast } from "react-toastify";
+import alcopopup from "../../../assets/alcopopup.svg";
+// import bg from "../../../assets/button_profile.svg";
 interface LiquorRatingPopUpProps {
     show: boolean;
     handleClose: () => void;
@@ -117,9 +119,20 @@ const LiquorRatingPopUp: React.FC<LiquorRatingPopUpProps> = ({ show, handleClose
 
     return (
         <>
-            <div className="liquor-modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
+            <div className="liquor-modal-backdrop-blur"  onClick={handleBackdropClick}/> {/* Заблюрений фон */}
             <div className="liquor-modal-container">
-                <div className="liquor-modal-content">
+                <div className="liquor-modal-content" style={{background: 'rgba(255, 255, 255, 0.3)',
+                    backdropFilter: 'blur(20px)',
+                    backgroundImage: `url(${alcopopup})`,
+                    backgroundSize: 'auto',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    border: '3px solid #50C5FF',
+                    display: 'flex', // Додаємо Flexbox для вертикального центрування
+                    flexDirection: 'column', // Текст і слайдери будуть вертикально
+                    alignItems: 'center', // Горизонтальне центрування
+                borderRadius: '16px'}}>
+                    <div className="liquor-title">Choose Liquors</div>
                     <SliderList sliders={sliderItems}/>
                     <button
                         className="liquor-btn-save"

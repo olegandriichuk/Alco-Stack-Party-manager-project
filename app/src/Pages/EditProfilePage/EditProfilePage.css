@@ -94,7 +94,8 @@ h1.card-title-editprofile {
     padding: 10px 15px; /* Отступы внутри поля для комфорта */
     font-size: 16px; /* Размер текста */
     box-sizing: border-box; /* Включаем внутренние отступы в расчет ширины */
-    width: 500px;
+    width: 480px;
+    margin: 0 auto; /* Центрирование */
 }
 .custom-input-editprofile:focus {
     border-color: #90A4AE; /* Оставляем обводку при фокусе */
@@ -175,3 +176,41 @@ h1.card-title-editprofile {
 .gender-select-option-editprofile:hover {
     color: #263238; /* Цвет текста при наведении */
 }
+
+.editprofile-save-btn {
+    position: absolute;
+    top: 1178px;
+    left: 225px;
+    width: 150px;
+    height: 40px;
+    margin: 20px auto 0;
+    display: block;
+    border-radius: 15px;
+    background-color: black;
+    color: white;
+    font-family: 'Halant', serif;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editprofile-logout-btn {
+    position: absolute;
+    top: 1177px;
+    left: 400px;
+    width: 150px;
+    height: 40px;
+    margin: 20px auto 0;
+    display: block;
+    border-radius: 15px;
+    background-color: black;
+    color: white;
+    font-family: 'Halant', serif;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+

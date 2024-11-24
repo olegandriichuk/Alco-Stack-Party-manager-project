@@ -1,4 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
+import timerBackground from "../../assets/timer.svg"; // Импортируем фон таймера
+import "./CountdownTimer.css";
 
 type CountdownTimerProps = {
     preparationDate: string; // The preparation date to count down to
@@ -32,7 +34,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
                     onTimerComplete("PREPARATION");
                 } else if (currentState === "PREPARATION") {
                     console.log("Switching to EXTRA_DAY state.");
-                    const nextTarget = new Date(targetDate.getTime() + 1 * 60 * 1000);// Extra Day (1 minute for demo)
+                    const nextTarget = new Date(targetDate.getTime() + 1 * 60 * 1000); // Extra Day (1 minute for demo)
                     setTargetDate(nextTarget);
                     setCurrentState("EXTRA_DAY");
                     onTimerComplete("EXTRA_DAY");
@@ -66,25 +68,20 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     }, [targetDate, currentState, onTimerComplete]);
 
     return (
-        <div
-            style={{
-                position: "absolute",
-                top: "10px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                padding: "10px",
-                borderRadius: "5px",
-                zIndex: 100,
-            }}
-        >
-            {timeLeft}
+        <div className="timer-container">
+            <img src={timerBackground} alt="Timer Background" className="timer-background"/>
+            <div className="timer-content">
+                {timeLeft.split(":").map((time, index) => (
+                    <div key={index} className="timer-segment">
+                        <span className={`timer-number timer-number-${index + 1}`}>{time}</span>
+
+                    </div>
+                ))}
+            </div>
         </div>
+
     );
 };
-
 
 
 export default CountdownTimer;

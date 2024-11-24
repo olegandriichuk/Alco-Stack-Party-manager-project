@@ -1,3 +1,71 @@
+.full-height-partypage {
+    min-height: 100vh;
+    /* Додаємо горизонтальне вирівнювання */
+}
+
+@font-face {
+    font-family: 'Halant';
+    src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
+}
+
+.main-text-partypage {
+    font-family: 'Halant', serif; /* Используем Halant */
+    color: #000000; /* Черный цвет текста */
+    font-size: 2rem; /* Размер текста */
+    text-align: center; /* Центрирование текста */
+
+}
+
+.party-id-container {
+
+
+    position: relative; /* Для гибкого позиционирования */
+    top: -0px; /* Поднимаем блок выше */
+}
+
+.party-id-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Расстояние между полем ввода и кнопкой */
+}
+
+.party-id-input {
+    width: 180px; /* Уменьшаем ширину поля ввода */
+    text-align: center; /* Центрируем текст */
+    font-family: 'Halant', serif; /* Шрифт Halant */
+    font-size: 14px; /* Уменьшаем размер текста */
+    border: 1px solid #ccc; /* Обводка поля */
+    border-radius: 15px; /* Более закругленные углы */
+    padding: 5px; /* Внутренние отступы */
+    height: 30px; /* Уменьшенная высота */
+}
+
+.party-id-button {
+    font-family: 'Halant', serif; /* Шрифт Halant */
+    font-size: 14px; /* Уменьшаем размер текста */
+    color: black; /* Черный текст */
+    background-color: #f7f7f7; /* Светлый фон кнопки */
+    border: 1px solid #ccc; /* Обводка кнопки */
+    border-radius: 15px; /* Более закругленные углы */
+    padding: 5px 10px; /* Внутренние отступы */
+    height: 30px; /* Уменьшенная высота */
+    cursor: pointer; /* Указываем, что элемент кликабельный */
+    transition: background-color 0.3s ease;
+}
+
+.party-id-button:hover {
+    background-color: #e6e6e6; /* Более темный фон при наведении */
+}
+
+.party-id-title {
+    font-family: 'Halant', serif; /* Шрифт Halant */
+    font-size: 16px; /* Уменьшаем размер текста */
+    font-weight: 600;
+    color: black; /* Черный текст */
+    margin-bottom: 10px; /* Уменьшаем отступ снизу */
+    text-align: center;
+}
+
 .Toastify {
     display: none;
 }
@@ -11,3 +79,78 @@
     right: 10px; /* Adjust the distance from the right edge of the page */
     z-index: 1000; /* Ensure the button is above other elements */
 }
+
+.party-icon-partypage {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: -2px;
+    left: -198px;
+    z-index: 1000;
+}
+
+.container-fluid-partypage {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Смещаем карточку к нижней границе */
+    min-height: 100vh;
+    background-position: center bottom;
+    background-attachment: fixed; /* Фиксируем фон */
+}
+
+.square-container-partypage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 1900px;
+    margin: 0 auto;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.btn-edit-partypage {
+    position: absolute;
+    top: 50px;
+    right: 31px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.btn-edit-partypage img {
+    width: 100px;
+    height: 100px;
+}
+
+.btn-delete-partypage {
+    position: absolute;
+    top: 640px;
+    right: 13px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.btn-delete-partypage img {
+    width: 110px;
+    height: 110px;
+}
+
+.btn-leave-partypage {
+    position: absolute;
+    top: 640px;
+    right: 13px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.btn-leave-partypage img {
+    width: 110px;
+    height: 110px;
+}
+

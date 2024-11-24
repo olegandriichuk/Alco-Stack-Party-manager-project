@@ -20,7 +20,7 @@ const AlcoVolumeSlider: React.FC<SliderProps> = ({
     };
 
     return (
-        <div className="slider-container">
+        <div className="select-slider-container">
             <div className="slider-header">
                 {/*<img src={imageSrc} alt="" className="slider-image" /> /!* Image element *!/*/}
                 <span className="slider-label">{label}</span>

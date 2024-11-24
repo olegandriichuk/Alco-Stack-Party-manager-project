@@ -3,14 +3,14 @@
     /* Додаємо горизонтальне вирівнювання */
 }
 
-.party-icon-welcome {
+/*.party-icon-welcome {
     width: 80px;
     height: 80px;
     position: absolute;
-    top: -2px;
+    !*top: -2px;*!
     left: -198px;
     z-index: 1000;
-}
+}*/
 
 .container-fluid-welcome {
     display: flex;
@@ -54,8 +54,8 @@
     width: 80px;
     height: 80px;
     position: absolute;
-    top: -212px;
-    left: 2px;
+    top: -220px;
+    left: 5px;
     z-index: 1000;
 }
 
@@ -84,10 +84,10 @@
 }
 
 .home-icon-welcome {
-    width: 40px;
-    height: 40px;
+    width: 120px;
+    height: 120px;
     position: absolute;
-    top: -200px;
+    top: -240px;
     left: 870px;
 
 }

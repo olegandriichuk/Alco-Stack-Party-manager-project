@@ -7,7 +7,7 @@
 
 /* Стилі для заголовку "Your Parties" */
 .party-header {
-    background-image: url('../../assets/party_buttons.svg');
+    
     color: #000000;
     font-family: 'Halant Medium';
     padding: 11px;
@@ -20,6 +20,7 @@
 
 /* Скрол-контейнер для списку партій */
 .scroll-container {
+    width: 100%;
     max-height: 190px; /* Висота контейнера з можливістю скролу */
     overflow-y: auto; /* Вмикаємо вертикальний скролінг */
     /*margin-bottom: 5px;*/

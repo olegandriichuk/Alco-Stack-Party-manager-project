@@ -1,22 +1,32 @@
 ﻿import React from 'react';
+import popBack from '../../assets/signIn_card.svg';
+import './DescriptionPopUp.css';
 
 type DescriptionPopUpProps = {
+    name: string;
     description: string;
+    photo?: string;
+    date: string;
+    location: string;
     liquors: boolean;
     lowAlcohol: boolean;
     midAlcohol: boolean;
     highAlcohol: boolean;
-    typesOfAlcohol: number;
+    rankLimit: number;
     onClose: () => void; // Function to handle closing the pop-up
 };
 
 const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
+                                                               name,
                                                                description,
+                                                               photo,
+                                                               date,
+                                                               location,
                                                                liquors,
                                                                lowAlcohol,
                                                                midAlcohol,
                                                                highAlcohol,
-                                                               typesOfAlcohol,
+                                                               rankLimit,
                                                                onClose,
                                                            }) => {
     // Dynamically create categories based on boolean values
@@ -28,40 +38,57 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
 
     return (
         <div
-            style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000,
-            }}
+            className="description-popup-container"
         >
             <div
                 style={{
-                    background: 'rgba(255, 255, 255, 0.9)',
+                    backgroundImage: `url(${popBack})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
                     padding: '20px',
                     borderRadius: '10px',
-                    maxWidth: '400px',
+                    maxWidth: '500px',
                     textAlign: 'center',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+
                 }}
             >
-                <h3>Party Description</h3>
+                {/* Заголовок */}
+                <h2 className="description-title-card">Party Description</h2>
+
+                {/* Основной контент */}
+                <h3>{name}</h3>
                 <p>{description || 'No description provided.'}</p>
+                {photo && (
+                    <img
+                        src={photo}
+                        alt="Party"
+                        style={{
+                            width: '100%',
+                            borderRadius: '10px',
+                            marginBottom: '15px',
+                        }}
+                    />
+                )}
                 <p>
-                    <strong>Categories:</strong> {categories.length > 0 ? categories.join(', ') : 'None'}{' '}
-                    ({categories.length})
+                    <strong>Date:</strong> {date}
                 </p>
                 <p>
-                    <strong>Number of Alcohol Types:</strong> {typesOfAlcohol}
+                    <strong>Location:</strong> {location}
                 </p>
-                <button className="btn btn-dark mt-3" onClick={onClose}>
-                    Close
+                <p>
+                    <strong>Categories:</strong>{' '}
+                    {categories.length > 0 ? categories.join(', ') : 'None'} ({categories.length})
+                </p>
+                <p>
+                    <strong>Rank Limit:</strong> {rankLimit}
+                </p>
+
+                {/* Кнопка Confirm */}
+                <button
+                    className="descrioption-confirm  "
+                    onClick={onClose}
+                >
+                    Back
                 </button>
             </div>
         </div>

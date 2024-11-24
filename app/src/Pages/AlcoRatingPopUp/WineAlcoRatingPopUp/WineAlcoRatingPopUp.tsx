@@ -1,15 +1,16 @@
 ﻿import React, { useState, useEffect } from "react";
 import './WineAlcoRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
-import martini from "../../../assets/martini.jpg";
-import sweet_vermouth from "../../../assets/sweet_vermouth.jpg";
-import champagne from "../../../assets/champagne.jpg";
-import dubonnet from "../../../assets/dubonnet.jpg";
-import prosecco from "../../../assets/dubonnet.jpg";
+import martini from "../../../assets/alcophotos/dry verm.svg";
+import sweet_vermouth from "../../../assets/alcophotos/sweet verm.svg";
+import champagne from "../../../assets/alcophotos/champ.svg";
+import dubonnet from "../../../assets/alcophotos/rouge.svg";
+import prosecco from "../../../assets/alcophotos/prosecco.svg";
 import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
 import {useAuth} from "../../../Context/useAuth.tsx";
 //import {SliderAlcoholPatch} from "../../../Models/Alcohol.tsx"; // Імпортуємо сервіс для збереження
 import { toast } from "react-toastify";
+import alcopopup from "../../../assets/alcopopup.svg";
 interface WineRatingPopUpProps {
     show: boolean;
     handleClose: () => void;
@@ -114,11 +115,25 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
         <>
             <div className="midalco-modal-backdrop-blur" onClick={handleBackdropClick}> {/* Фон, що закриває вікно */}
                 <div className="midalco-modal-container">
-                    <div className="midalco-modal-content">
-                        <SliderList sliders={sliderItems} />
+                    <div className="midalco-modal-content" style={{
+                        background: 'rgba(255, 255, 255, 0.3)',
+                        backdropFilter: 'blur(20px)',
+                        backgroundImage: `url(${alcopopup})`,
+                        backgroundSize: 'auto',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        border: '3px solid #50C5FF',
+                        display: 'flex', // Додаємо Flexbox для вертикального центрування
+                        flexDirection: 'column', // Текст і слайдери будуть вертикально
+                        alignItems: 'center', // Горизонтальне центрування
+                        borderRadius: '16px'
+                    }}>
+                        <div className="mid-alco-title">Choose Wines</div>
+                        <SliderList sliders={sliderItems}/>
 
                         {/* Кнопка Save з великими розмірами, сірого кольору, заокруглена */}
-                        <button className="midalco-btn-save" onClick={saveRatings} disabled={isSaving}>{isSaving ? "Saving..." : "Save"}</button>
+                        <button className="midalco-btn-save" onClick={saveRatings}
+                                disabled={isSaving}>{isSaving ? "Saving..." : "Save"}</button>
                     </div>
                 </div>
             </div>

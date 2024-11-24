@@ -1,33 +1,4 @@
-﻿/*.background-video-home {*/
-/*    object-fit: cover ;*/
-/*    z-index: -1;*/
-/*    box-sizing: border-box;*/
-/*    height: 100vh;*/
-/*    position: fixed;*/
-/*    top: 0;*/
-/*    width: 45vw;*/
-/*    left: 0;*/
-/*}*/
-
-/*.background-video_r-home {*/
-/*    object-fit: cover;*/
-/*    z-index: -1;*/
-/*    box-sizing: border-box;*/
-/*    height: 100vh;*/
-/*    position: fixed;*/
-/*    top: 0;*/
-/*    width: 45vw;*/
-/*    right: 0;*/
-/*}*/
-
-
-/*@media (max-width: 768px) {*/
-/*    .background-video-home, .background-video_r-home {*/
-/*        position: static;*/
-/*        width: 100%;*/
-/*        height: 0;*/
-/*    }*/
-/*}*/
+﻿
 
 .full-height-home {
     min-height: 120vh;
@@ -39,12 +10,11 @@
     width: 100%;
     height: 100%;
     max-width: 1000px;
-    /*max-height: 1;*/
     margin: 0 auto;
     border-radius: 10px;
     z-index: 1;
+    padding-top: 50px; /* Уменьшаем расстояние сверху */
 }
-
 .custom-heading-home {
     text-align: center;
     font-family: 'Halant', serif;
@@ -54,9 +24,10 @@
 .centered-container-home {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Переносим вверх */
     align-items: center;
     width: 70%;
+
 }
 
 @font-face {
@@ -69,8 +40,33 @@
     src: url('../../assets/fonts/halant/Halant-SemiBold.ttf') format('truetype');
 }
 
+.logo-container {
+    position: relative;
+    top: -20px; /* Сдвигаем вверх */
+    left: 20px; /* Сдвигаем вправо */
+}
+
 .logo-text {
+    position: relative;
+    top: -10px; /* Поднимаем текст */
+    left: -90px; /* Сдвигаем текст ближе к логотипу */
     font-family: 'JejuHallasan', sans-serif;
+    color: black;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.info-logo {
+    position: absolute;
+    top: -130px;
+    left: 860px;
+    width: 120px;
+    height: 120px;
+}
+
+.home-about{
+    font-family: 'Halant', sans-serif;
+    font-size: 28px;
 }
 
 .custom-heading-home {
@@ -84,9 +80,35 @@
     }
 }
 
+.container-fluid-home {
+    display: flex;
+    justify-content: flex-start; /* Поднимаем содержимое наверх */
+    align-items: center; /* Центрируем по горизонтали */
+    min-height: 100vh;
+    background-position: center bottom;
+}
+.party-icon-home {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: -115px;
+    left: 0px;
+    z-index: 1000;
+}
 
+.custom-heading-home {
+    font-family: 'Halant', serif;
+    font-size: 36px; /* Размер текста */
+    text-align: center;
+    color: black;
+    margin: 0;
+}
 
-
+.centered-container-home img {
+    width: 40px; /* Размер иконки */
+    height: 40px;
+    margin-left: 10px; /* Отступ между текстом и иконкой */
+}
 
 /* button create */
 

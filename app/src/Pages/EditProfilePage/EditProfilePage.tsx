@@ -8,16 +8,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Address, UserProfile } from "../../Models/User";
-import { UpdateProfileAPI } from "../../Services/UserService";
+import { UpdateProfileAPI, DeleteAccountAPI } from "../../Services/UserService";
 import Disco from '../../assets/disco.svg';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 //import { DatePicker } from "rsuite";
 //import Button from 'react-bootstrap/Button';
 import backgroundImage from "../../assets/backgroundFinal.svg";
 import './EditProfilePage.css';
 import DatePickerComponent from '../../components/DateTimePicker/DateTimePicker.tsx';
-
+import backicon from '../../assets/backicon.svg'
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -108,18 +106,37 @@ const EditProfilePage: React.FC = () => {
         setDateOfBirth(newDate);
     };
 
+    const handleDeleteAccount = async (username: string) => {
+        if (!token) {
+            toast.error("You must be logged in to delete your account");
+            return;
+        }
+
+        const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        if (!confirmDelete) return;
+
+        try {
+            await DeleteAccountAPI(username, token); // Call the API with username and token
+            toast.success("Account deleted successfully.");
+            logout(); // Log out the user after account deletion
+            navigate("/register"); // Redirect to the registration page
+        } catch (error) {
+            console.error("Failed to delete account", error);
+            toast.error("Failed to delete account. Please try again.");
+        }
+    };
 
     //const dateOfBirth = watch('dateOfBirth');
     //const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
 
-    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof UserProfile) => (
+    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof UserProfile,  isRequired: boolean = false) => (
         <div className="mb-3" key={id}>
-            <label htmlFor={id} className="input_titles-editprofile">{label}</label>
+            <label htmlFor={id} className="input_titles-editprofile">{label}{isRequired && <span style={{ color: "red", marginLeft: "5px" }}>*</span>}</label>
             <input
                 type={type}
                 id={id}
                 autoComplete={id}
-                className={`custom-input-editprofile form-control ${errors[registerName] ? 'is-invalid-editprofile' : ''}`}
+                className={`custom-input-editprofile  ${errors[registerName] ? 'is-invalid-editprofile' : ''}`}
                 placeholder={placeholder}
                 {...register(registerName)}
             />
@@ -143,6 +160,7 @@ const EditProfilePage: React.FC = () => {
         </div>
     );
 
+
     return (
         <div className="container-fluid-editprofile d-flex p-0 full-height-editprofile"
              style={{
@@ -162,7 +180,15 @@ const EditProfilePage: React.FC = () => {
                         />
                     </div>
                     <Link to="/profile" className="p-2" aria-label="Go to Profile">
-                        <FontAwesomeIcon icon={faUser} size="2x" color="black"/>
+                        <img
+                            src={backicon}
+                            alt="Go to Profile"
+                            style={{
+                                width: "120px", // Укажите подходящий размер для иконки
+                                height: "40px",
+                                cursor: "pointer", // Указывает, что это кликабельный элемент
+                            }}
+                        />
                     </Link>
                 </div>
                 <div className="card-editprofile">
@@ -193,8 +219,8 @@ const EditProfilePage: React.FC = () => {
                         {/*</div>*/}
                         <h1 className="card-title-editprofile mb-4 text-center">Edit Profile</h1>
                         <form onSubmit={handleSubmit(handleUpdate)}>
-                            {renderInput('Email', 'email', 'email', 'Email', 'email')}
-                            {renderInput('Username', 'userName', 'text', 'Username', 'userName')}
+                            {renderInput('Email', 'email', 'email', 'Email', 'email', true)}
+                            {renderInput('Username', 'userName', 'text', 'Username', 'userName', true)}
                             {renderInput('First Name', 'firstName', 'text', 'First Name', 'firstName')}
                             {renderInput('Last Name', 'lastName', 'text', 'Last Name', 'lastName')}
                             {renderInput('Phone Number', 'phoneNumber', 'text', 'Phone Number', 'phoneNumber')}
@@ -236,9 +262,42 @@ const EditProfilePage: React.FC = () => {
                             {renderAddressInput("Country", "address.country", "Enter your country", "country")}
                             {renderAddressInput("Zip Code", "address.postalCode", "Enter your zip code", "postalCode")}
                             <div className="d-flex justify-content-between">
-                                <button type="submit" className="btn btn-primary">Save Changes</button>
-                                <button type="button" className="btn btn-secondary" onClick={logout}>Logout</button>
+                                <button
+                                    type="submit"
+                                    className="editprofile-save-btn"
+
+                                >
+                                    Save Changes
+                                </button>
+                                <button
+
+                                    className="editprofile-logout-btn"
+
+                                    onClick={logout}
+                                >
+                                    Logout
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    style={{
+                                        width: "150px",
+                                        height: "40px",
+                                        borderRadius: "15px",
+                                        backgroundColor: "red",
+                                        color: "white",
+                                        fontFamily: "'Halant', serif",
+                                        fontSize: 15,
+                                        border: "none",
+                                        cursor: "pointer",
+                                        transition: "background-color 0.3s ease",
+                                    }}
+                                    onClick={() => handleDeleteAccount(user!.userName)}
+                                >
+                                    Delete Account
+                                </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -247,4 +306,4 @@ const EditProfilePage: React.FC = () => {
     );
 };
 
-            export default EditProfilePage;
+export default EditProfilePage;

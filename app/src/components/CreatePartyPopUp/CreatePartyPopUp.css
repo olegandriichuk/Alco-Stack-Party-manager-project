@@ -32,3 +32,9 @@
     border-radius: 10px; /* Додає закруглені кути, якщо необхідно */
     backdrop-filter: blur(20px);
 }
+.modal-title-bold-create {
+    font-weight: bold; /* Робить текст жирним */
+    font-size: 1.5rem; /* За потреби можна збільшити розмір */
+    margin-bottom: 8px;
+}
+

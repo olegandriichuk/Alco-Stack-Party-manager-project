@@ -1,0 +1,92 @@
+@font-face {
+    font-family: "ShareTech";
+    src: url("../../assets/fonts/Share_Tech/ShareTech-Regular.ttf") format("opentype");
+}
+
+.timer-container {
+    position: absolute;
+    top: 80px;
+    left: 80px;
+    width: 400px; /* Ширина таймера */
+    height: 150px; /* Высота таймера */
+    margin: 50px auto; /* Центрирование */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-background {
+    position: absolute;
+    width: 100%; /* Растягиваем фон */
+    height: 100%; /* Растягиваем фон */
+    z-index: 1; /* Под числом */
+}
+
+.timer-content {
+    position: absolute;
+    left: 0;
+    display: flex;
+    justify-content: space-between; /* Равномерное распределение */
+    align-items: center;
+    width: 90%; /* Уменьшение ширины контента */
+    height: 100%;
+    z-index: 2; /* Над фоном */
+}
+
+.timer-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px; /* Фиксированная ширина сегмента */
+    height: 100%; /* Растягиваем по высоте */
+    text-align: center;
+}
+
+.timer-number {
+    font-family: "ShareTech", sans-serif;
+    font-size: 2.5rem;
+    color: white;
+    line-height: 1; /* Убираем лишние отступы */
+    margin: 0; /* Убираем внешний отступ */
+}
+
+.timer-number-1 {
+    position: absolute;
+    top: 25px; /* Смещение вниз */
+    left: 12%; /* Смещение влево */
+    transform: translateX(-50%);
+    font-family: "ShareTech", sans-serif;
+    font-size: 4rem;
+    color: #F2F2F2;
+}
+
+.timer-number-2 {
+    position: absolute;
+    top: 25px; /* Смещение ниже */
+    left: 41%; /* Центрируем */
+    transform: translateX(-50%);
+    font-family: "ShareTech", sans-serif;
+    font-size: 4rem;
+    color: #F2F2F2;
+}
+
+.timer-number-3 {
+    position: absolute;
+    top: 25px; /* Смещение ниже */
+    left: 69%; /* Смещение вправо */
+    transform: translateX(-50%);
+    font-family: "ShareTech", sans-serif;
+    font-size: 4rem;
+    color: #F2F2F2;
+}
+
+.timer-number-4 {
+    position: absolute;
+    top: 25px; /* Смещение ниже */
+    left: 97%; /* Смещение вправо */
+    transform: translateX(-50%);
+    font-family: "ShareTech", sans-serif;
+    font-size: 4rem;
+    color: #F2F2F2;
+}

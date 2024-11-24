@@ -99,9 +99,12 @@ const RegisterPage: React.FC = () => {
         setDateOfBirth(newDate);
     };
 
-    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof RegisterFormInputs, error?: string) => (
+    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof RegisterFormInputs, error?: string,  isRequired: boolean = false) => (
         <div className="mb-3">
-            <label htmlFor={id} className="input_titles-register">{label}</label>
+            <label htmlFor={id} className="input_titles-register">
+                {label}
+                {isRequired && <span style={{ color: "red", marginLeft: "5px" }}>*</span>}
+            </label>
             <input
                 type={type}
                 id={id}
@@ -153,9 +156,9 @@ const RegisterPage: React.FC = () => {
                     <div className="card-body p-5" style={{marginTop: '10px'}}>
                         <h1 className="card-title-register mb-4 text-center">Create your account</h1>
                         <form onSubmit={handleSubmit(handleRegister)}>
-                            {renderInput('Email', 'email', 'email', 'Email', 'email', errors.email?.message)}
-                            {renderInput('Username', 'userName', 'text', 'Username', 'userName', errors.userName?.message)}
-                            {renderInput('Password', 'password', 'password', '••••••••', 'password', errors.password?.message)}
+                            {renderInput('Email', 'email', 'email', 'Email', 'email', errors.email?.message, true)}
+                            {renderInput('Username', 'userName', 'text', 'Username', 'userName', errors.userName?.message, true)}
+                            {renderInput('Password', 'password', 'password', '••••••••', 'password', errors.password?.message, true)}
                             {renderInput('First Name', 'firstName', 'text', 'First Name', 'firstName', errors.firstName?.message)}
                             {renderInput('Last Name', 'lastName', 'text', 'Last Name', 'lastName', errors.lastName?.message)}
                             {renderInput('Phone', 'phone', 'text', 'Phone', 'phoneNumber', errors.phoneNumber?.message)}

@@ -20,12 +20,15 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
         backgroundImage: `url(${party_button})`  , // Використовуємо url() для фону
         backgroundSize: 'cover', // Забезпечує повне покриття фону
         backgroundRepeat: 'no-repeat', // Запобігає повторенню фону
-        backgroundPosition: 'center', // Центрує фон
+        backgroundPosition: 'center',
+        border: '2px solid #50C5FF',
         borderTopLeftRadius: '10px',
         borderTopRightRadius: '10px',
         borderBottomRightRadius: '10px',
         borderBottomLeftRadius: '10px',
+        width: '600px',
         padding: '10px'
+
     };
 
     // Using useNavigate to programmatically navigate

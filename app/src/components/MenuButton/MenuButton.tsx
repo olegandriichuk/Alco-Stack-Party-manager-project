@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Link } from "react-router-dom";
-import bg from "../../assets/button_profile.svg";
+import bg from "../../assets/buttonmenu.svg";
 
 
 interface MenuButtonProps {
@@ -26,7 +26,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, link, onClick, clas
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         color: "black",
-        border: "none",
+        border: '3px solid #50C5FF',
         borderRadius: 16,
         fontSize: isMobile ? "13px" : "16px",
         width: "170px",
@@ -36,13 +36,13 @@ const MenuButton: React.FC<MenuButtonProps> = ({ text, icon, link, onClick, clas
     return link ? (
         <Link to={link} style={{ textDecoration: 'none' }}>
             <button className={`menu-button ${className}`} style={menuButtonStyle}>
-                <FontAwesomeIcon icon={icon} size="2x" className="mb-2" />
+                <FontAwesomeIcon icon={icon} size="2x" className="mb-2"/> <br></br>
                 <span className="menu-button-text">{text}</span>
             </button>
         </Link>
     ) : (
         <button className={`menu-button ${className}`} style={menuButtonStyle} onClick={onClick}>
-            <FontAwesomeIcon icon={icon} size="2x" className="mb-2" />
+            <FontAwesomeIcon icon={icon} size="2x" className="mb-2"/><br></br>
             <span className="menu-button-text">{text}</span>
         </button>
     );

@@ -3,6 +3,7 @@ import { AlcoholVolume } from "../../Models/Alcohol.tsx";
 import { GetPartyAlcoholVolumeAPI } from "../../Services/PartyService.tsx";
 import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
+import "./ViewAmountPopUp.css"; // Импортируем CSS
 
 interface ViewAmountPopUpProps {
     show: boolean;
@@ -42,26 +43,32 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
     if (!show) return null;
 
     return (
-        <div className="modal-backdrop-blur" onClick={handleClose}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-content">
-                    <h3>View Total Alcohol Volumes</h3>
+        <div className="view-amount-popup-backdrop" onClick={handleClose}>
+            <div
+                className="view-amount-popup-container"
+                onClick={(e) => e.stopPropagation()} // Останавливаем всплытие клика
+            >
+                <div className="view-amount-popup-content">
+                    <h3 className="view-amount-popup-title">View Total Alcohol Volumes</h3>
                     {loading ? (
-                        <p>Loading...</p>
+                        <p className="view-amount-popup-loading">Loading...</p>
                     ) : (
-                        <ul>
+                        <ul className="view-amount-popup-list">
                             {alcoholVolumes.length > 0 ? (
                                 alcoholVolumes.map((alcohol, index) => (
-                                    <li key={index}>
-                                        <strong>{alcohol.name}</strong>: {alcohol.volume || 0}
+                                    <li key={index} className="view-amount-popup-list-item">
+                                        <strong>{alcohol.name}</strong>: {alcohol.volume || 0} l
                                     </li>
                                 ))
                             ) : (
-                                <p>No alcohol data available.</p>
+                                <p className="view-amount-popup-loading">No alcohol data available.</p>
                             )}
                         </ul>
                     )}
-                    <button className="btn btn-secondary mt-3" onClick={handleClose}>
+                    <button
+                        className="view-amount-popup-close-btn"
+                        onClick={handleClose}
+                    >
                         Close
                     </button>
                 </div>

@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    /*background-color: #333;*/
 }
 @font-face {
     font-family: 'HalantSemiBold';
@@ -18,23 +18,24 @@
 }
 /* Контейнер для завантаження фото */
 .photo-upload-container {
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    padding: 20px;
+    border-radius: 50%; /* Робить контейнер круглим */
+    /*padding: 20px;*/
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 150px;
-    max-height: 150px;
+    width: 110px; /* Встановлюємо ширину */
+    height: 110px; /* Встановлюємо висоту, рівну ширині */
     margin: 0 auto;
-    background-color: #f5f5f5;
+    background-color: #f0f0f0; /* Задаємо колір фону, за бажанням */
+    overflow: hidden; /* Для коректного обрізання вмісту за межами кола */
 }
+
 
 /* Стиль для завантаженого зображення */
 .photo-upload-container img {
-    max-width: 150px;
-    max-height: 150px;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
 }
 
@@ -71,7 +72,7 @@
     width: 300px;
     height: 150px;
     margin: 0 auto;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
 }
 
 /* Стиль для завантаженого фонової картинки */
@@ -104,23 +105,32 @@
 }
 /* Стилі для фото користувача */
 .profile-photo-button {
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
     background: none;
-    border: none;
+    /*position: relative;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    border: transparent;
     padding: 0;
     cursor: pointer;
 }
 
 .profile-photo {
-    border: 1px solid black;
+
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
 }
 
 /* Стиль для назви профілю */
 .profile-name {
     border-radius: 10px;
-    background: linear-gradient(90deg, #5C5C5C 16%, #353535 82%);
+    background: transparent;
+    color: black;
+    /*background: linear-gradient(90deg, #5C5C5C 16%, #353535 82%);*/
     padding: 5px 10px;
     font-family: 'HalantSemiBold';
 }
@@ -128,31 +138,36 @@
 /* Стиль для кнопки редагування профілю */
 
 .edit-profile-btn {
-    background: #D8DCE3;
-    border: 1px solid white;
+    background-image: url('app/src/assets/editprofilebutton.svg'); /* Add the image */
+    background-size: cover; /* Make the image cover the button */
+    background-repeat: no-repeat; /* Prevent tiling */
+    background-position: center; /* Center the image */
+    border: transparent;
+    color: black;
     font-family: 'HalantSemiBold';
 }
 .edit-profile-btn:hover{
-    background: #D8DCE3;
-    border: none;
+    background-image: url('app/src/assets/editprofilebutton.svg'); /* Add the image */
+    border: transparent;
+    color: black;
 }
-@media (max-width: 768px) {
-    .edit-profile-btn {
-        width: 160px; /* Встановлюємо ширину кнопки */
-        height: 29px; /* Встановлюємо висоту кнопки */
-        font-size: 20px; /* Зменшуємо розмір шрифту для телефону */
-        border-radius: 8px; /* Заокруглені краї */
-        background: #D8DCE3; /* Світлий фон */
-        text-align: center; /* Вирівнюємо текст по центру */
-        padding: 0; /* Встановлюємо padding на 0 для точного розміру */
-        /*margin-top: -40px;*/
-        /*top: 30px;*/
-    }
-}
+/*@media (max-width: 768px) {*/
+/*    .edit-profile-btn {*/
+/*        width: 160px; !* Встановлюємо ширину кнопки *!*/
+/*        height: 29px; !* Встановлюємо висоту кнопки *!*/
+/*        font-size: 20px; !* Зменшуємо розмір шрифту для телефону *!*/
+/*        border-radius: 8px; !* Заокруглені краї *!*/
+/*        background: #D8DCE3; !* Світлий фон *!*/
+/*        text-align: center; !* Вирівнюємо текст по центру *!*/
+/*        padding: 0; !* Встановлюємо padding на 0 для точного розміру *!*/
+/*        !*margin-top: -40px;*!*/
+/*        !*top: 30px;*!*/
+/*    }*/
+/*}*/
 /* Стиль для списку деталей профілю */
 .profile-details-list {
     margin-top: 10px;
-    color: #FFFFFF;
+    color: #000000;
     padding: 0;
     font-family: 'InterRegular';
 }
@@ -165,8 +180,15 @@
 /* Стиль для елементів тексту всередині списку */
 .profile-details-list span {
     border-radius: 10px;
-    background: linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%);
+    /*background: linear-gradient(90deg, rgba(92, 92, 92, 0.8) 16%, rgba(53, 53, 53, 0.8) 82%);*/
     display: inline;
     padding: 5px 10px;
-    color: #FFFFFF;
+    color: #000000;
 }
+
+.blurred-content {
+    filter: blur(8px); /* Створює ефект розмиття */
+    pointer-events: none; /* Забороняє взаємодію з розмитим контентом */
+    transition: filter 0.3s ease-in-out; /* Додає плавність ефекту */
+}
+

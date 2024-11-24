@@ -12,6 +12,7 @@ import Wine from '../../assets/Wine.png';
 import Liquor from '../../assets/Liquor.png';
 import Base_Liquor from '../../assets/Base_liquor.png'
 import React, { useState } from "react";
+// homeIcon from '../../assets/Home.svg'; --------------------------------ЭТО ИСПОЛЬЗОВАТЬ
 import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp';// Імпорт модального вікна
 import WineAlcoRatingPopUp from '../AlcoRatingPopUp/WineAlcoRatingPopUp/WineAlcoRatingPopUp';
 import LiquorRatingPopUP from '../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP';
@@ -20,10 +21,10 @@ import StrongAlcoRatingPopUp from '../AlcoRatingPopUp/StrongAlcoRatingPopUp/Stro
 //import HalantSemiBold from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 // import video from '../../assets/viddd2.mp4';
 import './ProfilePage.css';
+import backgroundImage from "../../assets/backgroundFinal.svg";
 
 
 const ProfilePage: React.FC = () => {
-    const isMobile = window.innerWidth <= 768;
     const { user } = useAuth();
 
   //  const [showModal, setShowModal] = useState(false);
@@ -65,37 +66,45 @@ const ProfilePage: React.FC = () => {
     ];
 
     return (
-        <div className="container-fluid d-flex p-0 full-height-profile">
+        <div className="container-fluid d-flex p-0 full-height-profile"
+             style={{
+                 backgroundImage: `url(${backgroundImage})`,
+                 backgroundSize: 'cover',
+
+             }}>
             {/*<div className="video-left flex-grow-1">*/}
             {/*    <video className="background-video-profile left" autoPlay loop muted>*/}
             {/*        <source src={video} type="video/mp4"/>*/}
             {/*        Your browser does not support the video tag.*/}
             {/*    </video>*/}
             {/*</div>*/}
-
+            <div className="video-left flex-grow-1"></div>
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-profile flex-grow-7"
-                style={{
-                    backgroundColor: 'white',
-                    // backgroundImage: `url(${backgroundImage1})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: isMobile ? '-3px 10px' : '15px 6px',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                    minHeight: isMobile ? '100vh' : '100vh',
-                }}>
+                className="container-fluid-profile p-0 d-flex flex-column align-items-center custom-background square-container-profile flex-grow-7">
 
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div>
                         <img
                             src={Disco}
                             alt="Party Icon"
-                            width="80"
-                            height="80"
+                            className="party-icon-profile"
                         />
                     </div>
-                    <Link to={"/home"} className="p-2" aria-label="Go to Home Page">
-                        <FontAwesomeIcon icon={faHome} size="3x" color="black"/>
+                    <Link
+                        to={"/home"}
+                        className="p-2"
+                        aria-label="Go to Home Page"
+                        style={{
+                            position: "absolute", // Обов'язковий для `top` і `right`
+                            top: "-2px",
+                            right: "2px",
+                            textDecoration: "none", // Забираємо підкреслення
+                            color: "black", // Чорний колір тексту
+                            fontSize: "1.5rem", // Збільшуємо розмір тексту
+                            fontWeight: "bold", // Робимо текст жирним (за бажанням)
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faHome} size="1x" color="black" /> Home
                     </Link>
                 </div>
 
@@ -110,7 +119,7 @@ const ProfilePage: React.FC = () => {
                     formBackgroundSrc={user?.formBackgroundSrc || ""}
                 />
                 <h3 className="profile-alco-header">
-                    Your alcohol preferences🍾
+                     Сhoose Your Alcohol Preferences🍾
                 </h3>
 
 

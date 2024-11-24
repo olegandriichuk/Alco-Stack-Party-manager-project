@@ -9,13 +9,27 @@
 
 .choose-alco-button {
     margin-top: 1px;
-    width: 80%; /* Кнопка займає всю ширину батьківського контейнера */
+    height: 90px;
+    width: 160px;
+    background-image: url("/app/src/assets/alcobuttonpopupBack.svg");
+    /*width: 80%; !* Кнопка займає всю ширину батьківського контейнера *!*/
     max-width: none; /* Відміна обмеження на максимальну ширину */
     text-align: center;
     /*padding: 10px; !* Збільшення відступів для кращого вигляду *!*/
     font-size: 20px; /* Збільшення розміру тексту */
 }
+.alco-button-list {
+    display: flex;
+    /*flex-wrap: wrap;*/
+    justify-content: center; /* Центрування кнопок */
+    gap: 40px; /* Відстань між кнопками */
+    /*padding: 20px 0; !* Відступи для верхньої і нижньої частини *!*/
+}
 
+.alco-button-wrapper {
+    flex: 0 1 auto; /* Дозволяє кнопкам мати фіксовані розміри */
+    text-align: center;
+}
 .choose-alco-button img {
     margin-right: 0px; /* Відступ між іконкою і текстом */
 }

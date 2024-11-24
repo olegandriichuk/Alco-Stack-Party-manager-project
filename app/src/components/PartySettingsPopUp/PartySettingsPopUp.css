@@ -1,0 +1,45 @@
+/* PartySettingsPopUp.css */
+.custom-input {
+    width: 100%; /* Уменьшите ширину полей */
+    max-width: 300px; /* Установите максимальную ширину */
+    border-radius: 10px; /* Округлите углы */
+    padding: 8px 12px; /* Отступы внутри поля */
+    font-size: 14px; /* Уменьшите размер шрифта */
+    border: 1px solid #ced4da;
+    box-sizing: border-box; /* Учитывайте отступы при расчете размеров */
+}
+
+.custom-input:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Эффект фокуса */
+}
+
+.custom-input-datepicker {
+    width: 100%;
+    max-width: 300px; /* Уменьшите ширину поля для выбора даты */
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    box-sizing: border-box;
+}
+
+.custom-input-datepicker:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.party-settings-modal .rs-modal-content {
+    max-width: 400px; /* Установите ширину модального окна */
+    border-radius: 15px; /* Закруглите углы модального окна */
+    padding: 20px;
+}
+
+.party-settings-modal .modal-title-bold {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+

@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Card } from 'react-bootstrap';
+import './CocktailCard.css';
 
 export type CocktailCardProps = {
     cocktail: {
@@ -12,15 +12,23 @@ export type CocktailCardProps = {
 
 const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, onClick }) => {
     return (
-        <Card
-            style={{ width: '100px', margin: '10px', cursor: 'pointer' }}
-            onClick={() => onClick(cocktail.id)} // Trigger handler on click
-        >
-            <Card.Img variant="top" src={cocktail.photo} alt={cocktail.name} />
-            <Card.Body>
-                <Card.Title>{cocktail.name}</Card.Title>
-            </Card.Body>
-        </Card>
+        <div className="cocktail-card" onClick={() => onClick(cocktail.id)}>
+            <img
+                src={cocktail.photo}
+                alt={cocktail.name}
+                className="cocktail-card-photo"
+            />
+            <span className="cocktail-card-title">{cocktail.name}</span>
+            <button
+                className="cocktail-card-button"
+                onClick={(e) => {
+                    e.stopPropagation(); // Предотвращаем срабатывание основного клика
+                    alert(`Ingredients for ${cocktail.name}`);
+                }}
+            >
+                Ingredients ▼
+            </button>
+        </div>
     );
 };
 

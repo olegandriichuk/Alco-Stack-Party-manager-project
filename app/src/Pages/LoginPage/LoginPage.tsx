@@ -86,9 +86,6 @@ const LoginPage = () => {
                                     <div className="invalid-feedback-login">{errors.password.message}</div>
                                 )}
                             </div>
-                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                <a href="#" className="forgot-link-login">Forgot password?</a>
-                            </div>
                             <button type="submit" className="confirm-button-login">Sign in</button>
                             <p className="text-center mt-3 text-dont-login">
                                 Don't have an account yet?{" "}

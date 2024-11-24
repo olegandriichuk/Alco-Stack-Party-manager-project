@@ -2,25 +2,26 @@
 import './StrongAlcoRatingPopUp.css';
 //import Slider from "../../../components/Slider/Slider.tsx";
 import SliderList from "../../../components/SliderList/SliderList";
-import light_rum from "../../../assets/Light rum.jpg";
-import bourbon from "../../../assets/Bourbon.jpg";
-import vodka from "../../../assets/Vodka.jpg";
-import gin from "../../../assets/Gin.jpg";
-import blended_whiskey from "../../../assets/Blended whiskey.jpg";
-import tequila from "../../../assets/Tequila.jpg";
-import southern_comfort from "../../../assets/Southern Comfort.jpg";
-import brandy from "../../../assets/Brandy.jpg";
-import lemon_vodka from "../../../assets/Lemon vodka.jpg";
-import dark_rum from "../../../assets/Dark rum.jpg";
-import applejack from "../../../assets/Applejack.jpg";
-import scotch from "../../../assets/Scotch.jpg";
-import anejo_rum from "../../../assets/Añejo rum.jpg";
-import irish_whiskey from "../../../assets/Irish whiskey.jpg";
-import apple_brandy from "../../../assets/Apple brandy.jpg";
-import cognac from "../../../assets/Cognac.jpg";
+import light_rum from "../../../assets/alcophotos/light rum.svg";
+import bourbon from "../../../assets/alcophotos/bourbon.svg";
+import vodka from "../../../assets/alcophotos/vodka.svg";
+import gin from "../../../assets/alcophotos/gin.svg";
+import blended_whiskey from "../../../assets/alcophotos/blended wisk.svg";
+import tequila from "../../../assets/alcophotos/tekila.svg";
+import southern_comfort from "../../../assets/alcophotos/s comfort.svg";
+import brandy from "../../../assets/alcophotos/brandy.svg";
+import lemon_vodka from "../../../assets/alcophotos/lemon vodka.svg";
+import dark_rum from "../../../assets/alcophotos/dark rum.svg";
+import applejack from "../../../assets/alcophotos/applejk.svg";
+import scotch from "../../../assets/alcophotos/scotch.svg";
+import anejo_rum from "../../../assets/alcophotos/anh rum.svg";
+import irish_whiskey from "../../../assets/alcophotos/irish wisk.svg";
+import apple_brandy from "../../../assets/alcophotos/apple brandy.svg";
+import cognac from "../../../assets/alcophotos/cognac.svg";
 import {toast} from "react-toastify";
 import {GETAlcoholRatingsAPI, UpdateAlcoholRatingsAPI} from "../../../Services/AlcoholService.tsx";
 import {useAuth} from "../../../Context/useAuth.tsx";
+import alcopopup from "../../../assets/alcopopup.svg";
 
 interface HighAlcoRatingPopUpProps {
     show: boolean;
@@ -140,7 +141,21 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
         <>
             <div className="strongalco-modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
             <div className="strongalco-modal-container">
-                <div className="strongalco-modal-content">
+                <div className="strongalco-modal-content" style={{
+                    background: 'rgba(255, 255, 255, 0.3)',
+                    backdropFilter: 'blur(20px)',
+                    backgroundImage: `url(${alcopopup})`,
+                    backgroundSize: 'auto',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    border: '3px solid #50C5FF',
+                    display: 'flex', // Додаємо Flexbox для вертикального центрування
+                    flexDirection: 'column', // Текст і слайдери будуть вертикально
+                    alignItems: 'center', // Горизонтальне центрування
+                    borderRadius: '16px',
+                }}
+                >
+                    <div className="strong-alco-title">Choose Strong Alcohols</div>
                     <div className="strongalco-slider-list-container">
                         <SliderList sliders={sliderItems}/>
                     </div>
