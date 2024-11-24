@@ -1,45 +1,49 @@
-/* PartySettingsPopUp.css */
-.custom-input {
-    width: 100%; /* Уменьшите ширину полей */
-    max-width: 300px; /* Установите максимальную ширину */
-    border-radius: 10px; /* Округлите углы */
-    padding: 8px 12px; /* Отступы внутри поля */
-    font-size: 14px; /* Уменьшите размер шрифта */
-    border: 1px solid #ced4da;
-    box-sizing: border-box; /* Учитывайте отступы при расчете размеров */
+@font-face {
+    font-family: 'Karla-Bold';
+    src: url('../../assets/fonts/Karla/static/Karla-Bold.ttf') format('truetype');
 }
 
-.custom-input:focus {
-    border-color: #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Эффект фокуса */
-}
-
-.custom-input-datepicker {
+.select-backdrop-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 300px; /* Уменьшите ширину поля для выбора даты */
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ced4da;
-    box-sizing: border-box;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 999;
 }
 
-.custom-input-datepicker:focus {
-    border-color: #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-.party-settings-modal .rs-modal-content {
-    max-width: 400px; /* Установите ширину модального окна */
-    border-radius: 15px; /* Закруглите углы модального окна */
+.select-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-size: cover;
+    border-radius: 15px;
     padding: 20px;
+    z-index: 2000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.party-settings-modal .modal-title-bold {
-    font-size: 18px;
+.modal-content {
     text-align: center;
-    margin-bottom: 15px;
+    font-family: 'Karla-Bold', sans-serif;
+    color: #263238;
 }
 
+.select-confirm {
+    background-color: black;
+    border: 1px solid #50C5FF;
+    border-radius: 20px;
+    width: 200px;
+    padding: 10px;
+    color: white;
+    font-family: 'Karla-Bold', sans-serif;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+}

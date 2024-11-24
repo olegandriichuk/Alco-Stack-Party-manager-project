@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     z-index: 2000;
-    backdrop-filter: blur(20px); /* Эффект размытия */
+    backdrop-filter: blur(20px);
 }
 
 .view-amount-popup-container {
@@ -25,11 +25,13 @@
     border-radius: 20px;
     padding: 20px;
     z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для контейнера */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 80%;
+    overflow-y: auto;
 }
 
 .view-amount-popup-content {
-    font-family: 'Halant', serif; /* Используем шрифт Halant */
+    font-family: 'Halant', serif;
     color: black;
     text-align: center;
 }
@@ -41,9 +43,12 @@
 }
 
 .view-amount-popup-list {
-    list-style-type: none; /* Убираем стандартные маркеры списка */
+    list-style-type: none;
     padding: 0;
     margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .view-amount-popup-list-item {

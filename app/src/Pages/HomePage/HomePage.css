@@ -48,8 +48,8 @@
 
 .logo-text {
     position: relative;
-    top: -10px; /* Поднимаем текст */
-    left: -90px; /* Сдвигаем текст ближе к логотипу */
+    top: -10px;
+    left: -90px;
     font-family: 'JejuHallasan', sans-serif;
     color: black;
     font-size: 13px;
@@ -57,9 +57,9 @@
 }
 
 .info-logo {
-    position: absolute;
-    top: -130px;
-    left: 860px;
+    position: fixed;
+    top: -20px;
+    left: 1400px;
     width: 120px;
     height: 120px;
 }
@@ -71,45 +71,45 @@
 
 .custom-heading-home {
     font-family: 'Halant', serif;
-    font-size: 25px !important; /* За замовчуванням */
+    font-size: 25px !important;
 }
 
 @media (min-width: 768px) {
     .custom-heading-home {
-        font-size: 36px !important; /* Для комп'ютерів */
+        font-size: 36px !important;
     }
 }
 
 .container-fluid-home {
     display: flex;
-    justify-content: flex-start; /* Поднимаем содержимое наверх */
-    align-items: center; /* Центрируем по горизонтали */
+    justify-content: flex-start;
+    align-items: center;
     min-height: 100vh;
     background-position: center bottom;
 }
 .party-icon-home {
     width: 80px;
     height: 80px;
-    position: absolute;
-    top: -115px;
-    left: 0px;
+    position: fixed;
+    top: 0px;
+    left: 500px;
     z-index: 1000;
 }
 
 .custom-heading-home {
     font-family: 'Halant', serif;
-    font-size: 36px; /* Размер текста */
+    font-size: 36px;
     text-align: center;
     color: black;
     margin: 0;
 }
 
 .centered-container-home img {
-    width: 40px; /* Размер иконки */
+    width: 40px;
     height: 40px;
-    margin-left: 10px; /* Отступ между текстом и иконкой */
+    margin-left: 10px;
 }
 
-/* button create */
+
 
 

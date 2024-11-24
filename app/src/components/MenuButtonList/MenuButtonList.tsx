@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 interface MenuButton {
     text: string;
     icon: IconDefinition;
-    //color: string;
     link?: string; // Optional link prop
     onClick?: () => void; // Optional onClick prop
 }
@@ -26,7 +25,6 @@ const MenuButtonList: React.FC<MenuButtonListProps> = ({ menuButtons }) => {
                         <MenuButton
                             text={menuButton.text}
                             icon={menuButton.icon}
-                           // color={menuButton.color}
                             link={menuButton.link}
                             onClick={menuButton.onClick}
                             className="custom-font"

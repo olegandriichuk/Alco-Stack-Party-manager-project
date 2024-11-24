@@ -17,16 +17,16 @@ export type CocktailDetails = {
     strGlass: string;
     strInstructions: string;
     strDrinkThumb: string;
-    ingredients: string[]; // Массив строк для ингредиентов
+    ingredients: string[];
 };
 
 export type CocktailPopupProps = {
-    cocktails: Cocktail[]; // Список коктейлей
-    details: CocktailDetails | null; // Детали выбранного коктейля
-    onClickCocktail: (id: string) => void; // Обработчик кликов на коктейль
-    onBackToCocktails: () => void; // Обработчик для возврата к списку коктейлей
-    isOpen: boolean; // Открыт ли попап
-    onClose: () => void; // Функция для закрытия попапа
+    cocktails: Cocktail[];
+    details: CocktailDetails | null;
+    onClickCocktail: (id: string) => void;
+    onBackToCocktails: () => void;
+    isOpen: boolean;
+    onClose: () => void;
 };
 
 const CocktailPopup: React.FC<CocktailPopupProps> = ({
@@ -85,7 +85,7 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                             gap: '20px',
                         }}
                     >
-                        {/* Левая часть - детали коктейля */}
+
                         <div style={{ flex: 1, fontFamily: 'Halant, serif' }}>
                             <h4 style={{ fontWeight: 600 }}>{details.strDrink}</h4>
                             <img
@@ -111,7 +111,7 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                             </p>
                         </div>
 
-                        {/* Правая часть - список ингредиентов */}
+
                         <div style={{ flex: 1, fontFamily: 'Halant, serif' }}>
                             <h4 style={{ fontWeight: 600 }}>Ingredients:</h4>
                             <ul style={{ paddingLeft: '20px' }}>
@@ -123,7 +123,7 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                     </div>
                 )}
 
-                {/* Кнопки "Back" и "Close" */}
+
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                     {details && (
                         <button

@@ -1,5 +1,5 @@
 ﻿import axios from "axios";
-import { handleError } from "../Helpers/ErrorHandler.tsx";
+// import { handleError } from "../Helpers/ErrorHandler.tsx";
 import { UserProfileToken } from "../Models/User.tsx";
 import { Address } from "../Models/User.tsx";
 
@@ -15,7 +15,12 @@ export const loginAPI = async (username: string, password: string) => {
         });
         return data;
     } catch (error) {
-        handleError(error);
+        if (axios.isAxiosError(error)) {
+            window.alert("Username or password are incorrect!");
+        } else {
+            // Handle non-Axios errors
+            window.alert("Unexpected error");
+        }
     }
 };
 
@@ -46,8 +51,16 @@ export const registerAPI = async (
             gender: gender,
             dateOfBirth: dateOfBirth
         });
+
+        // Handle successful response
+        console.log("Registration successful:", data);
         return data;
     } catch (error) {
-        handleError(error);
+        if (axios.isAxiosError(error)) {
+            window.alert("Username or email are already in use!");
+        } else {
+            // Handle non-Axios errors
+            window.alert("Unexpected error");
+        }
     }
 };

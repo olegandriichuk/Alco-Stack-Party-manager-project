@@ -31,7 +31,7 @@ const CustomInput = React.forwardRef<HTMLInputElement, any>(
                     className="clear-icon"
                     onClick={onClear}
                 >
-                    &times; {/* Крестик для удаления */}
+                    &times;
                 </span>
             )}
         </div>
@@ -39,10 +39,10 @@ const CustomInput = React.forwardRef<HTMLInputElement, any>(
 );
 
 const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ value, onChange }) => {
-    // Функция для очистки временной зоны
+
     const handleDateChange = (date: Date | null) => {
         if (date) {
-            // Устанавливаем дату с обнулением времени
+
             const cleanDate = new Date(
                 Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
             );
@@ -64,7 +64,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ value, onChan
                     <CustomInput
                         value={value}
                         onClick={() => {}}
-                        onClear={() => onChange(undefined)} // Очистка даты
+                        onClear={() => onChange(undefined)}
                     />
                 }
             />

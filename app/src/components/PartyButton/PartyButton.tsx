@@ -16,10 +16,10 @@ interface PartyButtonProps {
 
 const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, date, createdByMe }) => {
     const ButtonStyle = {
-        // backgroundColor: createdByMe ? 'rgba(255, 49, 49, 0.6)' : 'rgba(33, 85, 255, 0.6)',
-        backgroundImage: `url(${party_button})`  , // Використовуємо url() для фону
-        backgroundSize: 'cover', // Забезпечує повне покриття фону
-        backgroundRepeat: 'no-repeat', // Запобігає повторенню фону
+
+        backgroundImage: `url(${party_button})`  ,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         border: '2px solid #50C5FF',
         borderTopLeftRadius: '10px',
@@ -54,20 +54,7 @@ const PartyButton: React.FC<PartyButtonProps> = ({ partyId, name, description, d
         minute: '2-digit'
     }).format(new Date(date));
 
-    // const titleStyle = {
-    //     fontFamily: 'Halant Semi Bold',
-    //     fontWeight: 600,
-    // };
-    //
-    // const descriptionStyle = {
-    //     fontFamily: 'Halant Regular',
-    //     fontWeight: 400,
-    // };
-    //
-    // const dateStyle = {
-    //     fontFamily: 'Halant Semi Bold',
-    //     fontWeight: 600,
-    // };
+
 
     return (
         <button

@@ -11,20 +11,17 @@
 
  .menu-button {
      border: 10px solid red;
-     /*background-color: transparent !important; !* Прозорий фон *!*/
-     /*box-shadow: none; !* Видаляє тіні, якщо вони додають ефект білого фону *!*/
-     display: inline-block; /* Активуємо flex для вирівнювання */
-     flex-direction: column; /* Вирівнюємо елементи вертикально */
-     align-items: center; /* Центрування по горизонталі */
-     justify-content: center; /* Центрування по вертикалі */
+
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
-    /*width:100%;*/
-    /*height: 100%;*/
+
     transition: transform 0.3s ease-in-out;
 }
-/* Rectangle 9 */
+
 
 
 /* Desktop and tablet styling */
@@ -48,5 +45,5 @@
     }
 }
 .menu-button {
-    border: 1px solid red; /* Тимчасова обводка для діагностики */
+    border: 1px solid red;
 }

@@ -1,5 +1,4 @@
-﻿import React, {  useState } from 'react';
-import * as Yup from "yup";
+﻿import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
 import { useForm } from "react-hook-form";
@@ -31,8 +30,6 @@ const LoginPage = () => {
         loginUser(form.userName, form.password);
     };
 
-    // To detect mobile view
-    // const isMobile = window.innerWidth <= 768;
 
 
     return (

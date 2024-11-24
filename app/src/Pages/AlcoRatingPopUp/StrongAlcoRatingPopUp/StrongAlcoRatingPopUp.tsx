@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 import './StrongAlcoRatingPopUp.css';
-//import Slider from "../../../components/Slider/Slider.tsx";
+
 import SliderList from "../../../components/SliderList/SliderList";
 import light_rum from "../../../assets/alcophotos/light rum.svg";
 import bourbon from "../../../assets/alcophotos/bourbon.svg";
@@ -58,19 +58,10 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
         try {
 
             const response = await GETAlcoholRatingsAPI(user?.userName, token);
-            // console.log("RESPONSE:", response);
-            if (response && response.data) {
-                console.log("Response Data:", response.data);
 
+            if (response && response.data) {
                 const updatedSliders = sliders.map(slider => {
-                    console.log("Slider ID:", slider.id);
-                    console.log("Rating ID: ", response.data.find(alcohol => alcohol.alcoholId === slider.id));
                     const ratingData = response.data.find(alcohol => alcohol.alcoholId === slider.id);
-                    if (ratingData) {
-                        console.log("Found Rating Data:", ratingData);
-                    } else {
-                        console.log("No match found for Slider ID:", slider.id);
-                    }
                     return ratingData ? { ...slider, value: ratingData.rating } : slider;
                 });
 
@@ -88,26 +79,25 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
     useEffect(() => {
         fetchUserRatings(); // Fetch ratings when component mounts
     }, []);
-    const [isSaving, setIsSaving] = useState(false); // Додано стан для індикації збереження
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Обробник зміни значення слайдера
+
     const handleSliderChange = (index: number, value: number) => {
         const newSliders = [...sliders];
         newSliders[index] = { ...newSliders[index], value };
         setSliders(newSliders);
     };
 
-    // Функція для збереження значень слайдерів
+
     const saveRatings = async () => {
         if (!user || !token) {
-            console.log("userName:", user);
-            console.log("authToken:", token);
-            console.error("userName або authToken не визначені");
+
+            console.error("userName or authToken are not defined");
             return;
         }
 
-        setIsSaving(true); // Починаємо процес збереження
-        const type = 3; // Приклад типу алкоголю
+        setIsSaving(true);
+        const type = 3;
         const ratings = sliders.map(slider => ({
             AlcoholId: slider.id,
             rating: slider.value
@@ -116,16 +106,16 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
         try {
             const result = await UpdateAlcoholRatingsAPI(user.userName, type, ratings, token);
             console.log("Updated ratings:", result);
-            // onRatingSave();
-            handleClose(); // Закрити вікно після успішного збереження
+
+            handleClose();
         } catch (error) {
             console.error("Failed to update ratings", error);
         } finally {
-            setIsSaving(false); // Завершуємо процес збереження
+            setIsSaving(false);
         }
     };
 
-    if (!show) return null; // Якщо вікно не повинно показуватися, повертаємо null
+    if (!show) return null;
 
     const sliderItems = sliders.map((slider, index) => ({
         ...slider,
@@ -134,12 +124,12 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
 
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
-            handleClose(); // Закрити вікно, якщо натиснуто на фон
+            handleClose();
         }
     };
     return (
         <>
-            <div className="strongalco-modal-backdrop-blur" onClick={handleBackdropClick}/> {/* Заблюрений фон */}
+            <div className="strongalco-modal-backdrop-blur" onClick={handleBackdropClick}/>
             <div className="strongalco-modal-container">
                 <div className="strongalco-modal-content" style={{
                     background: 'rgba(255, 255, 255, 0.3)',
@@ -149,9 +139,9 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     border: '3px solid #50C5FF',
-                    display: 'flex', // Додаємо Flexbox для вертикального центрування
-                    flexDirection: 'column', // Текст і слайдери будуть вертикально
-                    alignItems: 'center', // Горизонтальне центрування
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                     borderRadius: '16px',
                 }}
                 >
@@ -162,9 +152,9 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
                     <button
                         className="liquor-btn-save"
                         onClick={saveRatings}
-                        disabled={isSaving} // Деактивуємо кнопку під час збереження
+                        disabled={isSaving}
                     >
-                        {isSaving ? "Saving..." : "Save"} {/* Індикація процесу збереження */}
+                        {isSaving ? "Saving..." : "Save"}
                     </button>
                 </div>
             </div>

@@ -7,7 +7,7 @@ export type CocktailCardProps = {
         name: string;
         photo: string;
     };
-    onClick: (id: string) => void; // Click handler
+    onClick: (id: string) => void;
 };
 
 const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, onClick }) => {
@@ -22,7 +22,7 @@ const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, onClick }) => {
             <button
                 className="cocktail-card-button"
                 onClick={(e) => {
-                    e.stopPropagation(); // Предотвращаем срабатывание основного клика
+                    e.stopPropagation();
                     alert(`Ingredients for ${cocktail.name}`);
                 }}
             >

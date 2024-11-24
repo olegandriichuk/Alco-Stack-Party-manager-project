@@ -3,7 +3,7 @@ import { AlcoholVolume } from "../../Models/Alcohol.tsx";
 import { GetPartyAlcoholVolumeAPI } from "../../Services/PartyService.tsx";
 import { useAuth } from "../../Context/useAuth.tsx";
 import { toast } from "react-toastify";
-import "./ViewAmountPopUp.css"; // Импортируем CSS
+import "./ViewAmountPopUp.css";
 
 interface ViewAmountPopUpProps {
     show: boolean;
@@ -46,7 +46,7 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
         <div className="view-amount-popup-backdrop" onClick={handleClose}>
             <div
                 className="view-amount-popup-container"
-                onClick={(e) => e.stopPropagation()} // Останавливаем всплытие клика
+                onClick={(e) => e.stopPropagation()}
             >
                 <div className="view-amount-popup-content">
                     <h3 className="view-amount-popup-title">View Total Alcohol Volumes</h3>

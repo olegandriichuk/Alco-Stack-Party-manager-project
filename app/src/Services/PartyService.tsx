@@ -1,7 +1,7 @@
 ﻿import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {PartyListGet, PartyPost, PartyDetailGet, PartyUserAlcohol} from "../Models/Party.tsx";
-
+import { toast } from "react-toastify";
 const api = "http://localhost:5131/api/";
 
 export const CreatePartyAPI = async (
@@ -46,7 +46,19 @@ export const JoinPartyAPI = async (
         );
         return data;
     } catch (error) {
-        handleError(error);
+
+        if (axios.isAxiosError(error)) {
+            // Handle specific errors
+            if (error.response?.status === 404) {
+                toast.error("Party is not found.");
+            } else if (error.response?.status === 400) {
+                toast.error("Invalid Party ID format.");
+            } else {
+                handleError(error); // Handle other errors generically
+            }
+        } else {
+            handleError(error); // Handle generic errors
+        }
     }
 };
 

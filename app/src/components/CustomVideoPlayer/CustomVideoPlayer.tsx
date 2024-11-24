@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './CustomVideoPlayer.css'; // Підключаємо CSS файл
+import './CustomVideoPlayer.css';
 
 interface CustomVideoPlayerProps {
     videoSrc: string; // Відеофайл
@@ -10,12 +10,12 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
 
     // Функція для перевірки ширини екрану
     const checkScreenSize = () => {
-        setIsMobile(window.innerWidth <= 768); // Наприклад, мобільний розмір для пристроїв шириною <= 768px
+        setIsMobile(window.innerWidth <= 768);
     };
 
     useEffect(() => {
-        checkScreenSize(); // Перевірка при першому рендері
-        window.addEventListener('resize', checkScreenSize); // Перевірка при зміні розміру вікна
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
         return () => window.removeEventListener('resize', checkScreenSize);
     }, []);
 

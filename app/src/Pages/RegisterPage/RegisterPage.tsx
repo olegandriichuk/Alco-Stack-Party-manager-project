@@ -34,12 +34,24 @@ export type RegisterFormInputs = {
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
     userName: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string()
+        .required('Password is required')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/,
+            'Password must contain at least one uppercase letter, one lowercase letter, one digit, and only English letters'
+        ),
     firstName: Yup.string().optional(),
     lastName: Yup.string().optional(),
     gender: Yup.number().optional(),
     dateOfBirth: Yup.string()
         .matches(/^\d{4}-\d{2}-\d{2}$/, 'Date of Birth must be in YYYY-MM-DD format')
+        .test('is-past-date', 'Date of Birth cannot be in the future', value => {
+            if (!value) return true; // Allow empty values (optional field)
+            const selectedDate = new Date(value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Ignore time for comparison
+            return selectedDate <= today; // Ensure the date is not in the future
+        })
         .optional(),
     address: Yup.object().shape({
         streetAddress: Yup.string().optional(),
@@ -169,9 +181,9 @@ const RegisterPage: React.FC = () => {
                                     id="gender"
                                     autoComplete="gender"
                                     className={`custom-input-register form-control ${errors.gender ? 'is-invalid-register' : ''}`}
+                                    defaultValue={2} // Default to "Other"
                                     {...register("gender", {
-                                        required: "Gender is required",
-                                        valueAsNumber: true
+                                        valueAsNumber: true, // Parse value as a number
                                     })}
                                 >
                                     <option value="" className="gender-select-option-register">Select Gender</option>
@@ -179,10 +191,8 @@ const RegisterPage: React.FC = () => {
                                     <option value={1} className="gender-select-option-register-bold">Female</option>
                                     <option value={2} className="gender-select-option-register-bold">Other</option>
                                 </select>
-                                {errors.gender && (
-                                    <div className="invalid-feedback-register">{errors.gender.message}</div>
-                                )}
                             </div>
+
 
                             <div className="mb-3">
 
@@ -192,7 +202,15 @@ const RegisterPage: React.FC = () => {
 
                                 />
                                 {errors.dateOfBirth && (
-                                    <div className="invalid-feedback-register">{errors.dateOfBirth.message}</div>
+                                    <div
+                                        className="text-danger mt-2"
+                                        style={{
+                                            fontSize: '0.875rem',
+                                            color: 'red', // Ensure text is red
+                                        }}
+                                    >
+                                        {errors.dateOfBirth.message}
+                                    </div>
                                 )}
                             </div>
 
@@ -208,6 +226,7 @@ const RegisterPage: React.FC = () => {
                             <p className="text-center mt-3 text-alrdy-register">
                                 Already have an account? <Link to="/" className="text-signin-register">Sign in</Link>
                             </p>
+
                         </form>
                     </div>
                 </div>

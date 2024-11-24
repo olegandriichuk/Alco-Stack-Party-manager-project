@@ -50,7 +50,19 @@ const validationSchema = yup.object().shape({
                 const today = new Date().toISOString().split("T")[0];
                 return preparationDate !== today;
             }
+        )
+        .test(
+            "not-past-date",
+            "Preparation Date cannot be in the past",
+            function (value) {
+                if (!value) return true; // Skip if value is not provided
+                const preparationDate = new Date(value).setHours(0, 0, 0, 0); // Clear time for comparison
+                const today = new Date().setHours(0, 0, 0, 0); // Clear time for comparison
+                return preparationDate >= today; // Ensure the date is today or in the future
+            }
         ),
+
+
     photo: yup.string().optional(),
     location: yup.string().optional(),
 });

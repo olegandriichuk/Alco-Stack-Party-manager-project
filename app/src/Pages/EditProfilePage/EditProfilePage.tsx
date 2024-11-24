@@ -10,8 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Address, UserProfile } from "../../Models/User";
 import { UpdateProfileAPI, DeleteAccountAPI } from "../../Services/UserService";
 import Disco from '../../assets/disco.svg';
-//import { DatePicker } from "rsuite";
-//import Button from 'react-bootstrap/Button';
 import backgroundImage from "../../assets/backgroundFinal.svg";
 import './EditProfilePage.css';
 import DatePickerComponent from '../../components/DateTimePicker/DateTimePicker.tsx';
@@ -58,8 +56,7 @@ const EditProfilePage: React.FC = () => {
     });
 
 
-    console.log("errors", errors);
-    console.log("watch", watch());
+
 
     useEffect(() => {
         if (user) {
@@ -70,11 +67,11 @@ const EditProfilePage: React.FC = () => {
     }, [user, setValue]);
 
     useEffect(() => {
-        console.log("Date of Birth watched value:", watch('dateOfBirth'));
+
     }, [watch('dateOfBirth')]);
 
     const handleUpdate = async (formData: UserProfile) => {
-        console.log("handleUpdate called with:", formData);
+
         if (!token) {
             toast.error("You must be logged in to update your profile");
             return;
@@ -126,10 +123,8 @@ const EditProfilePage: React.FC = () => {
         }
     };
 
-    //const dateOfBirth = watch('dateOfBirth');
-    //const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
 
-    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof UserProfile,  isRequired: boolean = false) => (
+    const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof UserProfile,  isRequired: boolean = false, disabled: boolean = false) => (
         <div className="mb-3" key={id}>
             <label htmlFor={id} className="input_titles-editprofile">{label}{isRequired && <span style={{ color: "red", marginLeft: "5px" }}>*</span>}</label>
             <input
@@ -138,6 +133,7 @@ const EditProfilePage: React.FC = () => {
                 autoComplete={id}
                 className={`custom-input-editprofile  ${errors[registerName] ? 'is-invalid-editprofile' : ''}`}
                 placeholder={placeholder}
+                disabled={disabled}
                 {...register(registerName)}
             />
             {errors[registerName] && <div className="invalid-feedback-editprofile">{errors[registerName]?.message}</div>}
@@ -166,7 +162,7 @@ const EditProfilePage: React.FC = () => {
              style={{
                  backgroundImage: `url(${backgroundImage})`,
                  backgroundSize: 'cover',
-                 backgroundAttachment: 'fixed' // Фиксируем фон
+                 backgroundAttachment: 'fixed'
              }}>
             <div className="video-left flex-grow-1"></div>
 
@@ -184,43 +180,20 @@ const EditProfilePage: React.FC = () => {
                             src={backicon}
                             alt="Go to Profile"
                             style={{
-                                width: "120px", // Укажите подходящий размер для иконки
+                                width: "120px",
                                 height: "40px",
-                                cursor: "pointer", // Указывает, что это кликабельный элемент
+                                cursor: "pointer",
                             }}
                         />
                     </Link>
                 </div>
                 <div className="card-editprofile">
                     <div className="card-body p-5" style={{marginTop: '10px'}}>
-                        {/*<div className="d-flex flex-column align-items-center">*/}
-                        {/*    <Button*/}
-                        {/*        variant="link"*/}
-                        {/*        style={{*/}
-                        {/*            padding: 0,*/}
-                        {/*            border: 'none',*/}
-                        {/*            background: 'none',*/}
-                        {/*            display: 'inline-block',*/}
-                        {/*        }}*/}
-                        {/*        className="p-0"*/}
-                        {/*    >*/}
-                        {/*        <img*/}
-                        {/*            src={user?.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"}*/}
-                        {/*            alt={`${user?.userName}'s profile`}*/}
-                        {/*            className="rounded-circle"*/}
-                        {/*            style={{*/}
-                        {/*                width: '150px',*/}
-                        {/*                height: '150px',*/}
-                        {/*                objectFit: 'cover',*/}
-                        {/*                cursor: 'pointer',*/}
-                        {/*            }}*/}
-                        {/*        />*/}
-                        {/*    </Button>*/}
-                        {/*</div>*/}
+
                         <h1 className="card-title-editprofile mb-4 text-center">Edit Profile</h1>
                         <form onSubmit={handleSubmit(handleUpdate)}>
-                            {renderInput('Email', 'email', 'email', 'Email', 'email', true)}
-                            {renderInput('Username', 'userName', 'text', 'Username', 'userName', true)}
+                            {renderInput('Email', 'email', 'email', 'Email', 'email', true, true)}
+                            {renderInput('Username', 'userName', 'text', 'Username', 'userName', true, true)}
                             {renderInput('First Name', 'firstName', 'text', 'First Name', 'firstName')}
                             {renderInput('Last Name', 'lastName', 'text', 'Last Name', 'lastName')}
                             {renderInput('Phone Number', 'phoneNumber', 'text', 'Phone Number', 'phoneNumber')}
@@ -254,9 +227,7 @@ const EditProfilePage: React.FC = () => {
                                     <div className="invalid-feedback-editprofile">{errors.gender.message}</div>
                                 )}
                             </div>
-                            {/*<div className="mb-3">*/}
-                            {/*    <label htmlFor="address" className="form-label">Address</label>*/}
-                            {/*</div>*/}
+
                             {renderAddressInput("Street", "address.streetAddress", "Enter your street address", "streetAddress")}
                             {renderAddressInput("City", "address.city", "Enter your city", "city")}
                             {renderAddressInput("Country", "address.country", "Enter your country", "country")}

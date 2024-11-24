@@ -1,4 +1,5 @@
-﻿import { useForm } from "react-hook-form";
+﻿import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
 import { toast } from "react-toastify";
@@ -7,7 +8,6 @@ import { Modal, Button } from "rsuite";
 import { JoinPartyAPI } from "../../Services/PartyService.tsx";
 import 'rsuite/dist/rsuite.min.css';
 import "./JoinPartyPopUp.css";
-import { useEffect } from "react";
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({
@@ -24,6 +24,7 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema)
     });
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); // State to store the error message
 
     useEffect(() => {
         if (show) {
@@ -40,12 +41,20 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
                 data.partyId,
                 token
             );
+
+            if (!response) {
+                // If response is undefined, show the appropriate error message
+                setErrorMessage("Party with that ID is not found");
+                return; // Exit the function early
+            }
+
             toast.success("Party joined successfully!");
             console.log(response);
+            setErrorMessage(null); // Clear error message on success
             handleClose(); // Close the modal on success
         } catch (error) {
-            console.error(error);
-            toast.error("Failed to join party");
+            console.error("Error while joining the party:", error);
+            setErrorMessage("Party with that ID is not found"); // Set error message
         }
     };
 
@@ -62,17 +71,22 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
                         <div className="form-group">
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${errorMessage ? 'is-invalid' : ''}`}
                                 placeholder="Enter ID to join the party"
                                 {...register("partyId")}
                             />
+                            {/* Show error message in red if it exists */}
+                            {errorMessage && (
+                                <span className="text-danger" style={{ color: "red" }}>
+                                    {errorMessage}
+                                </span>
+                            )}
                             <span className="text-danger">{errors.partyId?.message}</span>
                         </div>
                         <Button type="submit" className="join-button">Confirm</Button>
                     </form>
                 </Modal.Body>
             </Modal>
-
         </>
     );
 }

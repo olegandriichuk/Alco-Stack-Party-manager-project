@@ -39,30 +39,30 @@ export const UpdateProfileAPI = async (
         );
         return data;
     } catch (error) {
-        handleError(error);
+        if (axios.isAxiosError(error)) {
+            window.alert("Username and email cannot be changed");
+        } else {
+            // Handle non-Axios errors
+            window.alert("Unexpected error");
+        }
     }
 }
 
 export const UpdatePhotoAPI = async (
     photoChanged: boolean,
-    formBackgroundChanged: boolean,
     photoFile?: File | null,
-    formBackgroundFile?: File | null,
     authToken?: string
 ) => {
     try {
         const formData = new FormData();
         // Append the boolean attributes as strings or numbers
         formData.append("PhotoChanged", JSON.stringify(photoChanged));
-        formData.append("FormBackgroundChanged", JSON.stringify(formBackgroundChanged));
         // Append the file data
         if (photoFile) {
             formData.append("PhotoFile", photoFile);
         }
 
-        if (formBackgroundFile) {
-            formData.append("FormBackgroundFile", formBackgroundFile);
-        }
+
 
         // Send the request
         const data = await axios.patch<UserProfile>(

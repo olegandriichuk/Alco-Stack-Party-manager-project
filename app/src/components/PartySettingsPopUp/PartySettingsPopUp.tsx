@@ -2,7 +2,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Modal, Button, DatePicker, Input} from 'rsuite';
+import { Modal, Button, DatePicker, Input, Toggle } from 'rsuite';
 import { PartyDetailPut } from '../../Models/Party.tsx';
 import './PartySettingsPopUp.css';
 import backpop from '../../assets/signUp_card.svg';
@@ -13,8 +13,47 @@ const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     description: yup.string().optional(),
     photo: yup.string().optional(),
-    date: yup.string().required("Date is required"),
-    preparationDate: yup.string().required("Preparation Date is required"),
+    date: yup
+        .string()
+        .required("Date is required")
+        .test(
+            "is-future-date",
+            "Date must be today or in the future",
+            function (value) {
+                if (!value) return false;
+                const selectedDate = new Date(value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return selectedDate >= today;
+            }
+        )
+    ,
+    preparationDate: yup
+        .string()
+        .required("Preparation Date is required")
+        .test(
+            "is-before-date",
+            "Preparation Date must be earlier than the event date",
+            function (value) {
+                const { date } = this.parent;
+                if (!value || !date) return true;
+                const preparationDate = new Date(value);
+                const eventDate = new Date(date);
+                return preparationDate < eventDate;
+            }
+        )
+        .test(
+            "is-not-same-day",
+            "Preparation Date cannot be the same day as the event date",
+            function (value) {
+                const { date } = this.parent;
+                if (!value || !date) return true;
+                const preparationDate = new Date(value).toISOString().split("T")[0];
+                const eventDate = new Date(date).toISOString().split("T")[0];
+                return preparationDate !== eventDate;
+            }
+        ),
+
     location: yup.string().optional(),
     liquors: yup.boolean().required(),
     lowAlcohol: yup.boolean().required(),
@@ -74,6 +113,11 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
         }
     }, [show, date, preparationDate, setValue]);
 
+    const watchLiquors = watch("liquors", liquors);
+    const watchLowAlcohol = watch("lowAlcohol", lowAlcohol);
+    const watchMidAlcohol = watch("midAlcohol", midAlcohol);
+    const watchHighAlcohol = watch("highAlcohol", highAlcohol);
+
     const onSubmit: SubmitHandler<PartyDetailPut> = async (data) => {
         try {
             await onSave(data);
@@ -90,7 +134,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
             <Modal
                 open={show}
                 onClose={onClose}
-                size="sm" /* Установите меньший размер окна */
+                size="sm"
                 className="party-settings-modal"
             >
                 <div
@@ -99,8 +143,8 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                         backgroundImage: `url(${backpop})`,
                         backgroundSize: 'cover',
 
-                        borderRadius: '15px', /* Уменьшите радиус для компактности */
-                        padding: '15px', /* Уменьшите внутренние отступы */
+                        borderRadius: '10px',
+                        padding: '15px',
                     }}
                 >
                     <Modal.Header>
@@ -146,7 +190,8 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                     onChange={(value) => setValue("preparationDate", value ? value.toISOString() : "")}
                                     className="custom-input-datepicker"
                                 />
-                                {errors.preparationDate && <p className="text-danger">{errors.preparationDate.message}</p>}
+                                {errors.preparationDate &&
+                                    <p className="text-danger">{errors.preparationDate.message}</p>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="photo" className="form-label">Photo URL</label>
@@ -169,6 +214,38 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                 {errors.location && <p className="text-danger">{errors.location.message}</p>}
                             </div>
                             <div className="mb-3">
+                                <label htmlFor="liquors" className="form-label">Liquors</label>
+                                <Toggle
+                                    id="liquors"
+                                    checked={watchLiquors}
+                                    onChange={(checked) => setValue("liquors", checked)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="lowAlcohol" className="form-label">Low Alcohol</label>
+                                <Toggle
+                                    id="lowAlcohol"
+                                    checked={watchLowAlcohol}
+                                    onChange={(checked) => setValue("lowAlcohol", checked)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="midAlcohol" className="form-label">Mid Alcohol</label>
+                                <Toggle
+                                    id="midAlcohol"
+                                    checked={watchMidAlcohol}
+                                    onChange={(checked) => setValue("midAlcohol", checked)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="highAlcohol" className="form-label">High Alcohol</label>
+                                <Toggle
+                                    id="highAlcohol"
+                                    checked={watchHighAlcohol}
+                                    onChange={(checked) => setValue("highAlcohol", checked)}
+                                />
+                            </div>
+                            <div className="mb-3">
                                 <label htmlFor="rankLimit" className="form-label">Rank Limit</label>
                                 <Input
                                     id="rankLimit"
@@ -179,7 +256,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                 />
                                 {errors.rankLimit && <p className="text-danger">{errors.rankLimit.message}</p>}
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Button type="submit" appearance="primary">Save Changes</Button>
                                 <Button onClick={onClose} appearance="subtle">Cancel</Button>
                             </div>

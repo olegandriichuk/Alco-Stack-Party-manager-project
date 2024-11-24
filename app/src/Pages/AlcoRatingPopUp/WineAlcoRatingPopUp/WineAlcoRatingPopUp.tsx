@@ -8,7 +8,7 @@ import dubonnet from "../../../assets/alcophotos/rouge.svg";
 import prosecco from "../../../assets/alcophotos/prosecco.svg";
 import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
 import {useAuth} from "../../../Context/useAuth.tsx";
-//import {SliderAlcoholPatch} from "../../../Models/Alcohol.tsx"; // Імпортуємо сервіс для збереження
+
 import { toast } from "react-toastify";
 import alcopopup from "../../../assets/alcopopup.svg";
 interface WineRatingPopUpProps {
@@ -33,19 +33,10 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
         try {
 
             const response = await GETAlcoholRatingsAPI(user?.userName, token);
-            // console.log("RESPONSE:", response);
-            if (response && response.data) {
-                console.log("Response Data:", response.data);
 
+            if (response && response.data) {
                 const updatedSliders = sliders.map(slider => {
-                    console.log("Slider ID:", slider.id);
-                    console.log("Rating ID: ", response.data.find(alcohol => alcohol.alcoholId === slider.id));
                     const ratingData = response.data.find(alcohol => alcohol.alcoholId === slider.id);
-                    if (ratingData) {
-                        console.log("Found Rating Data:", ratingData);
-                    } else {
-                        console.log("No match found for Slider ID:", slider.id);
-                    }
                     return ratingData ? { ...slider, value: ratingData.rating } : slider;
                 });
 
@@ -67,9 +58,8 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
     // Обробник зміни значення слайдера
     const saveRatings = async () => {
         if (!user || !token) {
-            console.log("userName:", user);
-            console.log("authToken:", token);
-            console.error("userName або authToken не визначені");
+
+            console.error("userName або authToken are not defined");
             return;
         }
 
@@ -83,12 +73,11 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
         try {
             const result = await UpdateAlcoholRatingsAPI(user.userName, type, ratings, token);
             console.log("Updated wine ratings:", result);
-            // onRatingSave();
-            handleClose(); // Закрити вікно після успішного збереження
+            handleClose();
         } catch (error) {
             console.error("Failed to update ratings", error);
         } finally {
-            setIsSaving(false); // Завершуємо процес збереження
+            setIsSaving(false);
         }
     };
     const handleSliderChange = (index: number, value: number) => {
@@ -97,7 +86,7 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
         setSliders(newSliders);
     };
 
-    if (!show) return null; // Якщо вікно не повинно показуватися, повертаємо null
+    if (!show) return null;
 
     const sliderItems = sliders.map((slider, index) => ({
         ...slider,
@@ -107,7 +96,7 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
     // Обробник для кліку по фону
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
-            handleClose(); // Закрити вікно, якщо натиснуто на фон
+            handleClose();
         }
     };
 
@@ -123,15 +112,15 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
                         border: '3px solid #50C5FF',
-                        display: 'flex', // Додаємо Flexbox для вертикального центрування
-                        flexDirection: 'column', // Текст і слайдери будуть вертикально
-                        alignItems: 'center', // Горизонтальне центрування
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                         borderRadius: '16px'
                     }}>
                         <div className="mid-alco-title">Choose Wines</div>
                         <SliderList sliders={sliderItems}/>
 
-                        {/* Кнопка Save з великими розмірами, сірого кольору, заокруглена */}
+
                         <button className="midalco-btn-save" onClick={saveRatings}
                                 disabled={isSaving}>{isSaving ? "Saving..." : "Save"}</button>
                     </div>

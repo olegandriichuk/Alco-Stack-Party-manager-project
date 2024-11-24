@@ -6,7 +6,7 @@ import { UpdateAlcoholVolumeAPI } from "../../Services/UserService.tsx";
 import { PartyUserAlcohol } from "../../Models/Party.tsx";
 import { AlcoholVolume } from "../../Models/Alcohol.tsx";
 import back from '../../assets/signIn_card.svg';
-import './SelectAlcoholPopUp.css'; // Добавьте для стилизации
+import './SelectAlcoholPopUp.css';
 
 interface SelectAlcoholPopUpProps {
     show: boolean;
@@ -25,7 +25,7 @@ const SelectAlcoholPopUp: React.FC<SelectAlcoholPopUpProps> = ({
     const [updatedAlcohols, setUpdatedAlcohols] = useState<AlcoholVolume[]>([]);
     const [isSaving, setIsSaving] = useState(false);
 
-    // Загрузка значений из localStorage
+
     useEffect(() => {
         if (show) {
             const savedVolumes = localStorage.getItem(`party-${partyId}-volumes`);
@@ -85,28 +85,30 @@ const SelectAlcoholPopUp: React.FC<SelectAlcoholPopUpProps> = ({
     return (
         <>
             <div className="select-backdrop-blur" onClick={handleClose} />
-            <div className="select-container" style={{ backgroundImage: `url(${back})` }}>
+            <div className="select-container" style={{ backgroundImage: `url(${back})`}}>
                 <div className="modal-content">
                     <h3>Select Alcohol Volumes</h3>
-                    <AlcoVolumeSliderList
-                        sliders={updatedAlcohols.map((alcohol) => ({
-                            label: alcohol.name,
-                            value: alcohol.volume ?? 0,
-                            onChange: (newVolume) =>
-                                handleVolumeChange(alcohol.name, newVolume),
-                        }))}
-                    />
-                    <button
-                        className="select-confirm"
-                        onClick={saveVolumes}
-                        disabled={isSaving}
-                    >
-                        {isSaving ? "Saving..." : "Save"}
-                    </button>
+                    <div className="alcohol-slider-list">
+                        <AlcoVolumeSliderList
+                            sliders={updatedAlcohols.map((alcohol) => ({
+                                label: alcohol.name,
+                                value: alcohol.volume ?? 0,
+                                onChange: (newVolume) =>
+                                    handleVolumeChange(alcohol.name, newVolume),
+                            }))}
+                        />
+                    </div>
+                        <button
+                            className="select-confirm"
+                            onClick={saveVolumes}
+                            disabled={isSaving}
+                        >
+                            {isSaving ? "Saving..." : "Save"}
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </>
-    );
-};
+            </>
+            );
+            };
 
-export default SelectAlcoholPopUp;
+            export default SelectAlcoholPopUp;

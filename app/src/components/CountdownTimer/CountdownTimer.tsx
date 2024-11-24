@@ -24,8 +24,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
         const calculateTimeLeft = () => {
             const now = new Date();
             const difference = targetDate.getTime() - now.getTime();
-            console.log("ggggg");
-            console.log("current sr", currentState);
+
+            console.log("current state", currentState);
             if (difference <= 0) {
                 if (currentState === "DEFAULT") {
                     console.log("Switching to PREPARATION state.");
@@ -34,7 +34,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
                     onTimerComplete("PREPARATION");
                 } else if (currentState === "PREPARATION") {
                     console.log("Switching to EXTRA_DAY state.");
-                    const nextTarget = new Date(targetDate.getTime() + 1 * 60 * 1000); // Extra Day (1 minute for demo)
+                    const nextTarget = new Date(targetDate.getTime() + 24 * 60 * 60 * 1000);
+
                     setTargetDate(nextTarget);
                     setCurrentState("EXTRA_DAY");
                     onTimerComplete("EXTRA_DAY");
@@ -64,7 +65,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
 
         const interval = setInterval(calculateTimeLeft, 1000);
 
-        return () => clearInterval(interval); // Cleanup the interval on component unmount
+        return () => clearInterval(interval);
     }, [targetDate, currentState, onTimerComplete]);
 
     return (

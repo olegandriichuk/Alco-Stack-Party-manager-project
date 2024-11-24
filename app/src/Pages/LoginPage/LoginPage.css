@@ -2,15 +2,14 @@
 
 .full-height-login {
     min-height: 100vh;
-    /* Додаємо горизонтальне вирівнювання */
 }
 
 .container-fluid-login {
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Сместить к нижней границе экрана */
-    min-height: 100vh; /* Покрыть 100% высоты экрана */
-    background-position: center bottom; /* Фон начинается с нижней границы */
+    align-items: flex-end;
+    min-height: 100vh;
+    background-position: center bottom;
 }
 
 @font-face {
@@ -26,18 +25,18 @@
 h1.card-title-login {
     font-family: 'Karla-Bold', sans-serif;
     font-size: 32px;
-    color: #263238; /* Apply the color */
-    margin-bottom: 16px; /* Keep the margin for spacing */
-    text-align: center; /* Keep the text centered */
+    color: #263238;
+    margin-bottom: 16px;
+    text-align: center;
     white-space: nowrap;
 }
 
 .UsernamePassword-login {
-    font-family: 'Karla-Bold', sans-serif; /* Use the Halant-Bold font */
+    font-family: 'Karla-Bold', sans-serif;
     font-size: 16px;
-    color: #263238; /* Apply the color */
-    margin-bottom: 4px; /* Keep the margin for spacing */
-    text-align: center; /* Keep the text centered */
+    color: #263238;
+    margin-bottom: 4px;
+    text-align: center;
     white-space: nowrap;
 }
 
@@ -53,7 +52,7 @@ h1.card-title-login {
 }
 
 .sign-in-card {
-    background-image: url('../../assets/signIn_card.svg'); /* путь к изображению */
+    background-image: url('../../assets/signIn_card.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -61,14 +60,13 @@ h1.card-title-login {
     max-width: 600px;
     height: 700px;
     display: flex;
-    justify-content: center; /* Центровка содержимого внутри карточки */
-    align-items: center;     /* Центровка по оси Y внутри карточки */
+    justify-content: center;
+    align-items: center;
     padding: 30px;
     box-sizing: border-box;
 
-    /* Сдвиг карточки вверх */
     position: relative;
-    top: -20px; /* поднимет карточку чуть выше */
+    top: -20px;
 }
 
 .square-container-login {
@@ -84,26 +82,26 @@ h1.card-title-login {
 
 
 .custom-input-login {
-    border-radius: 20px !important; /* Закругленные края */
-    border: 1px solid #90A4AE; /* Внутренняя обводка */
-    padding: 10px 15px; /* Отступы внутри поля для комфорта */
-    font-size: 16px; /* Размер текста */
-    box-sizing: border-box; /* Включаем внутренние отступы в расчет ширины */
+    border-radius: 20px !important;
+    border: 1px solid #90A4AE;
+    padding: 10px 15px;
+    font-size: 16px;
+    box-sizing: border-box;
     width: 500px;
 }
 
 .custom-input-login:focus {
-    border-color: #90A4AE; /* Оставляем обводку при фокусе */
-    outline: none; /* Убираем стандартное выделение при фокусе */
+    border-color: #90A4AE;
+    outline: none;
 }
 
 .custom-input-login::placeholder {
-    color: #90A4AE; /* Цвет текста placeholder */
-    font-family: 'Karla-Regular', sans-serif; /* Устанавливаем шрифт для placeholder */
+    color: #90A4AE;
+    font-family: 'Karla-Regular', sans-serif;
 }
 
 .is-invalid-login {
-    border-color: #ff6c6c; /* Красная обводка, если есть ошибка */
+    border-color: #ff6c6c;
 }
 
 .invalid-feedback-login {
@@ -112,37 +110,37 @@ h1.card-title-login {
 }
 
 .forgot-link-login {
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    color: white; /* Цвет текста белый */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Эффект drop shadow */
-    text-decoration: none; /* Убираем подчеркивание, если необходимо */
+    font-family: 'Karla-Bold', sans-serif;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
 }
 
 .confirm-button-login {
-    background-color: black; /* Черный цвет фона */
-    border: 1px solid #50C5FF; /* Обводка 1 пиксель цвета 50C5FF */
-    border-radius: 20px; /* Закругленные углы */
-    width: 470px; /* Уменьшенная ширина */
-    padding: 10px; /* Отступы внутри кнопки для удобства */
-    color: white; /* Цвет текста белый */
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    font-size: 20px; /* Размер текста */
-    transition: background-color 0.3s ease; /* Плавный переход для цвета фона */
-    display: block; /* Делаем кнопку блочным элементом */
-    margin: 0 auto; /* Центрируем кнопку */
+    background-color: black;
+    border: 1px solid #50C5FF;
+    border-radius: 20px;
+    width: 470px;
+    padding: 10px;
+    color: white;
+    font-family: 'Karla-Bold', sans-serif;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
 }
 
 .confirm-button-login:hover {
-    background-color: #333; /* Изменение цвета при наведении, например, темно-серый */
+    background-color: #333;
 }
 
 .text-dont-login {
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    color: #263238; /* Цвет текста для "Don't have an account yet?" */
+    font-family: 'Karla-Bold', sans-serif;
+    color: #263238;
 }
 
 .text-signup-login {
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    color: white; /* Цвет текста белый */
+    font-family: 'Karla-Bold', sans-serif;
+    color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }

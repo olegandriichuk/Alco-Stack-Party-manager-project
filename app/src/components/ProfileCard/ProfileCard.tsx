@@ -12,10 +12,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import * as Yup from "yup";
 import Photobg from "../../assets/photobackground.svg"
-// import backgroundImage from "../../assets/backgroundFinal.svg";
-// import HalantSemiBold from "../../assets/fonts/halant/Halant-SemiBold.ttf";
-// import InterRegular from  "../../assets/fonts/inter/Inter-Regular.otf";
-import updateFoto from "../../assets/updatefoto.svg"
 import editprof from "../../assets/edit profile.svg";
 import alcopopup from "../../assets/alcopopup.svg";
 interface ProfileCardProps {
@@ -68,27 +64,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
          UserName
     }) => {
     const [currentPhotoSrc, setCurrentPhotoSrc] = useState(photoSrc);
-    const [currentBackgroundSrc, setCurrentBackgroundSrc] = useState(formBackgroundSrc);
     const [photoFile, setPhotoFile] = useState<File | null>(null);
-    const [formBackgroundFile, setBackgroundFile] = useState<File | null>(null);
     const [photoChanged, setPhotoChanged] = useState(false);
-    const [formBackgroundChanged, setFormBackgroundChanged] = useState(false);
-
-    // console.log("photoSrc", photoSrc)
-    // console.log("photoFile", photoFile);
-    // console.log("formBackgroundSrc", formBackgroundSrc);
 
     const { token, updateUser } = useAuth();
 
     useEffect(() => {
         setCurrentPhotoSrc(photoSrc);
-        setCurrentBackgroundSrc(formBackgroundSrc);
     }, [photoSrc, formBackgroundSrc]);
 
-    // console.log("currentBackgroundSrc", currentBackgroundSrc);
+
 
     const profileCardStyle: React.CSSProperties = {
-        // backgroundImage: `url(${currentBackgroundSrc})`,
+
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -122,24 +110,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             toast.error("You must be logged in to update your profile");
             return;
         }
-        // console.log("formBackgroundChanged", formBackgroundChanged);
-        // console.log("photoChanged", photoChanged);
-        // console.log('Updating profile with data:', photoFile, formBackgroundFile);
+
         try {
             const response = await UpdatePhotoAPI(
                 photoChanged,
-                formBackgroundChanged,
                 photoFile,
-                formBackgroundFile,
                 token
             );
             if (response && response.data) {
                 updateUser(response.data);
                 setCurrentPhotoSrc(response.data.photoSrc || "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg");
-                setCurrentBackgroundSrc(response.data.formBackgroundSrc || '');
                 setPhotoChanged(false);
-                setFormBackgroundChanged(false);
-                // console.log('Profile updated successfully', response.data);
+
             }
         } catch (error) {
             console.error('Failed to update profile', error);
@@ -153,11 +135,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         setPhotoChanged(true);
     };
 
-    // const handleDeleteBackground = () => {
-    //     setCurrentBackgroundSrc('');
-    //     setBackgroundFile(null);
-    //     setFormBackgroundChanged(true);
-    // };
+
 
     const [modalShow, setModalShow] = useState(false);
 
@@ -187,15 +165,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     left: '35%',
                     borderRadius: '16px',
                     zIndex: '1050',
-                    // Вище, ніж у заблюреного фону
 
-            }} // Зробити вужче та вищим
+
+            }}
             >
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     style={{
                         backgroundImage: `url(${alcopopup})`,
-                        backgroundSize: "cover", // Забезпечує повне покриття фону
+                        backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                         border: "3px solid #50C5FF",
@@ -203,7 +181,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     }}
                 >
                     <Modal.Body>
-                        {/* Profile Photo Section */}
+
                         <div className="mb-3 text-center">
                             <label htmlFor="photoFile" className="form-label-profile-photo">
                                 Profile Photo
@@ -215,17 +193,17 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     <div
                                         className="photo-upload-icon"
                                         style={{
-                                            // Вище, ніж у заблюреного фону
+
                                             width: "110px",
                                             height: "110px",
                                             borderRadius: "50%",
                                             backgroundImage:`url(${Photobg})`,
-                                            backgroundSize: 'cover', // Забезпечує повне покриття фону
+                                            backgroundSize: 'cover',
                                             backgroundRepeat: 'no-repeat',
                                             backgroundPosition: "center",
                                             display: "flex",
                                             alignItems: "center",
-                                            // justifyContent: "center",
+
                                             cursor: "pointer",
                                         }}
                                     >
@@ -284,9 +262,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 <div className="p-3 d-flex flex-column justify-content-around align-items-center">
                     <button onClick={() => setModalShow(true)} className="profile-photo-button"
                     style={{backgroundImage:`url(${Photobg})`,
-                        backgroundSize: 'cover', // Забезпечує повне покриття фону
+                        backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
-                        color: "black",// Запобігає повторенню фону
+                        color: "black",
                         backgroundPosition: 'center',
                         border: '3px solid #50C5FF'}}>
                         <img className="profile-photo" src={currentPhotoSrc} />
@@ -307,11 +285,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             <Button
                                 className="btn-lg m-2 edit-profile-btn"
                                 style={{
-                                    padding: '0', // Видаляємо внутрішні відступи
-                                    background: `url(${editprof}) no-repeat center center`, // Встановлюємо зображення як фон
-                                    backgroundSize: 'contain', // Масштабування зображення
-                                    width: '297px', // Встановлюємо ширину кнопки
-                                    height: '120px', // Встановлюємо висоту кнопки
+                                    padding: '0',
+                                    background: `url(${editprof}) no-repeat center center`,
+                                    backgroundSize: 'contain',
+                                    width: '297px',
+                                    height: '120px',
                                 }}
                             />
                         </Link>

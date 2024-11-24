@@ -6,18 +6,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faCopy } from '@fortawesome/free-solid-svg-icons';
 import Disco from '../../assets/disco.svg';
 import { GetPartyDetailAPI, UpdatePartyAPI, DeletePartyAPI } from '../../Services/PartyService.tsx';
-import { GetAllAlcoholByRankListAPI, UpdateAllAlcoholsByRankAPI } from '../../Services/AlcoholService.tsx'; // Import the new service
+import { GetAllAlcoholByRankListAPI, UpdateAllAlcoholsByRankAPI } from '../../Services/AlcoholService.tsx';
 import { PartyDetailGet, PartyDetailPut } from '../../Models/Party.tsx';
-import { AlcoholGet } from '../../Models/Alcohol.tsx'; // Import the AlcoholGet type
+import { AlcoholGet } from '../../Models/Alcohol.tsx';
 import { useAuth } from '../../Context/useAuth.tsx';
 import PartySettingsPopUp from '../../components/PartySettingsPopUp/PartySettingsPopUp.tsx';
 import AlcoholList from '../../components/AlcoholCardList/AlcoholCardList';
 import {CocktailGet, CocktailDetailsGet} from "../../Models/Cocktail.tsx";
 import CocktailPopup from "../../components/CocktailPopup/CocktailPopup.tsx";
 import { toast } from 'react-toastify';
-//import LiquorRatingPopUp from "../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP.tsx";
+
 import {GetCocktailListAPI, GetCocktailDetailsAPI} from '../../Services/CocktailService.tsx';
-import DescriptionPopUp from "../../components/DescriptionPopUp/DescriptionPopUp.tsx"; // Import the new component
+import DescriptionPopUp from "../../components/DescriptionPopUp/DescriptionPopUp.tsx";
 import CountdownTimer from '../../components/CountdownTimer/CountdownTimer.tsx';
 import ViewAmountPopUp   from "../../components/ViewAmountPopUp/ViewAmountPopUp.tsx";
 import SelectAlcoholPopUp from "../../components/SelectAlcoholPopUp/SelectAlcoholPopUp.tsx";
@@ -62,9 +62,7 @@ const PartyPage: React.FC = () => {
                 const response = await GetPartyDetailAPI(partyId!, token);
                 setParty(response!.data);
 
-                // Fetch alcohol details after party details are fetched
-                // const alcoholResponse = await GetAllAlcoholByRankListAPI(partyId!, token);
-                // setAlcohols(alcoholResponse!.data);
+
                 await updateAlcoholData();
             } catch {
                 setError('Failed to fetch party details');
@@ -73,13 +71,7 @@ const PartyPage: React.FC = () => {
             }
         };
         fetchPartyDetails();
-        //
-        // const interval = setInterval(() => {
-        //     updateAlcoholData();
-        // }, 1000); // Обновление каждые 5 секунд
-        //
-        // // Очищаем интервал при размонтировании компонента
-        // return () => clearInterval(interval);
+
     }, [partyId, token]);
 
     const handleOpenSelectAmount = () => {
@@ -87,7 +79,7 @@ const PartyPage: React.FC = () => {
     };
 
     const handleBackToCocktails = () => {
-        setSelectedCocktailDetails(null); // Сбрасываем выбранные детали
+        setSelectedCocktailDetails(null);
     };
 
     // Function to close the SelectAlcoholPopUp
@@ -108,17 +100,17 @@ const PartyPage: React.FC = () => {
             setIsFinalState(false);
         } else if (state === "PREPARATION") {
             console.log("Blocking updates during PREPARATION and EXTRA_DAY states.");
-            setAllowUpdates(false); // Блокируем обновления
+            setAllowUpdates(false);
             setAllowSelect(true);
             setIsFinalState(false);
         } else if (state === "FINAL") {
             console.log("Final countdown reached. Event starts!");
-            setAllowUpdates(false); // Оставляем блокировку в режиме FINAL
+            setAllowUpdates(false);
             setAllowSelect(false);
             setIsFinalState(true);
         }else if (state === "EXTRA_DAY") {
             console.log("Final countdown reached. Event starts!");
-            setAllowUpdates(false); // Оставляем блокировку в режиме FINAL
+            setAllowUpdates(false);
             setAllowSelect(true);
             setIsFinalState(false);
         }
@@ -174,14 +166,12 @@ const PartyPage: React.FC = () => {
 
 
     const handleViewCocktails = async () => {
-        if (isLoading) return; // Если уже идет загрузка, игнорируем повторный вызов
+        if (isLoading) return;
 
-        setIsLoading(true); // Устанавливаем состояние загрузки
+        setIsLoading(true);
 
         try {
-            // const ingredientNames = alcohols.map((alcohol) => alcohol.name);
-            // const ingredientNamesString = ingredientNames.join(", ");
-            // console.log("Processing alcohol:");
+
             const cocktailPromises = alcohols.map(alcohol => {
                 console.log("Processing alcohol:", alcohol.name); // Print the name of the alcohol
                 return GetCocktailListAPI(partyId!, alcohol.name, token);
@@ -211,7 +201,7 @@ const PartyPage: React.FC = () => {
             console.error("Error fetching cocktails:", error);
             toast.error("Failed to load cocktails");
         } finally {
-            setIsLoading(false); // Сбрасываем состояние загрузки
+            setIsLoading(false);
         }
     };
 
@@ -311,8 +301,7 @@ const PartyPage: React.FC = () => {
                 return;
             }
             setParty(prevParty => prevParty ? { ...prevParty, ...updatedParty } : null);
-            //toast.success("Party updated successfully!");
-            // localStorage.setItem("party", JSON.stringify(updatedParty));
+
 
             setShowModal(false);
         } catch (error) {
@@ -337,7 +326,7 @@ const PartyPage: React.FC = () => {
             style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
-                backgroundAttachment: 'fixed' // Фиксируем фон
+                backgroundAttachment: 'fixed'
             }}
         >
             <div className="video-left flex-grow-1"></div>
@@ -348,10 +337,10 @@ const PartyPage: React.FC = () => {
                     className="party-id-display"
                     style={{
                         position: 'absolute',
-                        top: '20px', // Расположить выше заголовка
-                        left: '35%', // Центрировать горизонтально
-                        transform: 'translateX(-50%)', // Точное центрирование
-                        zIndex: 1000, // Убедиться, что элемент находится выше
+                        top: '20px',
+                        left: '35%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 1000,
                     }}
                 >
                     <div className="party-id-container">
@@ -365,8 +354,8 @@ const PartyPage: React.FC = () => {
                                 className="form-control"
                                 aria-label="Party ID"
                                 style={{
-                                    width: '200px', // Установите ширину поля
-                                    textAlign: 'center', // Центрируем текст
+                                    width: '200px',
+                                    textAlign: 'center',
                                 }}
                             />
                             <button
@@ -374,7 +363,7 @@ const PartyPage: React.FC = () => {
                                 onClick={handleCopy}
                                 aria-label="Copy Party ID"
                                 style={{
-                                    marginLeft: '10px', // Отступ от текстового поля
+                                    marginLeft: '10px',
                                 }}
                             >
                                 <FontAwesomeIcon icon={faCopy}/>
@@ -398,11 +387,11 @@ const PartyPage: React.FC = () => {
                     className="main-text-partypage"
                     style={{
                         position: 'absolute',
-                        top: '80px', // Расположение от верхнего края
-                        left: '35%', // Горизонтальное центрирование
-                        transform: 'translateX(-50%)', // Сдвиг для точного центрирования
-                        zIndex: 1000, // Поверх остальных элементов
-                        textAlign: 'center', // Центрирование текста
+                        top: '80px',
+                        left: '35%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 1000,
+                        textAlign: 'center',
                     }}
                 >
                     WELCOME to {party!.name}!!!
@@ -422,17 +411,17 @@ const PartyPage: React.FC = () => {
                     className="home-link-welcome"
                     aria-label="Go to Homepage"
                     style={{
-                        position: 'absolute', // Для фиксации в углу
-                        top: '-25px', // Сдвиг от верхнего края
-                        right: '10px', // Сдвиг от правого края
+                        position: 'absolute',
+                        top: '-25px',
+                        right: '10px',
                     }}
                 >
                     <img
                         src={homeIcon}
                         alt="Home Icon"
                         style={{
-                            width: '120px', // Изменение ширины
-                            height: '120px', // Изменение высоты
+                            width: '120px',
+                            height: '120px',
                         }}
                     />
                 </Link>
@@ -484,10 +473,10 @@ const PartyPage: React.FC = () => {
                         style={{
                             position: 'absolute',
                             top: '306px',
-                            right: '423px', // Положение кнопки справа
-                            padding: 0, // Убираем отступы внутри кнопки
-                            border: 'none', // Убираем обводку кнопки
-                            background: 'transparent', // Прозрачный фон
+                            right: '423px',
+                            padding: 0,
+                            border: 'none',
+                            background: 'transparent',
                         }}
                         onClick={handleShowDescription}
                     >
@@ -495,9 +484,9 @@ const PartyPage: React.FC = () => {
                             src={buttonDescription}
                             alt="Party Description"
                             style={{
-                                width: '200px', // Размер изображения (можно изменить)
-                                height: '100px', // Высота изображения
-                                cursor: 'pointer', // Указываем, что элемент кликабельный
+                                width: '200px',
+                                height: '100px',
+                                cursor: 'pointer',
                             }}
                         />
                     </button>
@@ -514,7 +503,7 @@ const PartyPage: React.FC = () => {
                         lowAlcohol={party?.lowAlcohol || false}
                         midAlcohol={party?.midAlcohol || false}
                         highAlcohol={party?.highAlcohol || false}
-                        rankLimit={party?.rankLimit || 0} // Default rank limit
+                        rankLimit={party?.rankLimit || 0}
                         onClose={handleCloseDescription}
                     />
                 )}
@@ -533,13 +522,13 @@ const PartyPage: React.FC = () => {
                     {isFinalState ? (
                         <button
                             className="btn"
-                            onClick={handleOpenViewAmount} // Open View Amount popup
+                            onClick={handleOpenViewAmount}
                             style={{
                                 position: 'absolute',
                                 top: '307px',
-                                left: '350px', // Расположение кнопки
-                                padding: 0, // Убираем отступы
-                                border: 'none', // Убираем рамку  background: 'transparent', // Прозрачный фон
+                                left: '350px',
+                                padding: 0,
+                                border: 'none',
 
                             }}
                         >
@@ -547,9 +536,9 @@ const PartyPage: React.FC = () => {
                                 src={viewamount}
                                 alt="Select Amount"
                                 style={{
-                                    width: '200px', // Ширина изображения
-                                    height: '100px', // Высота изображения
-                                    cursor: 'pointer', // Курсор для кликабельности
+                                    width: '200px',
+                                    height: '100px',
+                                    cursor: 'pointer',
 
                                 }}
                             />
@@ -560,21 +549,21 @@ const PartyPage: React.FC = () => {
                             style={{
                                 position: 'absolute',
                                 top: '307px',
-                                left: '350px', // Расположение кнопки
-                                padding: 0, // Убираем отступы
-                                border: 'none', // Убираем рамку  background: 'transparent', // Прозрачный фон
+                                left: '350px',
+                                padding: 0,
+                                border: 'none',
 
                             }}
                             onClick={handleOpenSelectAmount}
-                            disabled={!allowSelect} // Отключаем кнопку, если флаг `allowSelect` равен false
+                            disabled={!allowSelect}
                         >
                             <img
                                 src={selectamount}
                                 alt="Select Amount"
                                 style={{
-                                    width: '200px', // Ширина изображения
-                                    height: '100px', // Высота изображения
-                                    cursor: 'pointer', // Курсор для кликабельности
+                                    width: '200px',
+                                    height: '100px',
+                                    cursor: 'pointer',
 
                                 }}
                             />

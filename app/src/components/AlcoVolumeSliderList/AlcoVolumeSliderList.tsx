@@ -5,7 +5,7 @@ import AlcoVolumeSlider from "../AlcoVolumeSlider/AlcoVolumeSlider.tsx";
 interface SliderItem {
     label: string;
     value: number;
-    // imageSrc: string; // Include the image source
+
     onChange: (value: number) => void;
 }
 
@@ -23,7 +23,7 @@ const AlcoVolumeSliderList: React.FC<SliderListProps> = ({ sliders }) => {
                             label={slider.label}
                             value={slider.value}
                             onChange={slider.onChange}
-                            // imageSrc={slider.imageSrc} // Pass the image source
+
                         />
                     </div>
                 ))}
