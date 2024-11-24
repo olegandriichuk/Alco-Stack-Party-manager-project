@@ -3,7 +3,7 @@
 import { UserProfileToken } from "../Models/User.tsx";
 import { Address } from "../Models/User.tsx";
 
-const api = "http://localhost:5131/api/";
+const api = "https://alcostack.azurewebsites.net/api/";
 
 
 export const loginAPI = async (username: string, password: string) => {

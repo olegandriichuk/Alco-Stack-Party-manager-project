@@ -3,7 +3,7 @@ import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {UserProfile, Address} from "../Models/User.tsx";
  import {PartyUserAlcohol} from "../Models/Party.tsx"
 
-const api = "http://localhost:5131/api/";
+const api = "https://alcostack.azurewebsites.net/api/";
 
 export const UpdateProfileAPI = async (
     email: string,

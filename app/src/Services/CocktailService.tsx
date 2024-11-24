@@ -2,7 +2,7 @@ import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {CocktailDetailsGet, CocktailGet} from "../Models/Cocktail.tsx";
 
-const api = "http://localhost:5131/api/";
+const api = "https://alcostack.azurewebsites.net/api/";
 
 export const GetCocktailListAPI = async (partyId: string,ingredient: string,authToken?: string | null ) => {
     try {

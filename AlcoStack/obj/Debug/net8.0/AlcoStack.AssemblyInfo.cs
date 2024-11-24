@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlcoStack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b55795ec11dcef7bc178056e4d97f82fc1569262")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5013adc154c5e926041a6c98bbcb77a7e16b6e96")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlcoStack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AlcoStack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
