@@ -14,7 +14,7 @@
 /*fonts*/
 
 body, html {
-    overflow: hidden; /* Отключаем прокрутку для всей страницы */
+    overflow: hidden;
     height: 100%;
 }
 
@@ -32,15 +32,15 @@ body, html {
 .container-fluid-register {
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Смещаем карточку к нижней границе */
+    align-items: flex-end;
     min-height: 100vh;
     background-position: center bottom;
-    background-attachment: fixed; /* Фиксируем фон */
+    background-attachment: fixed;
 }
 
 .full-height-register {
     min-height: 100vh;
-    /* Додаємо горизонтальне вирівнювання */
+
 }
 
 .party-icon-register {
@@ -53,16 +53,16 @@ body, html {
 }
 
 .card-register {
-    background-image: url('../../assets/signUp_card.svg'); /* путь к изображению */
+    background-image: url('../../assets/signUp_card.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    max-height: 100vh; /* Ограничиваем высоту карточки, чтобы она не занимала весь экран */
+    max-height: 100vh;
     width: 100%;
     max-width: 600px;
-    overflow-y: auto; /* Включаем прокрутку только внутри карточки */
-    border-radius: 10px; /* Закругленные края карточки */
-    transform: translate(-100px, 40px); /* Сдвигаем карточку вверх и влево */
+    overflow-y: auto;
+    border-radius: 10px;
+    transform: translate(-100px, 40px);
 }
 
 .card-register .react-datepicker__triangle {
@@ -89,27 +89,27 @@ h1.card-title-register {
 }
 
 .custom-input-register {
-    border-radius: 20px !important; /* Закругленные края */
-    border: 1px solid #90A4AE; /* Внутренняя обводка */
-    padding: 10px 15px; /* Отступы внутри поля для комфорта */
-    font-size: 16px; /* Размер текста */
-    box-sizing: border-box; /* Включаем внутренние отступы в расчет ширины */
+    border-radius: 20px !important;
+    border: 1px solid #90A4AE;
+    padding: 10px 15px;
+    font-size: 16px;
+    box-sizing: border-box;
     width: 100%;
-    max-width: 480px; /* Максимальна ширина */
-    margin: 0 auto; /* Центрування */
+    max-width: 480px;
+    margin: 0 auto;
 }
 .custom-input-register:focus {
-    border-color: #90A4AE; /* Оставляем обводку при фокусе */
-    outline: none; /* Убираем стандартное выделение при фокусе */
+    border-color: #90A4AE;
+    outline: none;
 }
 
 .custom-input-register::placeholder {
-    color: #90A4AE; /* Цвет текста placeholder */
-    font-family: 'Karla-Regular', sans-serif; /* Устанавливаем шрифт для placeholder */
+    color: #90A4AE;
+    font-family: 'Karla-Regular', sans-serif;
 }
 
 .is-invalid-register {
-    border-color: #ff6c6c; /* Красная обводка, если есть ошибка */
+    border-color: #ff6c6c;
 }
 
 .invalid-feedback-register {
@@ -119,61 +119,61 @@ h1.card-title-register {
 /*card body*/
 
 .text-alrdy-register {
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    color: #263238; /* Цвет текста для "Don't have an account yet?" */
+    font-family: 'Karla-Bold', sans-serif;
+    color: #263238;
 }
 
 .text-signin-register {
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
-    color: white; /* Цвет текста белый */
+    font-family: 'Karla-Bold', sans-serif;
+    color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .confirm-button-register {
-    background-color: black; /* Черный цвет фона */
-    border: 1px solid #50C5FF; /* Обводка 1 пиксель цвета 50C5FF */
-    border-radius: 20px; /* Закругленные углы */
-    width: 470px; /* Уменьшенная ширина */
-    padding: 10px; /* Отступы внутри кнопки для удобства */
-    color: white; /* Цвет текста белый */
-    font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
+    background-color: black;
+    border: 1px solid #50C5FF;
+    border-radius: 20px;
+    width: 470px;
+    padding: 10px;
+    color: white;
+    font-family: 'Karla-Bold', sans-serif;
     font-size: 20px; /* Размер текста */
-    transition: background-color 0.3s ease; /* Плавный переход для цвета фона */
-    display: block; /* Делаем кнопку блочным элементом */
-    margin: 0 auto; /* Центрируем кнопку */
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
 }
 
 .confirm-button-register:hover {
-    background-color: #333; /* Изменение цвета при наведении, например, темно-серый */
+    background-color: #333;
 }
 
 /*datepicker*/
 
 
 .calendar-icon-register {
-    width: 25px; /* Установите нужный размер */
-    height: auto; /* Сохраняем пропорции */
+    width: 25px;
+    height: auto;
     position: absolute;
-    right: 20px; /* Расположение иконки внутри поля */
-    top: 50%; /* Центрируем по вертикали */
-    transform: translateY(-50%); /* Центрируем по вертикали */
-    cursor: pointer; /* Указываем, что иконка кликабельна */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
-/*datepicker*/
 
 
-/* Стили для опций в select */
+
+
 .gender-select-option-register {
-    color: #90A4AE; /* Цвет текста по умолчанию для опций */
-    font-family: 'Karla-Regular', sans-serif; /* Шрифт для всех опций */
+    color: #90A4AE;
+    font-family: 'Karla-Regular', sans-serif;
 }
 
 .gender-select-option-register-bold {
-    color: #263238; /* Цвет для опции "Select Gender" */
-    font-family: 'Karla-Bold', sans-serif; /* Жирный шрифт для опции "Select Gender" */
+    color: #263238;
+    font-family: 'Karla-Bold', sans-serif;
 }
 
-/* Настройка hover для опций, если необходимо */
+
 .gender-select-option-register:hover {
-    color: #263238; /* Цвет текста при наведении */
+    color: #263238;
 }

@@ -44,10 +44,7 @@ export const UpdateAlcoholRatingsAPI = async (
     authToken?: string | null
 ) => {
     try {
-        console.log("USERDDDDDDDDD",userName);
-        console.log("TYPE", type);
-        console.log("Ratings", ratings);
-        // console.log("ahberkherh",ratings);
+
 
         const response = await axios.patch<SliderAlcoholPatch[]>(
             `${api}account/${userName}/${type}/ratings`,
@@ -81,12 +78,6 @@ export const GETAlcoholRatingsAPI = async (
             }
         );
 
-        // Assuming the response contains an array of objects with AlcoholId and Rating
-        // const alcoholRatings = response.data.map(item => ({
-        //     AlcoholId: item.id,
-        //     rating: item.rating
-        // }));
-         // console.log("ALCOHOL Raitngs:", alcoholRatings);
         return response;
     } catch (error) {
         handleError(error);

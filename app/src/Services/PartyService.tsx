@@ -114,7 +114,7 @@ export const UpdatePartyAPI = async (
     authToken?: string | null
 ) => {
     try {
-        console.log("Data before send:", date);
+
         if (date) {
             const originalDate = new Date(date);
             originalDate.setHours(originalDate.getHours() + 1);
@@ -128,7 +128,7 @@ export const UpdatePartyAPI = async (
             preparationDate = originalPrepDate.toISOString();
         }
 
-        console.log("Data before send (with +1h):", { date, preparationDate });
+
 
         const data = await axios.put<PartyDetailGet>(
             `${api}party/${partyId}`,
@@ -162,7 +162,7 @@ export const DeletePartyAPI = async (
     authToken?: string | null
 ) => {
     try {
-        // console.log("DATA:");
+
         const data = await axios.delete(
             `${api}party/${partyId}`,
             {
@@ -171,7 +171,7 @@ export const DeletePartyAPI = async (
                 }
             }
         );
-        // console.log("DATA:", data);
+
         return data;
     } catch (error) {
         handleError(error);
@@ -180,7 +180,7 @@ export const DeletePartyAPI = async (
 
 export const GetPartyAlcoholVolumeAPI = async (
     partyId: string,
-   // isClicked: boolean, // Передаємо isClicked як параметр
+
     authToken?: string | null
 ) => {
     try {
@@ -206,9 +206,9 @@ export const UpdateWillBeBoughtAPI = async (
     authToken?: string
 ) => {
     try {
-        // Filter out unnecessary fields
 
-        console.log("WILL BE BOUGHT:", payload);
+
+
 
         // Send the PATCH request
         const response = await axios.patch(
@@ -222,7 +222,7 @@ export const UpdateWillBeBoughtAPI = async (
             }
         );
 
-        console.log("Response:", response.data);
+
 
         return response.data;
     } catch (error) {

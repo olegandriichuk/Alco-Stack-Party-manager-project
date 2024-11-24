@@ -1,23 +1,16 @@
 .full-height-welcome {
     min-height: 110vh;
-    /* Додаємо горизонтальне вирівнювання */
+
 }
 
-/*.party-icon-welcome {
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    !*top: -2px;*!
-    left: -198px;
-    z-index: 1000;
-}*/
+
 
 .container-fluid-welcome {
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Сместить к нижней границе экрана */
-    min-height: 100vh; /* Покрыть 100% высоты экрана */
-    background-position: center bottom; /* Фон начинается с нижней границы */
+    align-items: flex-end;
+    min-height: 100vh;
+    background-position: center bottom;
 }
 
 .square-container-welcome {
@@ -46,9 +39,7 @@
     src: url('../../assets/fonts/VT323-Regular.ttf') format('truetype');
 }
 
-/*h1 {*/
-/*    font-family: 'Halant-Bold', sans-serif;*/
-/*}*/
+
 
 .party-icon-welcome {
     width: 80px;
@@ -67,20 +58,20 @@
 }
 
 .home-text-welcome {
-    font-family: 'Halant', sans-serif; /* Fallback to sans-serif */
-    font-size: 27px; /* Set font size to 27 pixels */
-    margin-left: 13px; /* Set left margin for spacing */
+    font-family: 'Halant', sans-serif;
+    font-size: 27px;
+    margin-left: 13px;
     position: absolute;
     top: -195px;
     left: 904px;
-    color: black; /* Text color */
+    color: black;
 }
 
 .home-link-welcome {
-    display: flex; /* Use flexbox to align items */
-    align-items: center; /* Vertically center the items */
-    padding: 2px; /* Add padding for spacing */
-    margin-bottom: -20px; /* Move the link upwards */
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    margin-bottom: -20px;
 }
 
 .home-icon-welcome {
@@ -94,13 +85,13 @@
 
 .text-center-welcome {
     font-family: 'Halant', serif;
-    font-size: 20px !important; /* За замовчуванням */
+    font-size: 20px !important;
 
 }
 
 @media (min-width: 768px) {
     .text-center-welcome {
-        font-size: 40px !important; /* Для комп'ютерів */
+        font-size: 40px !important;
         color: #000000;
     }
 }

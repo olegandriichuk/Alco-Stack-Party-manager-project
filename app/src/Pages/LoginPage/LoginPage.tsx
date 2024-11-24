@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Link} from "react-router-dom";
 import Disco from '../../assets/disco.svg';
 import backgroundImage from '../../assets/backgroundFinal.svg';
-// import signIn_card from '../../assets/signIn_card.svg';
+
 import './LoginPage.css';
 type LoginFormsInputs = {
     userName: string;

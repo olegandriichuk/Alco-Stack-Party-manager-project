@@ -2,7 +2,7 @@
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {UserProfile, Address} from "../Models/User.tsx";
  import {PartyUserAlcohol} from "../Models/Party.tsx"
-// import {AlcoholVolume} from "../Models/Alcohol.tsx";
+
 const api = "http://localhost:5131/api/";
 
 export const UpdateProfileAPI = async (
@@ -92,9 +92,7 @@ export const UpdateAlcoholVolumeAPI = async (
     authToken?: string
 ) => {
     try {
-        // Filter out unnecessary fields
 
-        console.log("Filtered Payload:", payload);
 
         // Send the PATCH request
         const response = await axios.patch(
@@ -108,7 +106,7 @@ export const UpdateAlcoholVolumeAPI = async (
             }
         );
 
-        console.log("Response:", response.data);
+
 
         return response.data;
     } catch (error) {
@@ -122,7 +120,7 @@ export const leavePartyAPI = async (
     authToken?: string | null
 ) => {
     try {
-        // console.log("DATA:");
+
         const data = await axios.delete(
             `${api}account/${partyId}LeaveParty`,
             {
@@ -131,7 +129,7 @@ export const leavePartyAPI = async (
                 }
             }
         );
-        // console.log("DATA:", data);
+
         return data;
     } catch (error) {
         handleError(error);

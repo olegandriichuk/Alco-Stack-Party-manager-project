@@ -2,14 +2,11 @@
 import Disco from '../../assets/disco.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
-// import HalantBold from '../../assets/fonts/halant/Halant-Bold.ttf';
-//import HalantSemiBold from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 import backgroundImage from '../../assets/backgroundFinal.svg';
 import homeIcon from '../../assets/Home.svg';
-// import CustomVideoPlayer from '../../components/CustomVideoPlayer/CustomVideoPlayer.tsx';
 import './WelcomePage.css';
 const WelcomePage: React.FC = () => {
-    //const isMobile = window.innerWidth <= 768;
+
 
     return (
         <div className="container-fluid-welcome d-flex p-0 full-height-welcome"

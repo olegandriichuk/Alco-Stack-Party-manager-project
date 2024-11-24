@@ -1,5 +1,5 @@
 ﻿import axios from "axios";
-// import { handleError } from "../Helpers/ErrorHandler.tsx";
+
 import { UserProfileToken } from "../Models/User.tsx";
 import { Address } from "../Models/User.tsx";
 
@@ -52,8 +52,6 @@ export const registerAPI = async (
             dateOfBirth: dateOfBirth
         });
 
-        // Handle successful response
-        console.log("Registration successful:", data);
         return data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

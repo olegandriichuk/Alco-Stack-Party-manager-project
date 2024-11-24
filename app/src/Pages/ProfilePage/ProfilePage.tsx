@@ -12,14 +12,12 @@ import Wine from '../../assets/Wine.png';
 import Liquor from '../../assets/Liquor.png';
 import Base_Liquor from '../../assets/Base_liquor.png'
 import React, { useState } from "react";
-// homeIcon from '../../assets/Home.svg'; --------------------------------ЭТО ИСПОЛЬЗОВАТЬ
-import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp';// Імпорт модального вікна
+
+import LowAlcoRatingPopUp from '../../Pages/AlcoRatingPopUp/LowAlcoRatingPopUp/LowAlcoRatingPopUp';
 import WineAlcoRatingPopUp from '../AlcoRatingPopUp/WineAlcoRatingPopUp/WineAlcoRatingPopUp';
 import LiquorRatingPopUP from '../AlcoRatingPopUp/LiquorRatingPopUP/LiquorRatingPopUP';
 import StrongAlcoRatingPopUp from '../AlcoRatingPopUp/StrongAlcoRatingPopUp/StrongAlcoRatingPopUp';
-// import backgroundImage1 from '../../assets/backcov1.svg';
-//import HalantSemiBold from '../../assets/fonts/halant/Halant-SemiBold.ttf';
-// import video from '../../assets/viddd2.mp4';
+
 import './ProfilePage.css';
 import backgroundImage from "../../assets/backgroundFinal.svg";
 
@@ -36,7 +34,7 @@ const ProfilePage: React.FC = () => {
         setShowLowAlcoModal(true);
     };
 
-    // Функція для відкриття вікна Wine
+
     const handleWineButtonClick = () => {
         setShowWineModal(true);
     };
@@ -48,7 +46,7 @@ const ProfilePage: React.FC = () => {
         setShowStrongAlcoModal(true);
     };
 
-    // Функція для закриття будь-якого модального вікна
+
     const handleCloseModal = () => {
         setShowLowAlcoModal(false);
         setShowWineModal(false);
@@ -72,12 +70,7 @@ const ProfilePage: React.FC = () => {
                  backgroundSize: 'cover',
 
              }}>
-            {/*<div className="video-left flex-grow-1">*/}
-            {/*    <video className="background-video-profile left" autoPlay loop muted>*/}
-            {/*        <source src={video} type="video/mp4"/>*/}
-            {/*        Your browser does not support the video tag.*/}
-            {/*    </video>*/}
-            {/*</div>*/}
+
             <div className="video-left flex-grow-1"></div>
             <div
                 className="container-fluid-profile p-0 d-flex flex-column align-items-center custom-background square-container-profile flex-grow-7">
@@ -95,13 +88,13 @@ const ProfilePage: React.FC = () => {
                         className="p-2"
                         aria-label="Go to Home Page"
                         style={{
-                            position: "absolute", // Обов'язковий для `top` і `right`
+                            position: "absolute",
                             top: "-2px",
                             right: "2px",
-                            textDecoration: "none", // Забираємо підкреслення
-                            color: "black", // Чорний колір тексту
-                            fontSize: "1.5rem", // Збільшуємо розмір тексту
-                            fontWeight: "bold", // Робимо текст жирним (за бажанням)
+                            textDecoration: "none",
+                            color: "black",
+                            fontSize: "1.5rem",
+                            fontWeight: "bold",
                         }}
                     >
                         <FontAwesomeIcon icon={faHome} size="1x" color="black" /> Home

@@ -91,25 +91,25 @@ const PartyPage: React.FC = () => {
     const handleCloseViewAmount = () => setShowViewAmountPopUp(false); // New function to close View Amount popup
 
     const handleTimerComplete = (state: "DEFAULT" | "PREPARATION" | "EXTRA_DAY" | "FINAL") => {
-        console.log("State:", state);
+
 
         if (state === "DEFAULT") {
-            console.log("Default state: blocking updates and disabling Select Amount.");
+
             setAllowUpdates(true);
             setAllowSelect(false);
             setIsFinalState(false);
         } else if (state === "PREPARATION") {
-            console.log("Blocking updates during PREPARATION and EXTRA_DAY states.");
+
             setAllowUpdates(false);
             setAllowSelect(true);
             setIsFinalState(false);
         } else if (state === "FINAL") {
-            console.log("Final countdown reached. Event starts!");
+
             setAllowUpdates(false);
             setAllowSelect(false);
             setIsFinalState(true);
         }else if (state === "EXTRA_DAY") {
-            console.log("Final countdown reached. Event starts!");
+
             setAllowUpdates(false);
             setAllowSelect(true);
             setIsFinalState(false);
@@ -119,7 +119,7 @@ const PartyPage: React.FC = () => {
     const updateAlcoholData = async () => {
         try {
             const alcoholResponse = await GetAllAlcoholByRankListAPI(partyId!, token);
-            console.log("Alcohol in Party: ", alcoholResponse);
+
             setAlcohols(alcoholResponse!.data); // Update state with new data
         } catch (error) {
             console.error("Failed to fetch alcohol data", error);
@@ -128,7 +128,7 @@ const PartyPage: React.FC = () => {
 
     const handleUpdateRanking = async () => {
         if (!allowUpdates) {
-            console.log("Updates are disabled.");
+
             toast.error("Updates are not allowed during this period.");
             return;
         }
@@ -173,7 +173,7 @@ const PartyPage: React.FC = () => {
         try {
 
             const cocktailPromises = alcohols.map(alcohol => {
-                console.log("Processing alcohol:", alcohol.name); // Print the name of the alcohol
+
                 return GetCocktailListAPI(partyId!, alcohol.name, token);
             });
 
@@ -185,13 +185,12 @@ const PartyPage: React.FC = () => {
                 .flat(); // Flatten array if each response contains an array of cocktails
 
 // Update the cocktails state with the combined results
-            console.log("Processing cocktails:", combinedCocktails);
 
-            //console.log("Fetching details for cocktail ID gggggg:", cocktails[0].Id);
+
             const filteredCocktails = removeDuplicates(combinedCocktails);
             setCocktails(filteredCocktails);
             setIsPopupOpen(true);
-            console.log("Filtered cocktails:", filteredCocktails);
+
             if (filteredCocktails.length > 0) {
                 toast.success("Cocktails loaded successfully!");
             }else {
@@ -206,12 +205,12 @@ const PartyPage: React.FC = () => {
     };
 
     const handleClosePopup = () => {
-        setIsPopupOpen(false); // Закрываем попап
+        setIsPopupOpen(false);
 
-        // Отключаем кнопку на 5 секунд
+
         setIsDisabled(true);
         setTimeout(() => {
-            setIsDisabled(false); // Снимаем блокировку через 5 секунд
+            setIsDisabled(false);
         }, 5000);
     };
 
@@ -220,7 +219,7 @@ const PartyPage: React.FC = () => {
     const handleCocktailDetails = async (id: string) => {
         try {
 
-            console.log("Fetching details for cocktail ID:", id);
+
             const cocktailDetails = await GetCocktailDetailsAPI(id, token);
             if (cocktailDetails) {
                 setSelectedCocktailDetails(cocktailDetails); // Save the selected cocktail details
@@ -244,7 +243,7 @@ const PartyPage: React.FC = () => {
     const deleteParty = async () => {
         try {
             const response = await DeletePartyAPI(partyId!, token);
-            console.log("TRY TO DELETE:", response);
+
             if (!response) {
                 toast.error("Failed to delete party");
                 return;
@@ -275,7 +274,7 @@ const PartyPage: React.FC = () => {
     // Handle save action from modal
     const handleSave = async (updatedParty: PartyDetailPut) => {
         if (!allowUpdates) {
-            console.log("Party updates are disabled.");
+
             toast.error("Updates to the party details are not allowed during this period.");
             return;
         }
@@ -295,7 +294,7 @@ const PartyPage: React.FC = () => {
                 updatedParty.rankLimit,
                 token
             );
-            console.log("DATE RESPONSE:" , response);
+
             if (!response) {
                 toast.error("Failed to update party");
                 return;
@@ -600,18 +599,18 @@ const PartyPage: React.FC = () => {
                             position: "absolute",
                             top: "450px",
                             left: "550px",
-                            padding: 0, // Убираем внутренние отступы
-                            border: "none", // Убираем границы
-                            background: "transparent", // Прозрачный фон
-                            cursor: "pointer", // Указываем, что элемент кликабельный
+                            padding: 0,
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
                         }}
                     >
                         <img
                             src={updateRankingButton}
                             alt="Update Alko Ranking"
                             style={{
-                                width: "40px", // Установите размер изображения
-                                height: "40px", // Автоматическое соотношение сторон
+                                width: "40px",
+                                height: "40px",
                             }}
                         />
                     </button>
@@ -649,7 +648,7 @@ const PartyPage: React.FC = () => {
                         <div
                             style={{
                                 position: 'absolute',
-                                top: '280px', // Рядом с кнопкой
+                                top: '280px',
                                 left: '30px',
                                 color: 'white',
                                 fontSize: '16px',
@@ -663,7 +662,7 @@ const PartyPage: React.FC = () => {
                     <CocktailPopup
                         cocktails={cocktails}
                         details={selectedCocktailDetails}
-                        onClickCocktail={handleCocktailDetails} // Передаем обработчик для выбора коктейля
+                        onClickCocktail={handleCocktailDetails}
                         onBackToCocktails={handleBackToCocktails}
                         isOpen={isPopupOpen}
                         onClose={handleClosePopup}

@@ -14,7 +14,7 @@ export const GetCocktailListAPI = async (partyId: string,ingredient: string,auth
                 }
             }
         );
-        console.log("Cocktails:", response.data); // Log the response data
+
         return response.data; // Return only the data, not the full response
     } catch (error) {
 
@@ -24,8 +24,7 @@ export const GetCocktailListAPI = async (partyId: string,ingredient: string,auth
 
 export const GetCocktailDetailsAPI = async (id : string,authToken?: string | null ) => {
     try {
-        console.log("Requesting cocktails details...");
-        console.log("Cocktail id:", id);
+
         const response = await axios.get<CocktailDetailsGet>(
             `${api}cocktail/details/${id}`, // Updated URL
             {
@@ -34,8 +33,7 @@ export const GetCocktailDetailsAPI = async (id : string,authToken?: string | nul
                 }
             }
         );
-        console.log("Cocktail details:", response.data); // Log the response data
-        console.log("Cocktail ingredients bbbbbbb:", response.data.ingredients);
+
         return response.data; // Return only the data, not the full response
     } catch (error) {
 
