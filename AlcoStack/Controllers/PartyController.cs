@@ -136,10 +136,15 @@ public class PartyController(
     public async Task<IActionResult> AddUserToParty(Guid partyId)
     {
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            return BadRequest(new { message = "Invalid Party ID format." });
         
         var userName = User.GetUsername();
-        
+        var party = await repository.GetByIdAsync(partyId);
+        if (party == null || party.date < DateTime.UtcNow)
+        {
+           
+            return NotFound(new { message = "Party is not found." });
+        }
         return Ok(await userPartyRepository.AddAsync(userName, partyId));
     }
     
@@ -259,11 +264,17 @@ public class PartyController(
     [HttpGet("{partyId}/alcohol-volumes")]
     public async Task<IActionResult> GetPartyAlcoholVolumes(Guid partyId, [FromQuery] bool isClicked)
     {
-        // Call the repository method
-        if (!isClicked)
+
+        var party =  await repository.GetByIdAsync(partyId);
+
+        if (party == null)
+        {
+            return NotFound();
+        }
+        
+        if (!party.IsVolumeEvaluated)
         {
             var result = await PartyAlcoholVolumeService.CalculateAndSavePartyAlcoholVolumesAsync(partyId);
-            
             return Ok(result);
         }
         else
@@ -273,17 +284,7 @@ public class PartyController(
         }        
             
     }
-    [HttpGet("{partyId}/is-clicked")]
-    public async Task<IActionResult> CheckIsClicked(Guid partyId)
-    {
-        var party = await repository.GetByIdAsync(partyId);
-        
-
-        // Логіка для визначення стану (наприклад, збережений стан у таблиці чи розрахунок)
-        bool isClicked = await partyAlcoholRepository.AnyAsync(partyId);
-        return Ok(new { isClicked });
-    }
-
+   
     [Authorize]
     [HttpPatch("{partyId}/update-rank/{alcoholId}")]
     public async Task<IActionResult> UpdateRank(Guid partyId, Guid alcoholId, [FromBody] int rank)

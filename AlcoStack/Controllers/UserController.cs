@@ -19,6 +19,7 @@ namespace AlcoStack.Controllers;
         SignInManager<User> signInManager,
         ILogger<UserController> logger,
         IUserAlcoholRepository userAlcoholRepository,
+        IUserRepository userRepository,
         IUserPartyRepository userPartyRepository,
         IFileService fileService,
         IWebHostEnvironment webHostEnvironment)
@@ -55,9 +56,7 @@ namespace AlcoStack.Controllers;
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
-                    FormBackgroundName = user.FormBackgroundName,
-                    FormBackgroundSrc = user.FormBackgroundName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
-                }
+                   }
             );
         } 
     
@@ -134,8 +133,6 @@ namespace AlcoStack.Controllers;
                     PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
                     Bio = user.Bio,
                     Gender = user.Gender,
-                    FormBackgroundName = user.FormBackgroundName,
-                    FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}"
                 };
 
                 return Ok(newUserDto);
@@ -201,8 +198,6 @@ namespace AlcoStack.Controllers;
                 Phone = user.PhoneNumber,
                 PhotoName = user.PhotoName,
                 PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
-                FormBackgroundName = user.FormBackgroundName,
-                FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}",
                 Bio = user.Bio,
                 Gender = user.Gender
             };
@@ -240,8 +235,10 @@ namespace AlcoStack.Controllers;
                 return Unauthorized();
     
             // Ensure the email in the DTO matches the current user's email
+            /*
             if (currentUser.Email != userDto.Email)
                 return Forbid();
+                */
     
             // Update username if it has changed
             if (currentUser.UserName != userDto.Username)
@@ -308,27 +305,7 @@ namespace AlcoStack.Controllers;
                 user.PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
             }
             
-            if (photoDto.FormBackgroundChanged)
-            {
-
-                if (photoDto.FormBackgroundFile != null)
-                {
-                    if (user.FormBackgroundName != null)
-                        DeleteImage(user.FormBackgroundName);
-                    user.FormBackgroundName = await SaveImage(photoDto.FormBackgroundFile);
-                    user.FormBackgroundSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
-                }
-                else if (user.FormBackgroundName != null && photoDto.FormBackgroundFile == null)
-                {
-                    DeleteImage(user.FormBackgroundName);
-                    user.FormBackgroundName = null;
-                    user.FormBackgroundSrc = null;
-                }
-            }
-            else
-            {
-                user.FormBackgroundSrc = user.FormBackgroundName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.FormBackgroundName}";
-            }
+            
 
             var result = await userManager.UpdateAsync(user);
     
@@ -442,7 +419,7 @@ namespace AlcoStack.Controllers;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == username);
+            var user = await userRepository.DeleteAsync(username) ;
             
             if (user == null)
                 return NotFound();

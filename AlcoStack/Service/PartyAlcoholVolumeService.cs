@@ -42,7 +42,7 @@ public class PartyAlcoholVolumeService(AppDataContext context) : IPartyAlcoholVo
             .Select(group => new
             {
                 AlcoholId = group.Key,
-                TotalVolume = group.Sum(pua => pua.Volume)
+                TotalVolume = Math.Round(group.Sum(pua => pua.Volume), 1) // Round to 1 decimal place
             })
             .Where(a => a.TotalVolume > 0) // Include only non-zero volumes
             .ToList();
@@ -59,7 +59,7 @@ public class PartyAlcoholVolumeService(AppDataContext context) : IPartyAlcoholVo
             }
 
         }
-
+        party.IsVolumeEvaluated = true;
         // Save changes to the database
         await context.SaveChangesAsync();
 
@@ -74,6 +74,9 @@ public class PartyAlcoholVolumeService(AppDataContext context) : IPartyAlcoholVo
                 Volume = a.TotalVolume
             }).ToList()
         };
+
+        
+        
 
         return result;
 
