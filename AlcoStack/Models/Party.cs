@@ -43,6 +43,8 @@ public class Party
     public ICollection<PartyAlcohol> Alcohols { get; set; } = new List<PartyAlcohol>();
     
     public ICollection<PartyUserAlcohol> PartyUserAlcohols { get; set; } = new List<PartyUserAlcohol>();
+    
+    public bool IsVolumeEvaluated { get; set; } = false;
 
     
     public DateTime CreatedDate { get; set; } = DateTime.Now;

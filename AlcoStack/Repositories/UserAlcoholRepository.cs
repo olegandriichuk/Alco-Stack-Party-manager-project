@@ -113,21 +113,7 @@ public class UserAlcoholRepository(AppDataContext context) : IUserAlcoholReposit
         return userAlcohol;
     }
 
-   /* public async Task<UserAlcohol> UpdateRatingAsync(string userName, Guid alcoholId, int rating)
-    {
-        var userAlcohol = await context.UserAlcohols
-            .FirstOrDefaultAsync(x => x.UserName == userName && x.AlcoholId == alcoholId);
-        
-        if (userAlcohol == null)
-        {
-            throw new Exception("UserAlcohol not found");
-        }
-        
-        userAlcohol.Rating = rating;
-        context.UserAlcohols.Update(userAlcohol);
-        await context.SaveChangesAsync();
-        return userAlcohol;
-    }*/
+   
    public async Task<UserAlcohol> UpdateRatingAsync(string userName, Guid alcoholId, int rating)
    {
        var userAlcohol = await context.UserAlcohols

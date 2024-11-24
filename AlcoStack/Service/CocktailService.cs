@@ -57,94 +57,7 @@ namespace AlcoStack.Service
             return new List<CocktailListDto>();
         }
         
-        // public async Task<List<CocktailListDto>> GetCocktailsByIngredientAsync(string alcoholName)
-        // {
-        //     try
-        //     {
-        //         // Check if the provided alcohol name exists in the database
-        //         var alcoholInDb = await _context.Alcohols
-        //             .FirstOrDefaultAsync(a => a.Name.ToLower() == alcoholName.ToLower());
-        //
-        //         if (alcoholInDb == null)
-        //         {
-        //             // If the alcohol is not found, return an empty list
-        //             return new List<CocktailListDto>();
-        //         }
-        //
-        //         // Fetch cocktails using the alcohol ingredient name from the external API
-        //         var response = await _httpClient.GetAsync($"{_cocktailDbListUrl}{alcoholName}");
-        //
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             var jsonResponse = await response.Content.ReadAsStringAsync();
-        //             var cocktailList = JsonSerializer.Deserialize<CocktailList>(jsonResponse, new JsonSerializerOptions
-        //             {
-        //                 PropertyNameCaseInsensitive = true
-        //             });
-        //
-        //             if (cocktailList?.Drinks != null)
-        //             {
-        //                 var filteredCocktails = new List<CocktailListDto>();
-        //
-        //                 foreach (var drink in cocktailList.Drinks)
-        //                 {
-        //                     var cocktailDetails = await GetCocktailDetailsAsync(drink.IdDrink);
-        //
-        //                     if (cocktailDetails != null && await IsOnlyAlcoholIngredient(cocktailDetails, alcoholInDb.Name))
-        //                     {
-        //                         filteredCocktails.Add(new CocktailListDto
-        //                         {
-        //                             Id = drink.IdDrink,
-        //                             Name = drink.StrDrink,
-        //                             Photo = drink.StrDrinkThumb
-        //                         });
-        //                     }
-        //                 }
-        //
-        //                 return filteredCocktails;
-        //             }
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // Log the exception or handle it accordingly
-        //         Console.WriteLine($"Error fetching cocktails: {ex.Message}");
-        //     }
-        //
-        //     return new List<CocktailListDto>();
-        // }
-
-// Helper method to check if the given alcohol is the only alcoholic ingredient in the cocktail
-// private async Task<bool> IsOnlyAlcoholIngredient(CocktailDetailsDto cocktail, string alcoholIngredient)
-// {
-//     // Get all alcohol names from the database
-//     var alcoholNames = await _context.Alcohols.Select(a => a.Name.ToLower()).ToListAsync();
-//
-//     int alcoholCount = 0;
-//     bool containsDesiredAlcohol = false;
-//
-//     // Check ingredients (assuming Ingredient1 to Ingredient15)
-//     for (int i = 1; i <=25 ; i++)
-//     {
-//         var ingredient = cocktail.GetType().GetProperty($"StrIngredient{i}")?.GetValue(cocktail)?.ToString()?.ToLower();
-//
-//         if (!string.IsNullOrEmpty(ingredient))
-//         {
-//             if (alcoholNames.Contains(ingredient))
-//             {
-//                 alcoholCount++;
-//             }
-//             if (ingredient.Contains(alcoholIngredient.ToLower()))
-//             {
-//                 containsDesiredAlcohol = true;
-//             }
-//         }
-//     }
-//
-//     // Return true if the only alcohol present is the one passed as the ingredient
-//     return alcoholCount == 1 && containsDesiredAlcohol;
-// }
-
+      
 
         // Method for getting detailed cocktail information
         public async Task<CocktailDetailsDto?> GetCocktailDetailsAsync(string id)
@@ -220,7 +133,7 @@ namespace AlcoStack.Service
                     cocktail.StrIngredient13,
                     cocktail.StrIngredient14,
                     cocktail.StrIngredient15
-                }.Where(ingredient => !string.IsNullOrEmpty(ingredient)) // Исключаем null и пустые строки
+                }.Where(ingredient => !string.IsNullOrEmpty(ingredient)) 
                 .ToList();
             });
         }
