@@ -1,75 +1,51 @@
-import React from 'react';
-import DatePicker from 'react-datepicker';
+import { forwardRef, useImperativeHandle, useRef } from "react";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import './DateTimePicker.css';
-import icon_calendar from '../../assets/icon _calendar_.svg';
+import "./DateTimePicker.css";
 
-interface DatePickerComponentProps {
-    value: string | undefined;
-    onChange: (date: string | undefined) => void;
+interface DateTimePickerProps {
+    value: string | null | undefined; // ISO String for date value
+    onChange: (date: string | undefined) => void; // Callback to handle date change
 }
 
-const CustomInput = React.forwardRef<HTMLInputElement, any>(
-    ({ value, onClick, onClear }, ref) => (
-        <div className="datepicker-input-wrapper">
-            <input
-                ref={ref}
-                value={value}
-                placeholder="Select Date"
-                className="datepicker-input"
-                readOnly
-                onClick={onClick}
-            />
-            <img
-                src={icon_calendar}
-                alt="Calendar Icon"
-                className="datepicker-icon"
-                onClick={onClick}
-            />
-            {value && (
-                <span
-                    className="clear-icon"
-                    onClick={onClear}
-                >
-                    &times;
-                </span>
-            )}
-        </div>
-    )
+export interface DateTimePickerRef {
+    focus: () => void; // Expose a method to open the calendar
+}
+
+const DateTimePicker = forwardRef<DateTimePickerRef, DateTimePickerProps>(
+    ({ value, onChange }, ref) => {
+        const datePickerRef = useRef<DatePicker>(null);
+
+        const handleDateChange = (date: Date | null) => {
+            if (date) {
+                // Format date as yyyy-MM-dd without UTC adjustment
+                const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+                onChange(formattedDate);
+            } else {
+                onChange(undefined); // Handle clearing of the date
+            }
+        };
+
+        // Expose the focus method to the parent
+        useImperativeHandle(ref, () => ({
+            focus: () => {
+                datePickerRef.current?.setOpen(true); // Programmatically open the calendar
+            },
+        }));
+
+        return (
+            <div className="datepicker-wrapper">
+                <DatePicker
+                    ref={datePickerRef}
+                    selected={value ? new Date(value) : null} // Handle null for empty value
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd" // Use date-only format
+                />
+            </div>
+        );
+    }
 );
 
-const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ value, onChange }) => {
-
-    const handleDateChange = (date: Date | null) => {
-        if (date) {
-
-            const cleanDate = new Date(
-                Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-            );
-            onChange(cleanDate.toISOString().split('T')[0]);
-        } else {
-            onChange(undefined);
-        }
-    };
-
-    return (
-        <div className="datepicker-wrapper">
-            <label htmlFor="dateOfBirth" className="datepicker-title">Date of Birth</label>
-            <DatePicker
-                selected={value ? new Date(value) : null}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Select Date"
-                customInput={
-                    <CustomInput
-                        value={value}
-                        onClick={() => {}}
-                        onClear={() => onChange(undefined)}
-                    />
-                }
-            />
-        </div>
-    );
-};
-
-export default DatePickerComponent;
+export default DateTimePicker;

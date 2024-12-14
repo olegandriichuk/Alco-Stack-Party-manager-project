@@ -111,7 +111,7 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
                         backgroundSize: 'auto',
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
-                        border: '3px solid #50C5FF',
+                        border: '3px solid rgba(79, 40, 233, 0.5)',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',

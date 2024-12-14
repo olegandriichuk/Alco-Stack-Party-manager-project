@@ -203,13 +203,13 @@ export const GetPartyAlcoholVolumeAPI = async (
 export const UpdateWillBeBoughtAPI = async (
     partyId: string,
     payload: PartyUserAlcohol,
-    authToken?: string
+    authToken?: string | null
 ) => {
     try {
 
 
 
-
+        console.log("In api:ffff", payload);
         // Send the PATCH request
         const response = await axios.patch(
             `${api}party/${partyId}/update-alcohol-purchases`,
@@ -222,10 +222,10 @@ export const UpdateWillBeBoughtAPI = async (
             }
         );
 
-
-
+        console.log("dddddddd:", response.data);
         return response.data;
     } catch (error) {
+
         handleError(error);
         throw error;
     }

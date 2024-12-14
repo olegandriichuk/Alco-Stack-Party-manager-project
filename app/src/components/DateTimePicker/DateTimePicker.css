@@ -68,32 +68,7 @@
     color: white;
 }
 
-/* Стили для времени */
-.react-datepicker__time-container {
-    border-left: 1px solid #828282;
-    font-family: 'Lato-Medium', sans-serif;
-}
 
-.react-datepicker__time-list {
-    background: white;
-    border-radius: 0 12px 12px 0;
-}
-
-.react-datepicker__time-list-item {
-    padding: 8px;
-    text-align: center;
-    color: #000000;
-}
-
-.react-datepicker__time-list-item:hover {
-    background-color: #1294F2;
-    color: white;
-}
-
-.react-datepicker__time-list-item--selected {
-    background-color: #1294F2;
-    color: white;
-}
 
 .datepicker-wrapper {
     display: flex;
@@ -101,7 +76,7 @@
     align-items: center;
     width: 100%;
     max-width: 480px;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 
 .datepicker-title {
@@ -133,6 +108,10 @@
     border-color: #90A4AE;
 }
 
+.datepicker-wrapper .react-datepicker__input-container input {
+    display: none; /* Hides the input field */
+}
+
 .datepicker-input {
     width: 100%;
     border: none;
@@ -158,8 +137,8 @@
 
 .clear-icon {
     position: absolute;
-    right: 360px;
-    top: 5px;
+    right: 235px;
+    top: 6px;
     font-size: 20px;
     font-weight: bold;
     color: #90A4AE;

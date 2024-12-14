@@ -23,10 +23,10 @@
 }
 
 /* Ensure that the modal itself is above the blurred backdrop */
-.rs-modal-content {
-    background: rgba(255, 255, 255, 0);
-    background-image: url("../../assets/popupBack.svg");
-    background-size: auto;
+.rs-modal-content{
+    /*background: rgba(255, 255, 255, 0);*/
+    background-image: url("../../assets/createpopup.svg");
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 10px;
@@ -36,5 +36,20 @@
     font-weight: bold;
     font-size: 1.5rem;
     margin-bottom: 8px;
+}
+.modal-body-scroll-create-party {
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling behavior */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, etc.) */
+.modal-body-scroll-create-party::-webkit-scrollbar {
+    display: none;
+    background: rgba(41, 141, 255, 0.5);
+    filter: drop-shadow(-29px 6px 45px rgba(255, 249, 249, 0.25));
+    background: rgba(79, 40, 233, 0.5);
 }
 

@@ -5,7 +5,7 @@ import AlcoVolumeSliderList from "../AlcoVolumeSliderList/AlcoVolumeSliderList.t
 import { UpdateAlcoholVolumeAPI } from "../../Services/UserService.tsx";
 import { PartyUserAlcohol } from "../../Models/Party.tsx";
 import { AlcoholVolume } from "../../Models/Alcohol.tsx";
-import back from '../../assets/signIn_card.svg';
+import back from '../../assets/joinpopup.svg';
 import './SelectAlcoholPopUp.css';
 
 interface SelectAlcoholPopUpProps {
@@ -85,8 +85,15 @@ const SelectAlcoholPopUp: React.FC<SelectAlcoholPopUpProps> = ({
     return (
         <>
             <div className="select-backdrop-blur" onClick={handleClose} />
-            <div className="select-container" style={{ backgroundImage: `url(${back})`}}>
-                <div className="modal-content">
+            <div className="select-alco-container" style={{ backgroundImage: `url(${back})`, backgroundSize: 'auto',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                maxWidth: '600px'
+                // paddingRight: '50px',
+                // paddingLeft: '50px'
+                // padding: '50px'
+            }}>
+                <div className="select-alco-modal-content">
                     <h3>Select Alcohol Volumes</h3>
                     <div className="alcohol-slider-list">
                         <AlcoVolumeSliderList

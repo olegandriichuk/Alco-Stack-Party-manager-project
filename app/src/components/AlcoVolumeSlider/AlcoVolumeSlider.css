@@ -1,7 +1,7 @@
 ﻿.select-slider-container {
     display: flex;
     align-items: center;
-    background: white;
+    background: rgba(255, 255, 255, 0.3); /* White background with 80% opacity */
     border-radius: 25px;
     padding: 7px;
     /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
@@ -9,21 +9,20 @@
 }
 
 
-.slider-header {
+.select-alcohol-slider-header {
     display: flex;
     align-items: center;
     margin-bottom: 5px; /* Adjust spacing as needed */
 }
 
-.slider-image {
+.select-alcohol-slider-image {
     width: 28px; /* Set the width of the image */
     height: 28px; /* Set the height of the image */
     margin-right: 10px; /* Space between the image and the label */
 }
 
-.slider-label {
-
-    margin-right: 50px;
+.select-alcohol-slider-label {
+    margin-right: 54px;
     font-weight: bold;
     font-size: 12px;
     white-space: nowrap; /* Prevent text wrapping */
@@ -31,7 +30,7 @@
     text-align: center; /* Align text to center */
 }
 
-.slider-range {
+.select-alcohol-slider-range {
     -webkit-appearance: none;
     width: 75%;
     height: 8px;
@@ -42,7 +41,7 @@
     transition: opacity .2s;
 }
 
-.slider-range::-webkit-slider-thumb {
+.select-alcohol-slider-range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -52,7 +51,7 @@
     cursor: pointer;
 }
 
-.slider-range::-moz-range-thumb {
+.select-alcohol-slider-range::-moz-range-thumb {
     width: 20px;
     height: 20px;
     background: gray;
@@ -67,7 +66,7 @@
     font-style: normal;
 }
 
-.slider-value {
+.select-alcohol-slider-value {
     font-size: 18px; /* Розмір шрифту */
     margin-left: auto;
     font-family: 'Halant', serif; /* Використання шрифту Halant */

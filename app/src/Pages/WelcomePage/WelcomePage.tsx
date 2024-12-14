@@ -13,11 +13,12 @@ const WelcomePage: React.FC = () => {
              style={{
                  backgroundImage: `url(${backgroundImage})`,
                  backgroundSize: 'cover',
+                 backgroundAttachment: 'fixed'
              }}>
             <div className="video-left flex-grow-1"></div>
 
             <div
-                className="container-fluid p-0 d-flex flex-column align-items-center custom-background square-container-welcome flex-grow-7">
+                className="container-fluid-welcome p-0 d-flex flex-column align-items-center custom-background square-container-welcome flex-grow-7">
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div>
                         <img
@@ -30,11 +31,19 @@ const WelcomePage: React.FC = () => {
                             to="/home"
                             className="home-link-welcome"
                             aria-label="Go to Homepage"
+                            style={{
+                                position: 'absolute',
+                                top: '-25px',
+                                right: '10px',
+                            }}
                         >
                             <img
                                 src={homeIcon}
                                 alt="Home Icon"
-                                className="home-icon-welcome"
+                                style={{
+                                    width: '120px',
+                                    height: '120px',
+                                }}
                             />
                         </Link>
                     </div>
@@ -44,7 +53,7 @@ const WelcomePage: React.FC = () => {
                     <h2 className="text-2xl md:text-4xl lg:text-5xl m-1 mt-0 mb-2 text-center-welcome"
                         style={{
                             position: 'absolute', // Use absolute positioning
-                            top: '-110px', // Adjust this value to position it higher
+                            top: '70px', // Adjust this value to position it higher
                             left: '50%', // Center horizontally
                             transform: 'translateX(-50%)', // Correct horizontal alignment
                             zIndex: 10,

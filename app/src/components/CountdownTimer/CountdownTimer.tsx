@@ -34,7 +34,9 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
                     onTimerComplete("PREPARATION");
                 } else if (currentState === "PREPARATION") {
                     console.log("Switching to EXTRA_DAY state.");
-                    const nextTarget = new Date(targetDate.getTime() + 24 * 60 * 60 * 1000);
+                    // const nextTarget = new Date(targetDate.getTime() + 1 * 60 * 60 * 1000); 1hour
+                    const nextTarget = new Date(targetDate.getTime() + 10*60 * 1000);  // 1minute
+                    // const nextTarget = new Date(targetDate.getTime() + 24 * 60 * 60 * 1000); // 24 hours
 
                     setTargetDate(nextTarget);
                     setCurrentState("EXTRA_DAY");

@@ -16,7 +16,8 @@ export type CocktailDetailsCardProps = {
 
 const CocktailDetailsCard: React.FC<CocktailDetailsCardProps> = ({ cocktail }) => {
     return (
-        <Card style={{ width: '10px', height: '100px', margin: '20px' }}>
+        <Card style={{ width: '10px', height: '100px', margin: '20px',
+        }}>
             <Card.Img variant="top" src={cocktail.strDrinkThumb} alt={cocktail.strDrink} />
             <Card.Body>
                 <Card.Title>{cocktail.strDrink}</Card.Title>

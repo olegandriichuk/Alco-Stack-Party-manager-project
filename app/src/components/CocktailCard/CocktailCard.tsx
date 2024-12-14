@@ -12,7 +12,10 @@ export type CocktailCardProps = {
 
 const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, onClick }) => {
     return (
-        <div className="cocktail-card" onClick={() => onClick(cocktail.id)}>
+        <div className="cocktail-card" onClick={() => onClick(cocktail.id)}
+             style={{
+
+             }}>
             <img
                 src={cocktail.photo}
                 alt={cocktail.name}

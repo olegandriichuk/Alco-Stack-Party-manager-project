@@ -60,35 +60,39 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
 
     return (
         <>
-            {show && <div className="modal-backdrop" />} {/* Add blurred backdrop */}
-            <Modal open={show} onClose={handleClose}>
-                <Modal.Header className="text-center w-100">
-                    <Modal.Title className="modal-title-bold-join">Join Party</Modal.Title>
-                </Modal.Header>
+            {show && <div className="modal-backdrop"/>} {/* Add blurred backdrop */}
 
-                <Modal.Body>
-                    <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column align-items-center">
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                className={`form-control ${errorMessage ? 'is-invalid' : ''}`}
-                                placeholder="Enter ID to join the party"
-                                {...register("partyId")}
-                            />
-                            {/* Show error message in red if it exists */}
-                            {errorMessage && (
-                                <span className="text-danger" style={{ color: "red" }}>
+                <Modal open={show} onClose={handleClose}>
+
+                        <Modal.Header className="text-center w-100">
+                            <Modal.Title className="modal-title-bold-join">Join Party</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body className="modal-body-scroll-join-party">
+                            <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column align-items-center">
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        className={`form-control ${errorMessage ? 'is-invalid' : ''}`}
+                                        placeholder="Enter ID to join the party"
+                                        {...register("partyId")}
+                                    />
+                                    {/* Show error message in red if it exists */}
+                                    {errorMessage && (
+                                        <span className="text-danger" style={{color: "red"}}>
                                     {errorMessage}
                                 </span>
-                            )}
-                            <span className="text-danger">{errors.partyId?.message}</span>
-                        </div>
-                        <Button type="submit" className="join-button">Confirm</Button>
-                    </form>
-                </Modal.Body>
-            </Modal>
-        </>
-    );
-}
+                                    )}
+                                    <span className="text-danger">{errors.partyId?.message}</span>
+                                </div>
+                                <Button type="submit" className="join-button">Confirm</Button>
+                            </form>
+                        </Modal.Body>
 
-export default JoinPartyPopUp;
+                </Modal>
+
+        </>
+);
+            }
+
+            export default JoinPartyPopUp;

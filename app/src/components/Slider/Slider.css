@@ -2,7 +2,7 @@
     margin-top: 10px;
     display: flex;
     align-items: center;
-    background: white;
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 8px;
     /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
@@ -36,6 +36,7 @@
     -webkit-appearance: none;
     width: 75%;
     height: 8px;
+
     background: #ddd;
     border-radius: 5px;
     outline: none;

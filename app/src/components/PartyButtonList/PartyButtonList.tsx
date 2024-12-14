@@ -18,17 +18,20 @@ const PartyButtonList: React.FC<PartyButtonListProps> = ({ parties }) => {
     return (
         <div className="w-
         100"   style={{
-            width: '600px'
+            // marginTop: "100px",
+            width: '600px',
         }}>
             {/* Заголовок поза скрол-контейнером */}
             <div className="party-header"
-            style={{backgroundImage: `url(${party_button})`,backgroundSize: "cover",
-                width: '600px', height: '60px'
+            style={{backgroundImage: `url(${party_button})`,backgroundSize: "contain", backgroundRepeat: 'no-repeat',
+                width: '600px', height: '60px', marginLeft: '0px'
             }}></div>
 
             {/* Скрол-контейнер для списку партій */}
-            <div className="scroll-container ">
-                <div className="list-group ">
+            <div className="scroll-container " style={{
+
+            }}>
+                <div className="list-group " style={{position:"relative", marginLeft: '50px'}}>
                     {parties.map((party, index) => (
                         <PartyButton
                             key={index}

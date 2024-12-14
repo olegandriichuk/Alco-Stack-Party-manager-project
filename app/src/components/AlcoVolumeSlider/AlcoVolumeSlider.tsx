@@ -20,21 +20,21 @@ const AlcoVolumeSlider: React.FC<SliderProps> = ({
     };
 
     return (
-        <div className="select-slider-container">
-            <div className="slider-header">
+        <div className="select-slider-container" style={{ width: '100%'}}>
+            <div className="select-alcohol-slider-header">
 
-                <span className="slider-label">{label}</span>
+                <span className="select-alcohol-slider-label">{label}</span>
             </div>
             <input
                 type="range"
-                className="slider-range"
+                className="select-alcohol-slider-range"
                 min="0"
                 max="10"
                 step="0.1" // Allow decimal steps
                 value={value}
                 onChange={handleSliderChange}
             />
-            <span className="slider-value">{value.toFixed(1)}</span> {/* Display current value with one decimal place */}
+            <span className="select-alcohol-slider-value" >{value.toFixed(1)} l</span> {/* Display current value with one decimal place */}
         </div>
     );
 };

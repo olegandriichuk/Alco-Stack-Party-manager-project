@@ -53,6 +53,10 @@
 .strongalco-slider-list-container {
     max-height: 300px;
     overflow-y: auto;
+
+    scroll-behavior: smooth; /* Smooth scrolling behavior */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
     width: 100%;
     padding: 0 15px;
     box-sizing: border-box;

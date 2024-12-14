@@ -9,26 +9,33 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+    /*background-color: rgba(0, 0, 0, 0.5); !* Полупрозрачный черный фон *!*/
     backdrop-filter: blur(8px); /* Размытие фона */
     z-index: 1000; /* Поверхность для отображения */
 }
 
-.select-container {
+.select-alco-container {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 600px;
-    background-size: cover; /* Устанавливаем фоновое изображение */
+    width: 85%;
+    /*max-width: 600px;*/
+    background-size: cover;
     border-radius: 15px;
     padding: 20px;
-    z-index: 1500;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 3px solid rgba(41, 141, 255, 0.5); /* First semi-transparent blue border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow:
+            -29px 6px 45px rgba(255, 249, 249, 0.25), /* White-ish drop shadow */
+            0 0 15px rgba(79, 40, 233, 0.5); /* Purple glow effect around the border */
+    backdrop-filter: blur(20px); /* Optional: Adds a frosted-glass blur effect */
+    z-index: 2000;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
 }
 
-.modal-content {
+.select-alco-modal-content {
+    /*max-width: 550px;*/
     text-align: center;
     font-family: 'Karla-Bold', sans-serif;
     color: #263238;
@@ -43,16 +50,16 @@
     color: white; /* Цвет текста белый */
     font-family: 'Karla-Bold', sans-serif; /* Устанавливаем шрифт Karla-Bold */
     font-size: 20px; /* Размер текста */
-    transition: background-color 0.3s ease; /* Плавный переход для цвета фона */
+    /*transition: background-color 0.3s ease; !* Плавный переход для цвета фона *!*/
     display: block; /* Делаем кнопку блочным элементом */
     margin: 20px auto; /* Центрируем кнопку */
 }
 
 .alcohol-slider-list {
-    max-height: 300px; /* Максимальная высота списка */
+    max-height: 150px; /* Максимальная высота списка */
     overflow-y: auto; /* Вертикальная прокрутка */
-    padding-right: 10px; /* Отступ для прокрутки */
-    scrollbar-width: thin; /* Тонкий скроллбар (для Firefox) */
+    /*padding-right: 10px; !* Отступ для прокрутки *!*/
+    scrollbar-width: none; /* Тонкий скроллбар (для Firefox) */
 }
 
 .alcohol-slider-list::-webkit-scrollbar {

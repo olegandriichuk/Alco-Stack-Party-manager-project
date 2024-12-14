@@ -8,6 +8,7 @@ import Disco from '../../assets/disco.svg';
 import backgroundImage from '../../assets/backgroundFinal.svg';
 
 import './LoginPage.css';
+
 type LoginFormsInputs = {
     userName: string;
     password: string;
@@ -28,6 +29,7 @@ const LoginPage = () => {
 
     const handleLogin = (form: LoginFormsInputs) => {
         loginUser(form.userName, form.password);
+
     };
 
 

@@ -20,11 +20,11 @@ interface LowAlcoRatingPopUpProps {
 const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClose }) => {
     const { user, token } = useAuth();
     const [sliders, setSliders] = useState([
-        { id: 'a745bc6e-14d2-45f5-a0b4-9ee8b7936754', label: 'Beer', value: 0, imageSrc: beer, toggle: false },
-        { id: '0dec2807-98c9-4d48-a698-81ca5c3fd04c', label: 'Cider', value: 0, imageSrc: cider, toggle: false },
-        { id: 'dccfaddc-7907-42a4-85a1-ed392926beaa', label: 'Lager beer', value: 0, imageSrc: lb, toggle: false },
-        { id: 'be695724-d48f-4131-b9df-9d2bbb028796', label: 'Ale', value: 0, imageSrc: ale, toggle: false },
-        { id: '94544897-cd6a-45b4-9bbc-1eaf7929fac9', label: 'Dark beer', value: 0, imageSrc: db, toggle: false },
+        { id: 'a745bc6e-14d2-45f5-a0b4-9ee8b7936754', label: 'Beer', value: 0, imageSrc: beer },
+        { id: '0dec2807-98c9-4d48-a698-81ca5c3fd04c', label: 'Cider', value: 0, imageSrc: cider },
+        { id: 'dccfaddc-7907-42a4-85a1-ed392926beaa', label: 'Lager beer', value: 0, imageSrc: lb },
+        { id: 'be695724-d48f-4131-b9df-9d2bbb028796', label: 'Ale', value: 0, imageSrc: ale},
+        { id: '94544897-cd6a-45b4-9bbc-1eaf7929fac9', label: 'Dark beer', value: 0, imageSrc: db},
     ]);
 
 
@@ -119,7 +119,7 @@ const LowAlcoRatingPopUp: React.FC<LowAlcoRatingPopUpProps> = ({ show, handleClo
                     backgroundSize: 'auto',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
-                    border: '3px solid #50C5FF',
+                    border: '3px solid rgba(79, 40, 233, 0.5)',
                     borderRadius: '16px',
                     display: 'flex',
                     flexDirection: 'column',

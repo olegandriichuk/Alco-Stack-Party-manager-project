@@ -14,15 +14,24 @@
 
     z-index: 1050;
 }
-.rs-modal-content{
-    background: rgba(255, 255, 255, 0.5);
-    background-image: url("../../assets/popupBack.svg");
+ .rs-modal-content{
+    /*background: rgba(255, 255, 255, 0.5);*/
+    background-color: transparent;
+    background-image: url("../../assets/createpopup.svg");
     background-size: auto;
+     border: 3px solid rgba(79, 40, 233, 0.5); /* First semi-transparent blue border */
+     border-radius: 10px; /* Rounded corners */
+/*     box-shadow:
+             -29px 6px 45px rgba(255, 249, 249, 0.25), !* White-ish drop shadow *!
+             0 0 15px rgba(79, 40, 233, 0.5); !* Purple glow effect around the border *!*/
+     backdrop-filter: blur(20px); /* Optional: Adds a frosted-glass blur effect */
     background-repeat: no-repeat;
     background-position: center;
+    width: 75%;
+    left: 10%;
     border-radius: 10px;
-    border: 3px solid #50C5FF;
-    backdrop-filter: blur(20px);
+
+    /*backdrop-filter: blur(20px);*/
     z-index: 1050;
 }
 

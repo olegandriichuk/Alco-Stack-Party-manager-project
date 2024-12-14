@@ -1,6 +1,6 @@
-﻿import React, {useEffect} from 'react';
+﻿import React, {useEffect, useRef} from 'react';
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+//import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useAuth } from "../../Context/useAuth";
@@ -12,15 +12,34 @@ import { UpdateProfileAPI, DeleteAccountAPI } from "../../Services/UserService";
 import Disco from '../../assets/disco.svg';
 import backgroundImage from "../../assets/backgroundFinal.svg";
 import './EditProfilePage.css';
-import DatePickerComponent from '../../components/DateTimePicker/DateTimePicker.tsx';
+import DateTimePicker from '../../components/DateTimePicker/DateTimePicker.tsx';
 import backicon from '../../assets/backicon.svg'
+import icon_calendar from "../../assets/icon _calendar_.svg";
+import clear_icon from '../../assets/deldata.svg';
+//import DatePicker from "react-datepicker";
+interface DateTimePickerRef {
+    focus: () => void;
+}
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email address").required("Email is required"),
     userName: Yup.string().required("Username is required"),
-    firstName: Yup.string().optional(),
-    lastName: Yup.string().optional(),
-    phoneNumber: Yup.string().optional(),
+    firstName: Yup.string()
+        .nullable()
+        .matches(/^[a-zA-Z]*$/, 'First Name must contain only English letters')
+        .max(25, 'First Name must be at most 25 characters')
+        .optional(),
+    lastName: Yup.string()
+        .nullable()
+        .matches(/^[a-zA-Z]*$/, 'Last Name must contain only English letters')
+        .max(25, 'Last Name must be at most 25 characters')
+        .optional(),
+    phoneNumber: Yup.string()
+        .nullable() // Allow null or empty
+        .matches(
+            /^\+?[1-9]\d{1,14}$/,
+            'Phone Number must be a valid international number (e.g., +123456789)'
+        ), // Regex for international phone numbers
     bio: Yup.string().optional(),
     gender: Yup.number().optional(),
     dateOfBirth: Yup.string()
@@ -49,7 +68,7 @@ const validationSchema = Yup.object().shape({
 const EditProfilePage: React.FC = () => {
     const { user, token, updateUser, logout } = useAuth();
     const navigate = useNavigate();
-    const [dateOfBirth, setDateOfBirth] = useState<string | undefined>(undefined);
+    //const [dateOfBirth, setDateOfBirth] = useState<string | undefined>(undefined);
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<UserProfile>({
         resolver: yupResolver(validationSchema),
@@ -99,9 +118,11 @@ const EditProfilePage: React.FC = () => {
         }
     };
 
-    const handleDateChange = (newDate: string | undefined) => {
-        setDateOfBirth(newDate);
-    };
+    // const handleDateChange = (newDate: string | undefined) => {
+    //     setDateOfBirth(newDate);
+    // };
+
+    const dateRef = useRef<DateTimePickerRef>(null);
 
     const handleDeleteAccount = async (username: string) => {
         if (!token) {
@@ -142,7 +163,7 @@ const EditProfilePage: React.FC = () => {
 
     const renderAddressInput = (label: string, id: string, placeholder: string, registerName: keyof Address) => (
 
-        <div className="mb-3" key={id}>
+        <div className="mb-3" key={id} style={{marginRight: '100px'}}>
             <label htmlFor={id} className="input_titles-editprofile">{label}</label>
             <input
                 type="text"
@@ -155,6 +176,44 @@ const EditProfilePage: React.FC = () => {
             {errors.address?.[registerName] && <div className="invalid-feedback-editprofile">{errors.address[registerName]?.message}</div>}
         </div>
     );
+
+    interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+        value?: string;
+        onClick?: () => void;
+        onClear?: () => void;
+    }
+
+    const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(
+        ({ value, onClick, onClear, ...rest }, ref) => (
+            <div className="datepicker-input-wrapper" style={{ marginRight: '50px' }}>
+                <input
+                    ref={ref}
+                    value={value}
+                    placeholder="Select Date"
+                    className="datepicker-input"
+                    readOnly
+                    onClick={onClick}
+                    {...rest} // Spread additional input props if needed
+                />
+                <img
+                    src={icon_calendar}
+                    alt="Calendar Icon"
+                    className="datepicker-icon"
+                    onClick={onClick}
+                />
+                {value && (
+                    <img
+                        src={clear_icon} // Import the SVG image
+                        alt="Clear Icon" // Accessible description for the image
+                        className="clear-icon-editprof"
+                        onClick={onClear} // Clear the value on click
+                    />
+                )}
+            </div>
+        )
+    );
+
+    const dateOfBirth = watch("dateOfBirth");
 
 
     return (
@@ -180,7 +239,7 @@ const EditProfilePage: React.FC = () => {
                             src={backicon}
                             alt="Go to Profile"
                             style={{
-                                width: "120px",
+                                width: "110px",
                                 height: "40px",
                                 cursor: "pointer",
                             }}
@@ -199,13 +258,21 @@ const EditProfilePage: React.FC = () => {
                             {renderInput('Phone Number', 'phoneNumber', 'text', 'Phone Number', 'phoneNumber')}
                             {renderInput('Bio', 'bio', 'text', 'Bio', 'bio')}
                             <div className="mb-3">
-                                <DatePickerComponent
+                                <label htmlFor="dateOfBirth" className="form-label" style={{marginBottom: '-10px'}}>Date of Birth</label>
+                                <DateTimePicker
+                                    ref={dateRef}
                                     value={dateOfBirth}
-                                    onChange={handleDateChange}
-
+                                    //onChange={handleDateChange}
+                                    onChange={(value) => setValue("dateOfBirth", value || "")}
                                 />
-                                {errors.dateOfBirth &&
-                                    <div className="invalid-feedback">{errors.dateOfBirth.message}</div>}
+                                <CustomInput
+                                    value={dateOfBirth ?? undefined}
+                                    onClear={() => setValue("dateOfBirth", "")} // Clear the date value
+                                    onClick={() => dateRef.current?.focus()} // Trigger the calendar programmatically
+                                />
+                                {errors.dateOfBirth && (
+                                    <div className="invalid-feedback">{errors.dateOfBirth.message}</div>
+                                )}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="gender" className="input_titles-editprofile">Gender</label>
@@ -250,19 +317,8 @@ const EditProfilePage: React.FC = () => {
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-danger"
-                                    style={{
-                                        width: "150px",
-                                        height: "40px",
-                                        borderRadius: "15px",
-                                        backgroundColor: "red",
-                                        color: "white",
-                                        fontFamily: "'Halant', serif",
-                                        fontSize: 15,
-                                        border: "none",
-                                        cursor: "pointer",
-                                        transition: "background-color 0.3s ease",
-                                    }}
+                                    className="editprofile-deleteaccount-btn"
+
                                     onClick={() => handleDeleteAccount(user!.userName)}
                                 >
                                     Delete Account

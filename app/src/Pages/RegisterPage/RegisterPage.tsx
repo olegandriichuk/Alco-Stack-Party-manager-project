@@ -40,8 +40,14 @@ const validationSchema = Yup.object().shape({
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/,
             'Password must contain at least one uppercase letter, one lowercase letter, one digit, and only English letters'
         ),
-    firstName: Yup.string().optional(),
-    lastName: Yup.string().optional(),
+    firstName: Yup.string()
+        .matches(/^[a-zA-Z]+$/, 'First Name must contain only English letters')
+        .max(25, 'First Name must be at most 25 characters')
+        .optional(),
+    lastName: Yup.string()
+        .matches(/^[a-zA-Z]+$/, 'Last Name must contain only English letters')
+        .max(25, 'Last Name must be at most 25 characters')
+        .optional(),
     gender: Yup.number().optional(),
     dateOfBirth: Yup.string()
         .matches(/^\d{4}-\d{2}-\d{2}$/, 'Date of Birth must be in YYYY-MM-DD format')
@@ -63,21 +69,7 @@ const validationSchema = Yup.object().shape({
     bio: Yup.string().optional(),
 });
 
-// const CustomInput = React.forwardRef(({ value, onClick, placeholder }, ref) => (
-//     <div>
-//         <input
-//             className="custom-input-register form-control"
-//             onClick={onClick}
-//             ref={ref}
-//             value={value}
-//             placeholder={placeholder}
-//             readOnly
-//         />
-//         <div className="input-group-append" onClick={onClick}>
-//             <img src={icon_calendar} alt="Calendar Icon" className="calendar-icon-register" />
-//         </div>
-//     </div>
-// ));
+
 
 const RegisterPage: React.FC = () => {
     const { registerUser } = useAuth();
@@ -104,8 +96,7 @@ const RegisterPage: React.FC = () => {
         );
     };
 
-    //const dateOfBirth = watch('dateOfBirth');
-    //const dateOfBirthValue = dateOfBirth ? new Date(dateOfBirth) : null;
+
 
     const handleDateChange = (newDate: string | undefined) => {
         setDateOfBirth(newDate);

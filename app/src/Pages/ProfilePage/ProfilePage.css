@@ -49,14 +49,19 @@
 
 }
 
-
+.home-link-profile {
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    margin-bottom: -20px;
+}
 
 .party-icon-profile {
     width: 80px;
     height: 80px;
     position: absolute;
     top: -2px;
-    left: -198px;
+    left: -215px;
     z-index: 1000;
 }
 
@@ -67,6 +72,24 @@
         height: 0;
     }
 }
+.alco-cards-container {
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    /*gap: 26px; !* Space between rows *!*/
+}
 
+.alco-cards-row {
+    display: flex;
+    justify-content: center; /* Center cards horizontally in each row */
+    gap: 46px; /* Space between cards within the row */
+}
+.centered-container-profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Переносим вверх */
+    align-items: center;
+    width: 70%;
+
+}
 
 

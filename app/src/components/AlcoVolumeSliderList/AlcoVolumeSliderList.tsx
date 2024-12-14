@@ -15,8 +15,8 @@ interface SliderListProps {
 
 const AlcoVolumeSliderList: React.FC<SliderListProps> = ({ sliders }) => {
     return (
-        <div className="sliderlist-container d-flex flex-column align-items-center">
-            <div className="row justify-content-center">
+        <div className="sliderlist-container d-flex flex-column align-items-center" >
+            <div className="row justify-content-center "  style={{width: '100%'}}>
                 {sliders.map((slider, index) => (
                     <div key={index} className="col-12 mb-3 mt-2 d-flex justify-content-center">
                         <AlcoVolumeSlider
@@ -25,6 +25,7 @@ const AlcoVolumeSliderList: React.FC<SliderListProps> = ({ sliders }) => {
                             onChange={slider.onChange}
 
                         />
+
                     </div>
                 ))}
             </div>

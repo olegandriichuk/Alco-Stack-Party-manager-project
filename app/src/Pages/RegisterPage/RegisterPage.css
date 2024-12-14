@@ -54,13 +54,19 @@ body, html {
 
 .card-register {
     background-image: url('../../assets/signUp_card.svg');
-    background-size: contain;
+    background-size: cover; /* Scale the background to fit the container */
+    background-position: center; /* Keep the image centered */
+    word-wrap: break-word; /* Ensure text doesn't overflow */
+    border: 3px solid rgba(79, 40, 233, 0.5); /* First semi-transparent blue border */
+    border-radius: 10px; /* Rounded corners */
     background-repeat: no-repeat;
-    background-position: center;
     max-height: 100vh;
     width: 100%;
     max-width: 600px;
-    overflow-y: auto;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling behavior */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
     border-radius: 10px;
     transform: translate(-100px, 40px);
 }

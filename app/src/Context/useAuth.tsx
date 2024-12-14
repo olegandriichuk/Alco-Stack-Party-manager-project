@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
 
+
 type UserContextType = {
     user: UserProfile | null;
     token: string | null;
@@ -175,6 +176,7 @@ export const UserProvider = ({ children }: Props) => {
                 navigate("/home");
             }
         } catch (error) {
+            console.log("dsgdsdgfdfggdg");
             toast.warning("Server error occurred");
             console.error("Login error:", error);
         }

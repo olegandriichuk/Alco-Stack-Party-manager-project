@@ -84,7 +84,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         borderRadius: '20px',
         backgroundColor: 'transparent',
         border : 'transparent',
-        color: 'white'
+        color: 'white',
+        marginTop: '-30px',
 
     };
 
@@ -157,7 +158,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             <Modal
                 show={show}
                 onHide={onHide}
-                size="lg"
+                className= "foto-modal"
+                // size="sm"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
                 style={{ maxWidth: "500px", height: "600px", margin: "auto" , position: 'fixed',
@@ -165,6 +167,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                     left: '35%',
                     borderRadius: '16px',
                     zIndex: '1050',
+                    backgroundColor: 'black',
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    backgroundImage: `url(${alcopopup})`,
+                    border: "3px solid rgba(79, 40, 233, 0.5)",
 
 
             }}
@@ -172,38 +178,40 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     style={{
-                        backgroundImage: `url(${alcopopup})`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        border: "3px solid #50C5FF",
+                        background: 'transparent',
+                        backgroundImage: 'none',
+                        border: 'none',
+                        backgroundColor: 'transparent', // Corrected from 'none'
 
                     }}
                 >
-                    <Modal.Body>
-
+                    <Modal.Body style={{marginTop: '-50px'}}>
+                        <h3 className="update-profile-text" style={{marginBottom: '50px', fontWeight: 'bold'}}>
+                            Update your profile picture
+                        </h3>
                         <div className="mb-3 text-center">
+                            {/* Add the heading or label above "Profile Photo" */}
+
+
                             <label htmlFor="photoFile" className="form-label-profile-photo">
                                 Profile Photo
                             </label>
                             <div className="photo-upload-container">
                                 {currentPhotoSrc ? (
-                                    <img src={currentPhotoSrc} alt="Current Profile" />
+                                    <img src={currentPhotoSrc} alt="Current Profile"/>
                                 ) : (
                                     <div
                                         className="photo-upload-icon"
                                         style={{
-
                                             width: "110px",
                                             height: "110px",
                                             borderRadius: "50%",
-                                            backgroundImage:`url(${Photobg})`,
+                                            backgroundImage: `url(${Photobg})`,
                                             backgroundSize: 'cover',
                                             backgroundRepeat: 'no-repeat',
                                             backgroundPosition: "center",
                                             display: "flex",
                                             alignItems: "center",
-
                                             cursor: "pointer",
                                         }}
                                     >
@@ -233,21 +241,35 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                                     variant="danger"
                                     className="mt-2"
                                     onClick={handleDeletePhoto}
+                                    style={{
+                                        width: '150px',
+                                        borderRadius: '100px'
+                                    }}
                                 >
                                     Delete Photo
                                 </Button>
                             )}
                         </div>
                     </Modal.Body>
-                    <Modal.Footer style={{ display: "flex", justifyContent: "space-between" }}>
-                        <Button onClick={onSubmit} style={{ backgroundColor: "#000000", color: 'white' }}>
-                            Save
-                        </Button>
-                        <Button onClick={onHide} variant="secondary" style={{ backgroundColor: "#000000", color: 'white' }}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
+
+                    {/*<Modal.Footer style={{ display: "flex", justifyContent: "space-between", backgroundColor: 'transparent', marginTop: '230px' , borderTop: 'transparent'}}>*/}
+                    {/*    <Button onClick={onSubmit} style={{ backgroundColor: "#000000", color: 'white', marginTop: '15px', width: '150px', borderRadius: '100px' }}>*/}
+                    {/*        Save*/}
+                    {/*    </Button>*/}
+                    {/*    <Button onClick={onHide} variant="secondary" style={{ backgroundColor: "#000000", color: 'white', marginTop: '15px', width: '150px', borderRadius: '100px' }}>*/}
+                    {/*        Close*/}
+                    {/*    </Button>*/}
+                    {/*</Modal.Footer>*/}
+
                 </form>
+                <Modal.Footer style={{ display: "flex", justifyContent: "space-between", backgroundColor: 'transparent', marginTop: '150px' , borderTop: 'transparent'}}>
+                    <Button onClick={onSubmit} style={{ backgroundColor: "#000000", color: 'white', marginTop: '15px', width: '150px', borderRadius: '100px' }}>
+                        Save
+                    </Button>
+                    <Button onClick={onHide} variant="secondary" style={{ backgroundColor: "#000000", color: 'white', marginTop: '15px', width: '150px', borderRadius: '100px' }}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
 
@@ -258,19 +280,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     return (
         <div className="card" style={profileCardStyle}>
 
-            <div className="card-body d-flex flex-row">
+            <div className="card-body d-flex flex-column">
                 <div className="p-3 d-flex flex-column justify-content-around align-items-center">
                     <button onClick={() => setModalShow(true)} className="profile-photo-button"
-                    style={{backgroundImage:`url(${Photobg})`,
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        color: "black",
+                            style={{
+                                backgroundImage: `url(${Photobg})`,
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                color: "black",
                         backgroundPosition: 'center',
                         border: '3px solid #50C5FF'}}>
                         <img className="profile-photo" src={currentPhotoSrc} />
                     </button>
                     <h5 className="card-title profile-name">
-                        Username:
                         <br/>
                         <span style={{
                             display: 'flex',
@@ -279,23 +301,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                         }}>{UserName}</span>
                     </h5>
                 </div>
-                <div className="d-flex flex-grow-1 flex-column">
-                    <div className="d-flex justify-content-end">
-                        <Link to="/profile/edit" style={{textDecoration: 'none'}}>
-                            <Button
-                                className="btn-lg m-2 edit-profile-btn"
-                                style={{
-                                    padding: '0',
-                                    background: `url(${editprof}) no-repeat center center`,
-                                    backgroundSize: 'contain',
-                                    width: '297px',
-                                    height: '120px',
-                                }}
-                            />
-                        </Link>
-                    </div>
-
-                    <ul className="list-unstyled profile-details-list">
+                <div className="d-flex flex-grow-1 flex-row align-items-center justify-content-between">
+                    {/* Profile Details on the Left */}
+                    <ul className="list-unstyled profile-details-list m-0">
                         <li>
                             <span>Name: {name}</span>
                         </li>
@@ -306,12 +314,29 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
                             <span>Phone: {Phone}</span>
                         </li>
                         <li>
-                        <span>
-                            Gender: {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}
-                        </span>
+            <span>
+                Gender: {Gender === 0 ? "Male" : Gender === 1 ? "Female" : Gender === 2 ? "Other" : "Unknown"}
+            </span>
                         </li>
                     </ul>
+
+                    {/* Button on the Right */}
+                    <div style={{marginTop: '-90px',}}>
+                        <Link to="/profile/edit" style={{textDecoration: 'none'}}>
+                            <Button
+                                className="btn-lg edit-profile-btn"
+                                style={{
+                                    padding: '0',
+                                    background: `url(${editprof}) no-repeat center center`,
+                                    backgroundSize: 'contain',
+                                    width: '200px',
+                                    height: '120px',
+                                }}
+                            />
+                        </Link>
+                    </div>
                 </div>
+
             </div>
             <MyVerticallyCenteredModal
                 show={modalShow}

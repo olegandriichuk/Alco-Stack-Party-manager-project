@@ -1,13 +1,13 @@
 ﻿import React from 'react';
 import MenuButton from '../MenuButton/MenuButton';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+// import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import './MenuButtonList.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import Halant from '../../assets/fonts/halant/Halant-SemiBold.ttf';
 
 interface MenuButton {
     text: string;
-    icon: IconDefinition;
+    icon: string;
     link?: string; // Optional link prop
     onClick?: () => void; // Optional onClick prop
 }

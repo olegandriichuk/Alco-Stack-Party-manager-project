@@ -8,6 +8,7 @@
     max-width: 480px;
 }
 
+
 .datepicker-label {
     font-family: 'Karla-Bold', sans-serif;
     font-size: 16px;
@@ -43,6 +44,7 @@
 
 .datepicker-custom-input::placeholder {
     color: #90A4AE;
+
 }
 
 .datepicker-icon {

@@ -138,11 +138,15 @@ const HighAlcoRatingPopUp: React.FC<HighAlcoRatingPopUpProps> = ({ show, handleC
                     backgroundSize: 'auto',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
-                    border: '3px solid #50C5FF',
+                    border: '3px solid rgba(79, 40, 233, 0.5)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     borderRadius: '16px',
+                    overflowY: 'auto', /* Enable vertical scrolling */
+                    scrollBehavior: 'smooth',
+                    scrollbarWidth: 'none', // For Firefox
+                    msOverflowStyle: 'none', // For Internet Explorer and Edge
                 }}
                 >
                     <div className="strong-alco-title">Choose Strong Alcohols</div>

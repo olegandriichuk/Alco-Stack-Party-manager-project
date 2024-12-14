@@ -3,7 +3,7 @@ import './LiquorRatingPopUp.css';
 import SliderList from "../../../components/SliderList/SliderList";
 import apricot_brandy from "../../../assets/alcophotos/apricot brandy.svg";
 import triple_sec from "../../../assets/alcophotos/tripple sec.svg";
-import amaretto from "../../../assets/alcophotos/amaretto.svg";
+import amaretto from  "../../../assets/alcophotos/amaretto.svg";
 import coffee_liquor from "../../../assets/alcophotos/coffe lik.svg";
 import kahlua from "../../../assets/alcophotos/kahlua.svg";
 import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
@@ -121,7 +121,7 @@ const LiquorRatingPopUp: React.FC<LiquorRatingPopUpProps> = ({ show, handleClose
                     backgroundSize: 'auto',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
-                    border: '3px solid #50C5FF',
+                    border: '3px solid rgba(79, 40, 233, 0.5)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',

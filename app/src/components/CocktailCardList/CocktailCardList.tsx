@@ -14,7 +14,12 @@ export type CocktailListProps = {
 
 const CocktailList: React.FC<CocktailListProps> = ({ cocktails, onClickCocktail }) => {
     return (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap',
+            overflowY: 'auto',
+            overflowX: 'auto',
+            scrollBehavior: 'smooth',
+            scrollbarWidth: 'none', // For Firefox
+            msOverflowStyle: 'none', }}>
             {cocktails.map((cocktail) => (
                 <CocktailCard
                     key={cocktail.id}

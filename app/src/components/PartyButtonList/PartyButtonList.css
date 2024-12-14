@@ -10,7 +10,7 @@
     
     color: #000000;
     font-family: 'Halant Medium';
-    padding: 11px;
+    padding: 10px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-left-radius: 15px;
@@ -18,18 +18,22 @@
     overflow: hidden;
 }
 
-/* Скрол-контейнер для списку партій */
+
 .scroll-container {
     width: 100%;
+
     max-height: 190px;
     overflow-y: auto;
 
-    padding: 5px;
-
+    scroll-behavior: smooth; /* Corrected syntax for scroll behavior */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+    /*padding: 10px;*/
 }
 
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, etc.) */
 .scroll-container::-webkit-scrollbar {
-    width: 8px;
+    display: none;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
@@ -42,28 +46,4 @@
 }
 
 
-@media (max-width: 768px) {
-    .scroll-container {
-        max-height: 390px;
-        padding: 15px;
-        overflow-y: auto;
-    }
-}
 
-
-@media (max-width: 480px) {
-    .scroll-container {
-        max-height: 390px;
-        padding: 20px;
-        overflow-y: auto;
-    }
-}
-
-
-@media (min-width: 768px) and (max-width: 1024px) {
-    .scroll-container {
-        max-height: 500px;
-        padding: 20px;
-        overflow-y: auto;
-    }
-}

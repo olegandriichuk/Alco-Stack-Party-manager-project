@@ -43,9 +43,10 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
             <div
                 style={{
                     backgroundImage: `url(${popBack})`,
-                    backgroundSize: 'cover',
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    padding: '20px',
+                    padding: '30px',
                     borderRadius: '10px',
                     maxWidth: '500px',
                     textAlign: 'center',
@@ -57,7 +58,15 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
 
                 {/* Основной контент */}
                 <h3>{name}</h3>
-                <p>{description || 'No description provided.'}</p>
+                <p
+                    style={{
+                        wordWrap: 'break-word', // Break long words
+                        overflowWrap: 'break-word', // Ensure content wraps properly
+                        overflow: 'hidden', // Prevent overflow
+                        textOverflow: 'ellipsis', // Add ellipsis for long text
+                        maxHeight: '150px', // Restrict maximum height
+                        overflowY: 'auto', // Enable vertical scrolling if content exceeds max height
+                    }}>{description || 'No description provided.'}</p>
                 {photo && (
                     <img
                         src={photo}

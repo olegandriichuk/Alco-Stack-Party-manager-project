@@ -35,11 +35,14 @@ const AlcoholList: React.FC<AlcoholListProps> = ({ alcohols }) => {
                     flexDirection: 'column',
                     gap: '10px',
                     padding: '15px 0',
-                    overflowY: 'auto',
+
                     maxHeight: '200px',
                     width: '520px',
-                    scrollBehavior: 'smooth',
                     zIndex: 10,
+                    overflowY: 'auto',
+                    scrollBehavior: 'smooth',
+                    scrollbarWidth: 'none', // For Firefox
+                    msOverflowStyle: 'none', // For Internet Explorer and Edge
                 }}
             >
                 {alcohols.map((alcohol, index) => (

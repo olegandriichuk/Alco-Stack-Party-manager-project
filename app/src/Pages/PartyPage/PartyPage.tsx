@@ -14,7 +14,7 @@ import PartySettingsPopUp from '../../components/PartySettingsPopUp/PartySetting
 import AlcoholList from '../../components/AlcoholCardList/AlcoholCardList';
 import {CocktailGet, CocktailDetailsGet} from "../../Models/Cocktail.tsx";
 import CocktailPopup from "../../components/CocktailPopup/CocktailPopup.tsx";
-import { toast } from 'react-toastify';
+import {Bounce, toast} from 'react-toastify';
 
 import {GetCocktailListAPI, GetCocktailDetailsAPI} from '../../Services/CocktailService.tsx';
 import DescriptionPopUp from "../../components/DescriptionPopUp/DescriptionPopUp.tsx";
@@ -138,16 +138,33 @@ const PartyPage: React.FC = () => {
             const updatedAlcohols = await UpdateAllAlcoholsByRankAPI(party!.rankLimit, partyId!, token);
 
             if (updatedAlcohols) {
+                console.log("fsfdsdfdfs");
                 setAlcohols(updatedAlcohols); // Update the alcohol list state
                 toast.success("Alcohol rankings updated successfully!");
+                toast('🦄 Wow so easy!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                });
             } else {
                 toast.error("Failed to update alcohol rankings");
             }
         } catch (error) {
             console.error("Error updating alcohol rankings:", error);
-            toast.error("Failed to update alcohol rankings");
+
         }
     };
+    useEffect(() => {
+        handleUpdateRanking().then(r => r);
+
+
+    }, [party]);
 
     const removeDuplicates = (cocktails: (CocktailGet | undefined)[]) => {
         const uniqueCocktails: CocktailGet[] = [];

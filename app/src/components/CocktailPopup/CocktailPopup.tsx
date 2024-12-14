@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import CocktailCard from '../CocktailCard/CocktailCard';
 import './CocktailPopup.css';
-import cocktailback from '../../assets/signIn_card.svg';
+import cocktailback from '../../assets/cocktails.svg';
 
 export type Cocktail = {
     id: string;
@@ -46,11 +46,19 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                 style={{
                     backgroundImage: `url(${cocktailback})`,
                     backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     padding: '20px',
                     borderRadius: '10px',
-                    maxWidth: '500px',
+                    // border: '4px solid black',
+                    maxHeight: '750px',
+
+                    maxWidth: '600px',
                     textAlign: 'center',
+                    
+                    overflowY: 'auto', // Enable vertical scrolling
+                    scrollbarWidth: 'none', // Hide scrollbar in Firefox
+                    msOverflowStyle: 'none', // Hide scrollbar in IE and Edge
                 }}
             >
                 <h3

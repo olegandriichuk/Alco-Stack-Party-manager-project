@@ -13,24 +13,32 @@
 }
 
 .view-amount-popup-container {
+    background-color: transparent;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 400px;
+    /*width: 90%;*/
+    width: 400px;
     background-image: url('../../assets/signIn_card.svg');
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     border-radius: 20px;
-    padding: 20px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
     max-height: 80%;
     overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
 
 .view-amount-popup-content {
+    /*width: 450px;*/
     font-family: 'Halant', serif;
     color: black;
     text-align: center;
@@ -46,8 +54,10 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-    max-height: 300px;
+    max-height: 150px;
     overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
     padding-right: 10px;
 }
 
@@ -76,6 +86,4 @@
     transition: background-color 0.3s ease;
 }
 
-.view-amount-popup-close-btn:hover {
-    background-color: #444;
-}
+
