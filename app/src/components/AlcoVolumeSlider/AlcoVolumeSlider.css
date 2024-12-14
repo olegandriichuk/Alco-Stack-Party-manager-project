@@ -22,7 +22,7 @@
 }
 
 .select-alcohol-slider-label {
-    margin-right: 54px;
+    margin-right: 48px;
     font-weight: bold;
     font-size: 12px;
     white-space: nowrap; /* Prevent text wrapping */
@@ -34,11 +34,18 @@
     -webkit-appearance: none;
     width: 75%;
     height: 8px;
-    background: #ddd;
+    background: linear-gradient(
+            to right,
+            #007bff 0%,
+            #007bff calc(var(--value, 0) * 100%),
+            #ddd calc(var(--value, 0) * 10%),
+            #ddd 100%
+    ); /* Blue range up to the value and gray afterward */
     border-radius: 5px;
     outline: none;
     opacity: 0.7;
-    transition: opacity .2s;
+    transition: all 0.3s ease;
+    --value: 0; /* Default value */
 }
 
 .select-alcohol-slider-range::-webkit-slider-thumb {
@@ -46,18 +53,12 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    background: gray;
+    background: var(--thumb-color, gray); /* Dynamically set the thumb color */
     border-radius: 50%;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.select-alcohol-slider-range::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: gray;
-    border-radius: 50%;
-    cursor: pointer;
-}
 
 @font-face {
     font-family: 'Halant';

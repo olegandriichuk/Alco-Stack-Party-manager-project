@@ -1,14 +1,21 @@
-﻿import React from 'react';
+﻿/**
+ * ==============================================================
+ * Component: AlcoholCard
+ * Author: Yaroslav Hryn
+ * Description: Displays an alcohol item with its ranking visually styled.
+ * ==============================================================
+ */
+import React from 'react';
 import alcorankback from "../../assets/alcorankback.svg";
 import { AlcoholGet } from '../../Models/Alcohol.tsx';
 
-// Типы данных для пропсов компонента
+
 export type AlcoholCardProps = {
     alcohol: AlcoholGet;
     rank: number;
 };
 
-// Компонент AlcoholCard
+
 const AlcoholCard: React.FC<AlcoholCardProps> = ({ alcohol, rank }) => {
     return (
         <div

@@ -7,7 +7,6 @@ interface SliderProps {
     value: number;
     onChange: (value: number) => void;
     imageSrc: string; // Add a new prop for the image source
-
 }
 
 const Slider: React.FC<SliderProps> = ({ label, value, onChange, imageSrc }) => {
@@ -18,7 +17,7 @@ const Slider: React.FC<SliderProps> = ({ label, value, onChange, imageSrc }) => 
     return (
         <div className="slider-container">
             <div className="slider-header">
-                <img src={imageSrc} alt="" className="slider-image" /> {/* Image element */}
+                <img src={imageSrc} alt="" className="slider-image" />
                 <span className="slider-label">{label}</span>
             </div>
             <input
@@ -28,9 +27,12 @@ const Slider: React.FC<SliderProps> = ({ label, value, onChange, imageSrc }) => 
                 max="10"
                 value={value}
                 onChange={handleSliderChange}
+                style={{
+                    '--value': value,
+                    '--thumb-color': value === 0 ? 'gray' : '#007bff', // Set thumb color dynamically
+                } as React.CSSProperties} // Use inline styles to pass custom CSS variables
             />
-
-            <span className="slider-value">{value}</span> {/* Display current value */}
+            <span className="slider-value">{value}</span>
         </div>
     );
 };

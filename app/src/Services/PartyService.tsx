@@ -209,7 +209,7 @@ export const UpdateWillBeBoughtAPI = async (
 
 
 
-        console.log("In api:ffff", payload);
+        // console.log("In api:ffff", payload);
         // Send the PATCH request
         const response = await axios.patch(
             `${api}party/${partyId}/update-alcohol-purchases`,
@@ -222,10 +222,32 @@ export const UpdateWillBeBoughtAPI = async (
             }
         );
 
-        console.log("dddddddd:", response.data);
+        // console.log("dddddddd:", response.data);
         return response.data;
     } catch (error) {
 
+        handleError(error);
+        throw error;
+    }
+};
+
+
+export const RemoveUserFromPartyAPI = async (
+    partyId: string | undefined,
+    userName: string,
+    authToken?: string | null
+) => {
+    try {
+        const response = await axios.delete(
+            `${api}party/${partyId}remove-user/${userName}`,
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        }
+    );
+        return response.data;
+    } catch (error) {
         handleError(error);
         throw error;
     }

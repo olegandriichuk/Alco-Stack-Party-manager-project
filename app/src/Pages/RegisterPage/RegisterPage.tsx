@@ -1,6 +1,6 @@
-﻿import React from 'react';
+﻿import React, {useRef} from 'react';
 import { useForm } from 'react-hook-form';
-import { useState } from "react";
+// import { useState } from "react";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAuth } from '../../Context/useAuth';
@@ -15,7 +15,13 @@ import Disco from '../../assets/disco.svg';
 import './RegisterPage.css';
 //import './datepicker.css';
 //import icon_calendar from '../../assets/icon _calendar_.svg';
-import DatePickerComponent from '../../components/DateTimePicker/DateTimePicker.tsx';
+import DateTimePicker from '../../components/DateTimePicker/DateTimePicker.tsx';
+import icon_calendar from "../../assets/icon _calendar_.svg";
+import clear_icon from "../../assets/deldata.svg";
+interface DateTimePickerRef {
+    focus: () => void;
+}
+
 
 export type RegisterFormInputs = {
     email: string;
@@ -41,11 +47,11 @@ const validationSchema = Yup.object().shape({
             'Password must contain at least one uppercase letter, one lowercase letter, one digit, and only English letters'
         ),
     firstName: Yup.string()
-        .matches(/^[a-zA-Z]+$/, 'First Name must contain only English letters')
+        .matches(/^[a-zA-Z]*$/, 'First Name must contain only English letters')
         .max(25, 'First Name must be at most 25 characters')
         .optional(),
     lastName: Yup.string()
-        .matches(/^[a-zA-Z]+$/, 'Last Name must contain only English letters')
+        .matches(/^[a-zA-Z]*$/, 'Last Name must contain only English letters')
         .max(25, 'Last Name must be at most 25 characters')
         .optional(),
     gender: Yup.number().optional(),
@@ -73,10 +79,10 @@ const validationSchema = Yup.object().shape({
 
 const RegisterPage: React.FC = () => {
     const { registerUser } = useAuth();
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormInputs>({
+    const { register, handleSubmit, setValue, watch ,formState: { errors } } = useForm<RegisterFormInputs>({
         resolver: yupResolver(validationSchema),
     });
-    const [dateOfBirth, setDateOfBirth] = useState<string | undefined>(undefined);
+    // const [dateOfBirth, setDateOfBirth] = useState<string | undefined>(undefined);
 
 
     const handleRegister = (form: RegisterFormInputs) => {
@@ -98,9 +104,9 @@ const RegisterPage: React.FC = () => {
 
 
 
-    const handleDateChange = (newDate: string | undefined) => {
-        setDateOfBirth(newDate);
-    };
+    // const handleDateChange = (newDate: string | undefined) => {
+    //     setDateOfBirth(newDate);
+    // };
 
     const renderInput = (label: string, id: string, type: string, placeholder: string, registerName: keyof RegisterFormInputs, error?: string,  isRequired: boolean = false) => (
         <div className="mb-3">
@@ -134,9 +140,44 @@ const RegisterPage: React.FC = () => {
             {error && <div className="invalid-feedback-register">{error}</div>}
         </div>
     );
-
+    const dateRef = useRef<DateTimePickerRef>(null);
     //const isMobile = window.innerWidth <= 768;
+    interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+        value?: string;
+        onClick?: () => void;
+        onClear?: () => void;
+    }
+    const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(
+        ({ value, onClick, onClear, ...rest }, ref) => (
+            <div className="datepicker-input-wrapper" style={{ marginRight: '50px' }}>
+                <input
+                    ref={ref}
+                    value={value}
+                    placeholder="Select Date"
+                    className="datepicker-input"
+                    readOnly
+                    onClick={onClick}
+                    {...rest} // Spread additional input props if needed
+                />
+                <img
+                    src={icon_calendar}
+                    alt="Calendar Icon"
+                    className="datepicker-icon"
+                    onClick={onClick}
+                />
+                {value && (
+                    <img
+                        src={clear_icon} // Import the SVG image
+                        alt="Clear Icon" // Accessible description for the image
+                        className="clear-icon-editprof"
+                        onClick={onClear} // Clear the value on click
+                    />
+                )}
+            </div>
+        )
+    );
 
+    const dateOfBirth = watch("dateOfBirth");
 
     return (
         <div className="container-fluid-register d-flex p-0 full-height-register"
@@ -185,23 +226,22 @@ const RegisterPage: React.FC = () => {
                             </div>
 
 
-                            <div className="mb-3">
-
-                                <DatePickerComponent
+                            <div className="mb-3" style={{marginLeft: '10px'}}>
+                                <label htmlFor="dateOfBirth" className="form-label" style={{marginBottom: '-10px'}}>Date
+                                    of Birth</label>
+                                <DateTimePicker
+                                    ref={dateRef}
                                     value={dateOfBirth}
-                                    onChange={handleDateChange}
-
+                                    //onChange={handleDateChange}
+                                    onChange={(value) => setValue("dateOfBirth", value || "")}
+                                />
+                                <CustomInput
+                                    value={dateOfBirth ?? undefined}
+                                    onClear={() => setValue("dateOfBirth", "")} // Clear the date value
+                                    onClick={() => dateRef.current?.focus()} // Trigger the calendar programmatically
                                 />
                                 {errors.dateOfBirth && (
-                                    <div
-                                        className="text-danger mt-2"
-                                        style={{
-                                            fontSize: '0.875rem',
-                                            color: 'red', // Ensure text is red
-                                        }}
-                                    >
-                                        {errors.dateOfBirth.message}
-                                    </div>
+                                    <div className="invalid-feedback">{errors.dateOfBirth.message}</div>
                                 )}
                             </div>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../Context/useAuth.tsx";
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import { GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
 import StrongAlcoRatingPopUP from "../../../Pages/AlcoRatingPopUp/StrongAlcoRatingPopUp/StrongAlcoRatingPopUp.tsx";
 import "./HighAlcoCard.css";
@@ -55,7 +55,18 @@ const HighAlcoCard: React.FC = () => {
 
     const fetchUserPreferences = async () => {
         if (!token) {
-            toast.error("You must be logged in to view your preferences");
+
+            toast.error('You must be logged in to view your preferences',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
 
@@ -69,12 +80,21 @@ const HighAlcoCard: React.FC = () => {
                     return matchingRating ? { ...pref, value: matchingRating.rating } : pref;
                 });
                 setPreferences(updatedPreferences);
-            } else {
-                toast.info("No preferences available");
             }
         } catch (error) {
             console.error("Failed to fetch preferences:", error);
-            toast.error("Failed to fetch preferences. Please try again.");
+            toast.error('Failed to fetch preferences. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
+
         }
     };
 

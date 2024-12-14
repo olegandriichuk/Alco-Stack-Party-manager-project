@@ -5,12 +5,19 @@ import * as yup from 'yup';
 import { Input, Toggle } from 'rsuite';
 import { PartyDetailPut } from '../../Models/Party.tsx';
 import './PartySettingsPopUp.css';
-import backpop from '../../assets/partySett.svg';
-import { toast } from 'react-toastify';
+import backpop from '../../assets/signUp_card.svg';
+import {Bounce, toast} from 'react-toastify';
 import icon_calendar from '../../assets/icon _calendar_.svg';
 import DateTimePickerTime from "../DateTimePicker/DateTimePickerTime.tsx";
 import clear_icon from '../../assets/deldata.svg';
+import {UserDeleteList} from "../UserDeleteList/UserDeleteList.tsx";
+interface DateTimePickerRef {
+    focus: () => void;
+}
 
+interface DateTimePickerTimeRef {
+    focus: () => void;
+}
 // Validation schema with Yup
 const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -72,6 +79,8 @@ const validationSchema = yup.object().shape({
 });
 
 interface PartySettingsPopUpProps {
+    partyId: string | undefined;
+    token: string | null;
     name: string;
     description: string;
     date: string;
@@ -84,11 +93,15 @@ interface PartySettingsPopUpProps {
     highAlcohol: boolean;
     rankLimit: number;
     show: boolean;
+    allowUpdates: boolean; // Add allowUpdates as a prop
     onClose: () => void;
     onSave: (updatedParty: PartyDetailPut) => Promise<void>;
 }
 
+
 const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
+                                                                   partyId,
+                                                                   token,
                                                                    name,
                                                                    description,
                                                                    date,
@@ -101,6 +114,7 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                                                    highAlcohol,
                                                                    rankLimit,
                                                                    show,
+                                                                   allowUpdates,
                                                                    onClose,
                                                                    onSave,
                                                                }) => {
@@ -137,7 +151,20 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
             data.midAlcohol,
             data.highAlcohol,
         ].some((category) => category);
-
+        if (!allowUpdates) {
+            toast.error('Updates to the party details are not allowed during this period.', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            return;
+        }
         if (!categoriesSelected) {
             setValue("liquors", true);
             data.liquors = true;
@@ -145,11 +172,33 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
 
         try {
             await onSave(data);
-            toast.success("Party updated successfully!");
+
+            toast.success('Party updated successfully!',{
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             onClose();
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            toast.error("Failed to update party");
+            toast.error('Failed to update party!',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
+
         }
     };
 
@@ -165,8 +214,12 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
             hour12: false,
         });
     };
-
-    const CustomInput = React.forwardRef<HTMLInputElement, any>(
+    interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+        value?: string;
+        onClick?: () => void;
+        onClear?: () => void;
+    }
+    const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(
         ({ value, onClick, onClear }, ref) => (
             <div className="datepicker-input-wrapper">
                 <input
@@ -198,8 +251,8 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
 
     const dateValue = watch("date");
     const preparationDateValue = watch("preparationDate");
-    const datePickerRef = useRef<any>(null);
-    const date_timePickerRef = useRef<any>(null);
+    const datePickerRef = useRef<DateTimePickerRef>(null);
+    const date_timePickerRef = useRef<DateTimePickerTimeRef>(null);
 
 
     return (
@@ -214,10 +267,12 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
                         style={{
                             backgroundImage: `url(${backpop})`,
-                            backgroundSize: 'contain',
+                            backgroundSize: 'cover',
+                            border: '3px solid rgba(79, 40, 233, 0.5)',
+
                             backgroundRepeat: 'no-repeat',
                             borderRadius: '10px',
-                            padding: '20px',
+                            padding: '2px',
                             maxWidth: '450px',
                             maxHeight: '600px',
                             margin: 'auto',
@@ -344,10 +399,15 @@ const PartySettingsPopUp: React.FC<PartySettingsPopUpProps> = ({
                                     />
                                     {errors.rankLimit && <p className="text-danger">{errors.rankLimit.message}</p>}
                                 </div>
+                                <label htmlFor="userlist" className="form-label">Delete User</label>
+                                <UserDeleteList
+                                    partyId={partyId}
+                                    token={token}
+                                />
                             </form>
                         </div>
                         <div>
-                            <form
+                        <form
                                 onSubmit={handleSubmit(onSubmit)} // Bind the onSubmit handler
                                 style={{
                                     display: 'flex',

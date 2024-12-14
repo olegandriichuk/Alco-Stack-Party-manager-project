@@ -1,11 +1,12 @@
 ﻿import React from 'react';
-import popBack from '../../assets/signIn_card.svg';
+import popBack from '../../assets/signUp_card.svg';
 import './DescriptionPopUp.css';
 
 type DescriptionPopUpProps = {
     name: string;
     description: string;
     photo?: string;
+    preparationDate: string;
     date: string;
     location: string;
     liquors: boolean;
@@ -20,6 +21,7 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
                                                                name,
                                                                description,
                                                                photo,
+                                                               preparationDate,
                                                                date,
                                                                location,
                                                                liquors,
@@ -43,7 +45,8 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
             <div
                 style={{
                     backgroundImage: `url(${popBack})`,
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
+                    border: '3px solid rgba(79, 40, 233, 0.5)',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     padding: '30px',
@@ -78,6 +81,9 @@ const DescriptionPopUp: React.FC<DescriptionPopUpProps> = ({
                         }}
                     />
                 )}
+                <p>
+                    <strong>Preparation Date:</strong> {preparationDate}
+                </p>
                 <p>
                     <strong>Date:</strong> {date}
                 </p>

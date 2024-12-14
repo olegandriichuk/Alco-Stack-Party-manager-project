@@ -1,12 +1,12 @@
 import axios from "axios";
 import { handleError } from "../Helpers/ErrorHandler.tsx";
-import {CocktailDetailsGet, CocktailGet} from "../Models/Cocktail.tsx";
+import {CocktailDetailsGet} from "../Models/Cocktail.tsx";
 
 const api = "http://localhost:5131/api/";
 
-export const GetCocktailListAPI = async (partyId: string,ingredient: string,authToken?: string | null ) => {
+export const GetCocktailListAPI = async (partyId: string | undefined,ingredient: string,authToken?: string | null ) => {
     try {
-        const response = await axios.get<CocktailGet[]>(
+        const response = await axios.get<CocktailDetailsGet[]>(
             `${api}cocktail/ingredient/${partyId}/${ingredient}`, // Updated URL
             {
                 headers: {

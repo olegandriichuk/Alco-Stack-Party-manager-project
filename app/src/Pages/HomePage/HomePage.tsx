@@ -14,7 +14,7 @@ import infoLogo from '../../assets/About.svg';
 import CreatePartyPopUp from '../../components/CreatePartyPopUp/CreatePartyPopUp';
 import JoinPartyPopUp from "../../components/JoinPartyPopUp/JoinPartyPopUp";
 import { useAuth } from "../../Context/useAuth.tsx";
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import { GetPartyListAPI } from "../../Services/PartyService";
 import { PartyListGet } from "../../Models/Party.tsx";
 import yourProfile from "../../assets/vector.svg";
@@ -34,7 +34,18 @@ const HomePage: React.FC = () => {
 
     const UserPartiesGet = async () => {
         if (!token) {
-            toast.error("You must be logged in to view your parties");
+
+            toast.error('You must be logged in to view your parties',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
         try {
@@ -48,7 +59,18 @@ const HomePage: React.FC = () => {
             }
         } catch (error) {
             console.error('Failed to fetch parties', error);
-            toast.error('Failed to fetch parties. Please try again.');
+
+            toast.error('Failed to fetch parties. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             setParties([]); // Set an empty array in case of error
         }
     };

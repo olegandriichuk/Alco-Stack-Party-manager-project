@@ -1,13 +1,13 @@
 ﻿import React from 'react';
 import CocktailCard from '../CocktailCard/CocktailCard';
 import './CocktailPopup.css';
-import cocktailback from '../../assets/cocktails.svg';
+import cocktailback from '../../assets/signUp_card.svg';
 
-export type Cocktail = {
-    id: string;
-    name: string;
-    photo: string;
-};
+// export type Cocktail = {
+//     id: string;
+//     name: string;
+//     photo: string;
+// };
 
 export type CocktailDetails = {
     idDrink: string;
@@ -21,7 +21,7 @@ export type CocktailDetails = {
 };
 
 export type CocktailPopupProps = {
-    cocktails: Cocktail[];
+    cocktails?: CocktailDetails[];
     details: CocktailDetails | null;
     onClickCocktail: (id: string) => void;
     onBackToCocktails: () => void;
@@ -50,6 +50,7 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                     backgroundRepeat: 'no-repeat',
                     padding: '20px',
                     borderRadius: '10px',
+                    border: '3px solid rgba(79, 40, 233, 0.5)',
                     // border: '4px solid black',
                     maxHeight: '750px',
 
@@ -74,9 +75,9 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
 
                 {!details ? (
                     <div className="cocktail-list-scroll">
-                        {cocktails.map((cocktail) => (
+                        {cocktails?.map((cocktail) => (
                             <CocktailCard
-                                key={cocktail.id}
+                                key={cocktail.idDrink}
                                 cocktail={cocktail}
                                 onClick={onClickCocktail}
                             />
@@ -87,9 +88,13 @@ const CocktailPopup: React.FC<CocktailPopupProps> = ({
                         style={{
                             background: 'white',
                             borderRadius: '10px',
+                            height: '500px',
                             padding: '15px',
                             display: 'flex',
                             flexDirection: 'row',
+                            overflowY: 'auto',
+                            scrollbarWidth: 'none', // Hide scrollbar in Firefox
+                            msOverflowStyle: 'none', // Hide scrollbar in IE and Edge
                             gap: '20px',
                         }}
                     >

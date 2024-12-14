@@ -9,7 +9,7 @@ import prosecco from "../../../assets/alcophotos/prosecco.svg";
 import { UpdateAlcoholRatingsAPI, GETAlcoholRatingsAPI } from "../../../Services/AlcoholService.tsx";
 import {useAuth} from "../../../Context/useAuth.tsx";
 
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import alcopopup from "../../../assets/alcopopup.svg";
 interface WineRatingPopUpProps {
     show: boolean;
@@ -27,7 +27,18 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
     ]);
     const fetchUserRatings = async () => {
         if (!token) {
-            toast.error("You must be logged in to view your ratings");
+
+            toast.error('You must be logged in to view your ratings.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
         try {
@@ -46,7 +57,18 @@ const WineRatingPopUp: React.FC<WineRatingPopUpProps> = ({ show, handleClose }) 
             }
         } catch (error) {
             console.error('Failed to fetch ratings', error);
-            toast.error('Failed to fetch ratings. Please try again.');
+
+            toast.error('Failed to fetch ratings. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             setSliders(sliders.map(slider => ({ ...slider, value: 0 }))); // Reset to default in case of error
         }
     };

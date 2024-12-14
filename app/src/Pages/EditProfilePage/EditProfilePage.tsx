@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useAuth } from "../../Context/useAuth";
 import { useNavigate, Link } from 'react-router-dom';
-import { toast } from "react-toastify";
+import { toast , Bounce} from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Address, UserProfile } from "../../Models/User";
 import { UpdateProfileAPI, DeleteAccountAPI } from "../../Services/UserService";
@@ -92,7 +92,17 @@ const EditProfilePage: React.FC = () => {
     const handleUpdate = async (formData: UserProfile) => {
 
         if (!token) {
-            toast.error("You must be logged in to update your profile");
+            toast.error('You must be logged in to update your profile',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
         try {
@@ -114,7 +124,18 @@ const EditProfilePage: React.FC = () => {
             }
         } catch (error) {
             console.error('Failed to update profile', error);
-            toast.error('Failed to update profile. Please try again.');
+
+            toast.error('Failed to update profile. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
         }
     };
 
@@ -126,21 +147,50 @@ const EditProfilePage: React.FC = () => {
 
     const handleDeleteAccount = async (username: string) => {
         if (!token) {
-            toast.error("You must be logged in to delete your account");
+
+            toast.error('You must be logged in to delete your account.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
 
-        const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
-        if (!confirmDelete) return;
 
         try {
             await DeleteAccountAPI(username, token); // Call the API with username and token
-            toast.success("Account deleted successfully.");
+            toast.success('Account was deleted successfully', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
             logout(); // Log out the user after account deletion
             navigate("/register"); // Redirect to the registration page
         } catch (error) {
             console.error("Failed to delete account", error);
-            toast.error("Failed to delete account. Please try again.");
+            toast.error('Failed to delete account. Please try again.',{
+                position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+            } );
         }
     };
 

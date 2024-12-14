@@ -6,7 +6,7 @@ import {useAuth} from "../../Context/useAuth.tsx";
 import {useForm} from "react-hook-form";
 import {UserPhoto} from "../../Models/User.tsx";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {toast} from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import {UpdatePhotoAPI} from "../../Services/UserService.tsx";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -108,7 +108,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
     const handlePhotoUpdate = async () => {
         if (!token) {
-            toast.error("You must be logged in to update your profile");
+
+            toast.error('You must be logged in to update your profile',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
 
@@ -126,7 +137,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             }
         } catch (error) {
             console.error('Failed to update profile', error);
-            toast.error('Failed to update profile. Please try again.');
+
+            toast.error('Failed to update profile. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
         }
     };
 

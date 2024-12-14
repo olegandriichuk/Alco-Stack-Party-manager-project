@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/useAuth.tsx";
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import AlcoVolumeSliderList from "../AlcoVolumeSliderList/AlcoVolumeSliderList.tsx";
 import { UpdateAlcoholVolumeAPI } from "../../Services/UserService.tsx";
 import { PartyUserAlcohol } from "../../Models/Party.tsx";
@@ -65,14 +65,23 @@ const SelectAlcoholPopUp: React.FC<SelectAlcoholPopUpProps> = ({
                     JSON.stringify(updatedAlcohols)
                 );
 
-                toast.success("Alcohol volumes updated successfully!");
+                // toast.success("Alcohol volumes updated successfully!");
                 handleClose();
-            } else {
-                throw new Error("Failed to save alcohol volumes.");
             }
         } catch (error) {
             console.error("Failed to save alcohol volumes:", error);
-            toast.error("Failed to save alcohol volumes. Please try again.");
+            toast.error('Failed to save alcohol volumes. Please try again.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
+
         } finally {
             setIsSaving(false);
         }

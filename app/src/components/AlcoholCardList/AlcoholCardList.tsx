@@ -1,9 +1,14 @@
-﻿import React from 'react';
+﻿/**
+ * =====================================================
+ * Component: AlcoholList
+ * Author: Yaroslav Hryn (xhryny00)
+ * =====================================================
+ */
+
+import React from 'react';
 import { Container } from 'react-bootstrap';
 import AlcoholCard from '../AlcoholCard/AlcoholCard';
 import alcorankborder from '../../assets/alko rank border.svg';
-
-
 import { AlcoholGet } from '../../Models/Alcohol.tsx';
 
 export type AlcoholListProps = {
@@ -13,7 +18,6 @@ export type AlcoholListProps = {
 const AlcoholList: React.FC<AlcoholListProps> = ({ alcohols }) => {
     return (
         <div style={{ position: 'absolute', top: 500, left: '35%', transform: 'translateX(-50%)' }}>
-
             <div
                 style={{
                     position: 'absolute',
@@ -35,7 +39,6 @@ const AlcoholList: React.FC<AlcoholListProps> = ({ alcohols }) => {
                     flexDirection: 'column',
                     gap: '10px',
                     padding: '15px 0',
-
                     maxHeight: '200px',
                     width: '520px',
                     zIndex: 10,
@@ -58,14 +61,10 @@ const AlcoholList: React.FC<AlcoholListProps> = ({ alcohols }) => {
                             position: 'relative',
                         }}
                     >
-
                         <AlcoholCard alcohol={alcohol} rank={index + 1} />
-
-
                     </div>
                 ))}
             </Container>
-
         </div>
     );
 };

@@ -45,3 +45,10 @@
     font-family: 'Halant', serif;
     font-weight: 600;
 }
+.cocktail-ingr {
+    font-family: 'Halant', sans-serif;
+
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+}

@@ -52,7 +52,7 @@ namespace AlcoStack.Controllers;
                     Address = user.Address.MapToDto(),
                     Phone = user.PhoneNumber,
                     PhotoName = user.PhotoName,
-                    PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                    PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{user.PhotoName}",
                     Bio = user.Bio,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate,
@@ -130,7 +130,7 @@ namespace AlcoStack.Controllers;
                     UpdatedDate = user.UpdatedDate,
                     Phone = user.PhoneNumber,
                     PhotoName = user.PhotoName,
-                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                    PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{user.PhotoName}",
                     Bio = user.Bio,
                     Gender = user.Gender,
                 };
@@ -181,8 +181,7 @@ namespace AlcoStack.Controllers;
             if (user == null)
                 return NotFound();
 
-            // Get the full path to the "Uploads" directory
-            var uploadsDirectory = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads");
+            var uploadsDirectory = Path.Combine(webHostEnvironment.ContentRootPath, "wwwroot/images");
 
             var userDto = new NewUserDto
             {
@@ -197,7 +196,7 @@ namespace AlcoStack.Controllers;
                 UpdatedDate = user.UpdatedDate,
                 Phone = user.PhoneNumber,
                 PhotoName = user.PhotoName,
-                PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}",
+                PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{user.PhotoName}",
                 Bio = user.Bio,
                 Gender = user.Gender
             };
@@ -287,7 +286,7 @@ namespace AlcoStack.Controllers;
                     if (user.PhotoName != null)
                         DeleteImage(user.PhotoName);
                     user.PhotoName = await SaveImage(photoDto.PhotoFile);
-                    user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
+                    user.PhotoSrc = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{user.PhotoName}";
                 }
                 else if (user.PhotoName != null && photoDto.PhotoFile == null)
                 {
@@ -298,7 +297,7 @@ namespace AlcoStack.Controllers;
             }
             else
             {
-                user.PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/Uploads/{user.PhotoName}";
+                user.PhotoSrc = user.PhotoName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{user.PhotoName}";
             }
             
             
@@ -433,7 +432,7 @@ namespace AlcoStack.Controllers;
         {
             string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
             imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "wwwroot/images", imageName);
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
                 await imageFile.CopyToAsync(fileStream);
@@ -444,7 +443,7 @@ namespace AlcoStack.Controllers;
         [NonAction]
         public void DeleteImage(string imageName)
         {
-            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "Uploads", imageName);
+            var imagePath = Path.Combine(webHostEnvironment.ContentRootPath, "wwwroot/images", imageName);
             if (System.IO.File.Exists(imagePath))
                 System.IO.File.Delete(imagePath);
         }

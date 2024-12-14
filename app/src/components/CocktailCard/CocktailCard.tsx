@@ -3,34 +3,35 @@ import './CocktailCard.css';
 
 export type CocktailCardProps = {
     cocktail: {
-        id: string;
-        name: string;
-        photo: string;
+        idDrink: string;
+        strDrink: string;
+        strCategory?: string;
+        strAlcoholic?: string;
+        strGlass?: string;
+        strInstructions?: string;
+        strDrinkThumb: string;
+        ingredients?: string[];
     };
-    onClick: (id: string) => void;
+    onClick: (idDrink: string) => void;
 };
 
 const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, onClick }) => {
     return (
-        <div className="cocktail-card" onClick={() => onClick(cocktail.id)}
+        <div className="cocktail-card" onClick={() => onClick(cocktail.idDrink)}
              style={{
 
              }}>
             <img
-                src={cocktail.photo}
-                alt={cocktail.name}
+                src={cocktail.strDrinkThumb}
+                alt={cocktail.strDrink}
                 className="cocktail-card-photo"
             />
-            <span className="cocktail-card-title">{cocktail.name}</span>
-            <button
-                className="cocktail-card-button"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    alert(`Ingredients for ${cocktail.name}`);
-                }}
-            >
+            <span className="cocktail-card-title">{cocktail.strDrink}</span>
+            <div
+                className="cocktail-ingr">
                 Ingredients ▼
-            </button>
+            </div>
+
         </div>
     );
 };

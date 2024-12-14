@@ -25,18 +25,7 @@ const ViewAmountPopUp: React.FC<ViewAmountPopUpProps> = ({ show, handleClose, pa
             fetchAlcoholVolumes();
         }
     }, [show]);
-    // useEffect(() => {
-    //     if (show) {
-    //         fetchAlcoholVolumes();
-    //         const savedVolumes = localStorage.getItem(`party-${partyId}-isBoughtVolumes`);
-    //         if (savedVolumes) {
-    //             setAlcoholVolumes(JSON.parse(savedVolumes));
-    //         } else {
-    //             setAlcoholVolumes(alcohols);
-    //         }
-    //     }
-    //
-    // }, [show, alcohols, partyId]);
+
 
 
     const fetchAlcoholVolumes = async () => {

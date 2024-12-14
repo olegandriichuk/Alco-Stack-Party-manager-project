@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, {useEffect, useRef, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import './PartyPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,11 +12,11 @@ import { AlcoholGet } from '../../Models/Alcohol.tsx';
 import { useAuth } from '../../Context/useAuth.tsx';
 import PartySettingsPopUp from '../../components/PartySettingsPopUp/PartySettingsPopUp.tsx';
 import AlcoholList from '../../components/AlcoholCardList/AlcoholCardList';
-import {CocktailGet, CocktailDetailsGet} from "../../Models/Cocktail.tsx";
+import { CocktailDetailsGet} from "../../Models/Cocktail.tsx";
 import CocktailPopup from "../../components/CocktailPopup/CocktailPopup.tsx";
 import {Bounce, toast} from 'react-toastify';
 
-import {GetCocktailListAPI, GetCocktailDetailsAPI} from '../../Services/CocktailService.tsx';
+import {GetCocktailListAPI} from '../../Services/CocktailService.tsx';
 import DescriptionPopUp from "../../components/DescriptionPopUp/DescriptionPopUp.tsx";
 import CountdownTimer from '../../components/CountdownTimer/CountdownTimer.tsx';
 import ViewAmountPopUp   from "../../components/ViewAmountPopUp/ViewAmountPopUp.tsx";
@@ -24,14 +24,17 @@ import SelectAlcoholPopUp from "../../components/SelectAlcoholPopUp/SelectAlcoho
 import backgroundImage from "../../assets/backgroundFinal.svg";
 import buttonDescription from "../../assets/descr.svg";
 import editIcon from "../../assets/editparty.svg";
+import userlist from "../../assets/userlist.svg";
 import deleteIcon from "../../assets/Delete.svg";
 import leaveIcon from "../../assets/Leave.svg";
 import homeIcon from '../../assets/Home.svg';
 import viewcocktails from "../../assets/viewcocktails.svg";
 import selectamount from "../../assets/selectamount.svg";
-import updateRankingButton from '../../assets/updaterankingButton.svg'
-import viewamount from '../../assets/viewamount.svg'
-import {leavePartyAPI} from '../../Services/UserService.tsx'
+import updateRankingButton from '../../assets/updaterankingButton.svg';
+import viewamount from '../../assets/viewamount.svg';
+import icon_timer from '../../assets/timer_info.svg';
+import {leavePartyAPI} from '../../Services/UserService.tsx';
+import UserListPopUp from "../../components/UserListPopUp/UserListPopUp.tsx";
 
 const PartyPage: React.FC = () => {
     const { partyId } = useParams<{ partyId: string }>();
@@ -41,8 +44,9 @@ const PartyPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showUserListModal, setShowUserListModal] = useState(false);
     const { token } = useAuth();
-    const [cocktails, setCocktails] = useState<CocktailGet[]>([]);
+    const [cocktails, setCocktails] = useState<CocktailDetailsGet[] | undefined>([]);
     const [selectedCocktailDetails, setSelectedCocktailDetails] = useState<CocktailDetailsGet | null>(null);
     const [showDescription, setShowDescription] = useState(false);
     const [allowUpdates, setAllowUpdates] = useState(true);
@@ -55,6 +59,8 @@ const PartyPage: React.FC = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
+    const [timerState, setTimerState] = useState<"DEFAULT" | "PREPARATION" | "EXTRA_DAY" | "FINAL">("DEFAULT");
+    const [infoMessage, setInfoMessage] = useState<string>("");
     // Fetch party details when partyId changes
     useEffect(() => {
         const fetchPartyDetails = async () => {
@@ -70,7 +76,9 @@ const PartyPage: React.FC = () => {
                 setLoading(false);
             }
         };
+
         fetchPartyDetails();
+        // handleViewCocktails();
 
     }, [partyId, token]);
 
@@ -91,7 +99,7 @@ const PartyPage: React.FC = () => {
     const handleCloseViewAmount = () => setShowViewAmountPopUp(false); // New function to close View Amount popup
 
     const handleTimerComplete = (state: "DEFAULT" | "PREPARATION" | "EXTRA_DAY" | "FINAL") => {
-
+        setTimerState(state);
 
         if (state === "DEFAULT") {
 
@@ -115,9 +123,40 @@ const PartyPage: React.FC = () => {
             setIsFinalState(false);
         }
     };
+
+    const handleInfoClick = () => {
+        if (infoMessage) {
+            // If the message is already displayed, hide it
+            setInfoMessage("");
+        } else {
+            // Otherwise, display the message based on the timer state
+            let message = "";
+
+            switch (timerState) {
+                case "DEFAULT":
+                    message = "Moving to PREPARATION phase. Updates are allowed.";
+                    break;
+                case "PREPARATION":
+                    message = "PREPARATION phase. Alcohol selection allowed.";
+                    break;
+                case "EXTRA_DAY":
+                    message = "EXTRA DAY phase. Alcohol selection allowed.";
+                    break;
+                case "FINAL":
+                    message = "Moving to PARTY start. No updates allowed.";
+                    break;
+                default:
+                    message = "Unknown timer state.";
+
+            }
+
+            setInfoMessage(message); // Update the message state
+        }
+    };
 // Function to update alcohol data
     const updateAlcoholData = async () => {
         try {
+            console.log("ssdfsdfdsf");
             const alcoholResponse = await GetAllAlcoholByRankListAPI(partyId!, token);
 
             setAlcohols(alcoholResponse!.data); // Update state with new data
@@ -129,56 +168,76 @@ const PartyPage: React.FC = () => {
     const handleUpdateRanking = async () => {
         if (!allowUpdates) {
 
-            toast.error("Updates are not allowed during this period.");
+
+            toast.warning('Updates are not allowed during this period.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
 
         try {
-
+            setIsDisabled(true);
             const updatedAlcohols = await UpdateAllAlcoholsByRankAPI(party!.rankLimit, partyId!, token);
 
             if (updatedAlcohols) {
-                console.log("fsfdsdfdfs");
+
                 setAlcohols(updatedAlcohols); // Update the alcohol list state
-                toast.success("Alcohol rankings updated successfully!");
-                toast('🦄 Wow so easy!', {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                    transition: Bounce,
-                });
-            } else {
-                toast.error("Failed to update alcohol rankings");
+                await handleViewCocktails();
+            }else{
+                return;
             }
         } catch (error) {
             console.error("Error updating alcohol rankings:", error);
 
+
+        }
+        finally {
+
+                setIsDisabled(false);
+
         }
     };
+    const hasUpdated = useRef(false);
+
     useEffect(() => {
-        handleUpdateRanking().then(r => r);
-
-
+        if (party && !hasUpdated.current) {
+            hasUpdated.current = true; // Prevent duplicate calls
+            handleUpdateRanking().finally(() => {
+                hasUpdated.current = false; // Reset after API call
+            });
+        }
     }, [party]);
 
-    const removeDuplicates = (cocktails: (CocktailGet | undefined)[]) => {
-        const uniqueCocktails: CocktailGet[] = [];
+
+    const removeDuplicates = (cocktails: (CocktailDetailsGet | undefined)[]) => {
+        const uniqueCocktails: CocktailDetailsGet[] = [];
         const seenIds = new Set<string>();
 
         for (let i = 0; i < cocktails.length; i++) {
             const currentCocktail = cocktails[i];
-            if (currentCocktail && !seenIds.has(currentCocktail.id)) {
+            if (currentCocktail && !seenIds.has(currentCocktail.idDrink)) {
                 uniqueCocktails.push(currentCocktail);
-                seenIds.add(currentCocktail.id);
+                seenIds.add(currentCocktail.idDrink);
             }
         }
 
         return uniqueCocktails;
+    };
+
+    const handleCocktailDetails = (id: string) => {
+        const details = cocktails?.find((c) => c.idDrink === id);
+        if (details) {
+            setSelectedCocktailDetails(details);
+            setIsPopupOpen(true);
+        }
     };
 
 
@@ -193,6 +252,7 @@ const PartyPage: React.FC = () => {
 
                 return GetCocktailListAPI(partyId!, alcohol.name, token);
             });
+            console.log(cocktailPromises);
 
 // Wait for all API calls to complete
             const cocktailResponses = await Promise.all(cocktailPromises);
@@ -206,16 +266,51 @@ const PartyPage: React.FC = () => {
 
             const filteredCocktails = removeDuplicates(combinedCocktails);
             setCocktails(filteredCocktails);
-            setIsPopupOpen(true);
+            console.log("filteredCocktails", filteredCocktails);
+            setIsPopupOpen(false);
+
+
 
             if (filteredCocktails.length > 0) {
-                toast.success("Cocktails loaded successfully!");
-            }else {
-                toast.error("Failed to load cocktails.");
-            }
+
+                toast.success('Cocktails loaded successfully!',{
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                } );
+            }/*else {
+                toast.error('Failed to load cocktails.',{
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                } );
+            }*/
         } catch (error) {
             console.error("Error fetching cocktails:", error);
-            toast.error("Failed to load cocktails");
+            toast.error('Failed to load cocktails.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
+
         } finally {
             setIsLoading(false);
         }
@@ -225,29 +320,28 @@ const PartyPage: React.FC = () => {
         setIsPopupOpen(false);
 
 
-        setIsDisabled(true);
-        setTimeout(() => {
-            setIsDisabled(false);
-        }, 5000);
+        // setIsDisabled(true);
+        // setTimeout(() => {
+        //     setIsDisabled(false);
+        // }, 5000);
     };
 
 
 
-    const handleCocktailDetails = async (id: string) => {
-        try {
-
-
-            const cocktailDetails = await GetCocktailDetailsAPI(id, token);
-            if (cocktailDetails) {
-                setSelectedCocktailDetails(cocktailDetails); // Save the selected cocktail details
-            } else {
-                toast.error('No details found for this cocktail.');
-            }
-        } catch (error) {
-            console.error('Error fetching cocktail details:', error);
-            toast.error('Failed to fetch cocktail details.');
-        }
-    };
+    // const handleCocktailDetails = async (id: string) => {
+    //     try {
+    //
+    //
+    //         const cocktailDetails = await GetCocktailDetailsAPI(id, token);
+    //         console.log("cocktail photo", cocktailDetails.strDrinkThumb);
+    //         if (cocktailDetails) {
+    //             setSelectedCocktailDetails(cocktailDetails); // Save the selected cocktail details
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching cocktail details:', error);
+    //
+    //     }
+    // };
     // Function to handle copying party ID
     const handleCopy = () => {
         const inputElement = document.getElementById("partyIdInput") as HTMLInputElement;
@@ -262,14 +356,36 @@ const PartyPage: React.FC = () => {
             const response = await DeletePartyAPI(partyId!, token);
 
             if (!response) {
-                toast.error("Failed to delete party");
+
+                toast.error('Failed to delete party.',{
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                } );
                 return;
             }
-            toast.success("Party deleted successfully!");
+
+            toast.success('Party deleted successfully!',{
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             window.location.href = "/home";
         } catch (error) {
             console.error("Failed to delete party", error);
-            toast.error("Failed to delete party");
+
         }
     }
 
@@ -277,14 +393,35 @@ const PartyPage: React.FC = () => {
         try {
             const response = await leavePartyAPI(partyId!, token); // Виклик API для виходу з вечірки
             if (!response) {
-                toast.error("Failed to leave party");
+
+                toast.error('Failed to leave party!',{
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                } );
                 return;
             }
-            toast.success("Party leaved successfully!");
+            toast.success('Party leaved successfully!',{
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             window.location.href = "/home";
         } catch (error) {
             console.error("Error leaving the party:", error);
-            toast.error("An error occurred while trying to leave the party.");
+
         }
     };
 
@@ -292,7 +429,18 @@ const PartyPage: React.FC = () => {
     const handleSave = async (updatedParty: PartyDetailPut) => {
         if (!allowUpdates) {
 
-            toast.error("Updates to the party details are not allowed during this period.");
+
+            toast.error('Updates to the party details are not allowed during this period.',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             return;
         }
         try {
@@ -313,7 +461,18 @@ const PartyPage: React.FC = () => {
             );
 
             if (!response) {
-                toast.error("Failed to update party");
+
+                toast.error('Failed to update party!',{
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                } );
                 return;
             }
             setParty(prevParty => prevParty ? { ...prevParty, ...updatedParty } : null);
@@ -322,7 +481,7 @@ const PartyPage: React.FC = () => {
             setShowModal(false);
         } catch (error) {
             console.error("Failed to update party", error);
-            toast.error("Failed to update party");
+
         }
     };
 
@@ -457,6 +616,16 @@ const PartyPage: React.FC = () => {
                             </button>
                         )}
 
+                        {!party.createdByMe && (
+                            <button
+                                className="btn-userlist"
+                                onClick={() => setShowUserListModal(true)}
+                                aria-label="User List"
+                            >
+                                <img src={userlist} alt="Userlist"/>
+                            </button>
+                        )}
+
                         {party.createdByMe && (
                             <button
                                 className="btn-delete-partypage"
@@ -469,9 +638,18 @@ const PartyPage: React.FC = () => {
                         {!party.createdByMe && (
                             <button className="btn-leave-partypage"
                                     onClick={leaveParty}
-                                    aria-label="Leave Pary"
+                                    aria-label="Leave Party"
                             >
                                 <img src={leaveIcon} alt="Leave Party"/>
+                            </button>
+                        )}
+                        {party.createdByMe && (
+                            <button
+                                className="btn-creator-userlist"
+                                onClick={() => setShowUserListModal(true)}
+                                aria-label="User List"
+                            >
+                                <img src={userlist} alt="Userlist"/>
                             </button>
                         )}
                     </div>
@@ -513,6 +691,7 @@ const PartyPage: React.FC = () => {
                         name={party?.name || 'Unnamed Party'} // Fallback value for name
                         description={party?.description || 'No description available'}
                         photo={party?.photo}
+                        preparationDate={new Date(party?.preparationDate || '').toLocaleDateString()}
                         date={new Date(party?.date || '').toLocaleDateString()} // Provide fallback for date
                         location={party?.location || 'Unknown location'} // Fallback value for location
                         liquors={party?.liquors || false}
@@ -524,14 +703,36 @@ const PartyPage: React.FC = () => {
                     />
                 )}
 
-                {party?.preparationDate && (
-                    <CountdownTimer
-                        preparationDate={party.preparationDate}
-                        eventDate={party.date}
-                        onTimerComplete={handleTimerComplete}
-
-                    />
-                )}
+                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    {party?.preparationDate && (
+                        <CountdownTimer
+                            preparationDate={party.preparationDate}
+                            eventDate={party.date}
+                            onTimerComplete={handleTimerComplete}
+                        />
+                    )}
+                    <div style={{position: 'absolute', top: '125px', left: '480px'}}>
+                        <img
+                            src={icon_timer}
+                            alt="Info Icon"
+                            style={{width: '24px', height: '24px', cursor: 'pointer'}}
+                            onClick={handleInfoClick} // Toggle the message on click
+                        />
+                    </div>
+                    {infoMessage && (
+                        <div
+                            style={{
+                                position: 'absolute', top: '115px', left: '120px',
+                                marginTop: '10px',
+                                fontFamily: 'Halant, sans-serif',
+                                fontSize: '14px',
+                                color: 'black',
+                            }}
+                        >
+                            {infoMessage}
+                        </div>
+                    )}
+                </div>
 
                 {/* Кнопка Select Amount */}
                 <div className="mt-3">
@@ -621,6 +822,7 @@ const PartyPage: React.FC = () => {
                             background: "transparent",
                             cursor: "pointer",
                         }}
+                        disabled={isDisabled}
                     >
                         <img
                             src={updateRankingButton}
@@ -634,7 +836,7 @@ const PartyPage: React.FC = () => {
                 </div>
 
 
-                <div className="btn">
+                <div >
                     <button
                         className="btn"
                         style={{
@@ -644,11 +846,20 @@ const PartyPage: React.FC = () => {
                             padding: 0,
                             border: 'none',
                             background: 'transparent',
-                            opacity: isLoading || isDisabled ? 0.6 : 1,
-                            cursor: isLoading || isDisabled ? 'not-allowed' : 'pointer',
+                            opacity: isLoading ? 0.6 : 1,
+                            cursor: isLoading ? 'not-allowed' : 'pointer',
                         }}
-                        onClick={handleViewCocktails}
-                        disabled={isLoading || isDisabled}
+                        onClick={async () => {
+                             // Open the popup
+
+                            // Call handleViewCocktails only if cocktails is undefined or empty
+                            if (!cocktails || cocktails.length === 0) {
+                                await handleViewCocktails();
+                            }
+                            setIsPopupOpen(true);
+                        }}
+
+                        disabled={isLoading}
                     >
                         <img
                             src={viewcocktails}
@@ -659,9 +870,10 @@ const PartyPage: React.FC = () => {
                                 cursor: 'pointer',
                             }}
                         />
+
                     </button>
                     {/* Условный рендеринг текста */}
-                    {(isLoading || isDisabled) && (
+                    {(isLoading) && (
                         <div
                             style={{
                                 position: 'absolute',
@@ -687,8 +899,17 @@ const PartyPage: React.FC = () => {
 
                 </div>
 
+                <UserListPopUp
+                    partyId={partyId!}
+                    token={token}
+                    show={showUserListModal}
+                    onClose={() => setShowUserListModal(false)}
+                />
+
                 {party && (
                     <PartySettingsPopUp
+                        partyId={partyId}
+                        token={token}
                         name={party.name}
                         description={party.description || ""}
                         date={party.date}
@@ -701,6 +922,7 @@ const PartyPage: React.FC = () => {
                         highAlcohol={party.highAlcohol}
                         rankLimit={party.rankLimit}
                         show={showModal}
+                        allowUpdates={allowUpdates} // Pass allowUpdates to the popup
                         onClose={() => setShowModal(false)}
                         onSave={handleSave}
                     />

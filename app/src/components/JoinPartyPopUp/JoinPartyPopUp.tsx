@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import * as yup from "yup";
 import { Modal, Button } from "rsuite";
 import { JoinPartyAPI } from "../../Services/PartyService.tsx";
@@ -48,7 +48,17 @@ const JoinPartyPopUp: React.FC<JoinPartyPopUpProps> = ({ show, handleClose }) =>
                 return; // Exit the function early
             }
 
-            toast.success("Party joined successfully!");
+            toast.success('Party joined successfully!',{
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             console.log(response);
             setErrorMessage(null); // Clear error message on success
             handleClose(); // Close the modal on success

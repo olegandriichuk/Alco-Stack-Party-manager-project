@@ -1,72 +1,47 @@
-﻿import { useForm } from "react-hook-form";
+﻿import React, {  useRef } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
-import { toast } from "react-toastify";
+import {Bounce, toast} from "react-toastify";
 import * as yup from "yup";
-import { DatePicker, Modal, Button } from "rsuite";
+import { Modal, Button } from "rsuite";
 import { CreatePartyAPI } from "../../Services/PartyService.tsx";
-import 'rsuite/dist/rsuite.min.css';
+import DateTimePickerTime from "../DateTimePicker/DateTimePickerTime.tsx";
 import "./CreatePartyPopUp.css";
-import { useEffect } from "react";
+import icon_calendar from '../../assets/icon _calendar_.svg';
+import clear_icon from "../../assets/deldata.svg";
+interface DateTimePickerRef {
+    focus: () => void;
+}
+
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({
     name: yup
         .string()
-        .required('Name is required') // Make it required
-        .max(50, 'Name must be at most 50 characters'), // Restrict to 50 characters
-
-    description: yup.string().optional().max(500, 'Description must be at most 500 characters'),
+        .required("Name is required")
+        .max(50, "Name must be at most 50 characters"),
+    description: yup.string().optional().max(500, "Description must be at most 500 characters"),
     date: yup
         .string()
         .required("Date is required")
-        .test(
-            "is-future-date",
-            "Date must be today or in the future",
-            function (value) {
-                if (!value) return false; // Ensure value is provided
-                const selectedDate = new Date(value);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0); // Reset today's time to midnight for comparison
-                return selectedDate >= today;
-            }
-        ),
+        .test("is-future-date", "Date must be today or in the future", function (value) {
+            if (!value) return false;
+            const selectedDate = new Date(value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return selectedDate >= today;
+        }),
     preparationDate: yup
         .string()
         .required("Preparation Date is required")
-        .test(
-            "is-before-date",
-            "Preparation Date must be earlier than the event date",
-            function (value) {
-                const { date } = this.parent;
-                if (!value || !date) return true; // Skip if either is missing
-                const preparationDate = new Date(value);
-                const eventDate = new Date(date);
-                return preparationDate < eventDate;
-            }
-        )
-        .test(
-            "not-today",
-            "Preparation Date cannot be today",
-            function (value) {
-                if (!value) return true;
-                const preparationDate = new Date(value).toISOString().split("T")[0];
-                const today = new Date().toISOString().split("T")[0];
-                return preparationDate !== today;
-            }
-        )
-        .test(
-            "not-past-date",
-            "Preparation Date cannot be in the past",
-            function (value) {
-                if (!value) return true; // Skip if value is not provided
-                const preparationDate = new Date(value).setHours(0, 0, 0, 0); // Clear time for comparison
-                const today = new Date().setHours(0, 0, 0, 0); // Clear time for comparison
-                return preparationDate >= today; // Ensure the date is today or in the future
-            }
-        ),
-
-
+        .test("is-before-date", "Preparation Date must be earlier than the event date", function (value) {
+            const { date } = this.parent;
+            if (!value || !date) return true;
+            const preparationDate = new Date(value);
+            const eventDate = new Date(date);
+            return preparationDate < eventDate;
+        }),
     photo: yup.string().optional(),
     location: yup.string().optional(),
 });
@@ -78,25 +53,65 @@ interface CreatePartyPopUpProps {
 
 const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }) => {
     const { user, token } = useAuth();
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-        resolver: yupResolver(validationSchema)
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+        resolver: yupResolver(validationSchema),
     });
 
-    useEffect(() => {
-        if (show) {
-            const dropdown = document.querySelector('.rs-picker-dropdown');
-            if (dropdown) {
-                document.getElementById('portal-root')?.appendChild(dropdown);
-            }
-        }
-    }, [show]);
+    const dateRef = useRef<DateTimePickerRef>(null);
+    const preparationDateRef = useRef<DateTimePickerRef>(null);
 
-    const onSubmit = async (data: { name?: string; description?: string; date: string; preparationDate:string; photo?: string; location?: string; }) => {
-        console.log("Create party form submitted");
-        console.log(data.date);
+    const formatDateTimeForDisplay = (value: string | undefined) => {
+        if (!value) return "";
+        const date = new Date(value);
+        return date.toLocaleString("sv-SE", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+    };
+
+    interface CustomInputProps {
+        value?: string;
+        onClick?: () => void;
+        onClear?: () => void;
+    }
+
+    const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(
+        ({ value, onClick, onClear }, ref) => (
+            <div className="datepicker-input-wrapper">
+                <input
+                    ref={ref}
+                    value={formatDateTimeForDisplay(value)}
+                    placeholder="Select Date"
+                    className="datepicker-input"
+                    readOnly
+                    onClick={onClick}
+                />
+                <img
+                    src={icon_calendar}
+                    alt="Calendar Icon"
+                    className="datepicker-icon"
+                    onClick={onClick}
+                />
+                {value && (
+                    <img
+                        src={clear_icon}
+                        alt="Clear Icon"
+                        className="clear-icon"
+                        onClick={onClear}
+                    />
+                )}
+            </div>
+        )
+    );
+
+    const onSubmit = async (data: { name: string; description?: string; date: string; preparationDate: string; photo?: string; location?: string; }) => {
         try {
             const response = await CreatePartyAPI(
-                data.name || "",
+                data.name,
                 data.description || "",
                 data.date,
                 data.preparationDate,
@@ -105,164 +120,135 @@ const CreatePartyPopUp: React.FC<CreatePartyPopUpProps> = ({ show, handleClose }
                 user?.userName,
                 token
             );
-            toast.success("Party created successfully!");
+            toast.success('Party created successfully!',{
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
             console.log(response);
-            handleClose(); // Close the modal on success
+            handleClose();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            console.error(error);
-            toast.error("Failed to create party");
+            toast.error('Failed to create party!',{
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            } );
+
         }
     };
 
+    const dateValue = watch("date");
+    const preparationDateValue = watch("preparationDate");
+
     return (
         <>
-            {show && <div className="modal-backdrop create-party"/>} {/* Add this backdrop */}
+            {show && <div className="modal-backdrop create-party" />}
+            <Modal open={show} onClose={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Create Party</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="mb-3">
+                            <label htmlFor="name">Party Name <span style={{color: "red"}}>*</span></label>
+                            <input
+                                type="text"
+                                placeholder=" Enter Party Name"
+                                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                                {...register("name")}
+                            />
+                            {errors.name && <p className="text-danger">{errors.name.message}</p>}
+                        </div>
 
-                <Modal open={show} onClose={handleClose}>
+                        <div className="mb-3">
+                            <label htmlFor="description">Description</label>
+                            <textarea
+                                placeholder="Optional description"
+                                className={`form-control ${errors.description ? "is-invalid" : ""}`}
+                                {...register("description")}
+                            />
+                            {errors.description && (
+                                <p className="text-danger">{errors.description.message}</p>
+                            )}
+                        </div>
 
-                        <Modal.Header className="text-center w-100">
-                            <Modal.Title className="modal-title-bold-create">Create Party</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body className="modal-body-scroll-create-party">
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                {/* Party Name Field */}
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label">
-                                        Party Name <span style={{color: "red"}}>*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                                        id="name"
-                                        placeholder="Enter party name"
-                                        {...register("name", {required: true})}
-                                    />
-                                    {errors.name && (
-                                        <p className="text-danger">
-                                            {errors.name.message} {/* Display appropriate validation message */}
-                                        </p>
-                                    )}
-                                </div>
+                        <div className="mb-3" >
+                            <label htmlFor="preparationDate">Preparation Date <span
+                                style={{color: "red"}}>*</span></label>
+                            <CustomInput
+                                value={preparationDateValue}
+                                onClear={() => setValue("preparationDate", "")}
+                                onClick={() => preparationDateRef.current?.focus()}
+                            />
+                            <DateTimePickerTime
+                                ref={preparationDateRef}
+                                value={preparationDateValue}
+                                onChange={(value) => setValue("preparationDate", value || "")}
+                            />
+                            {errors.preparationDate && (
+                                <p className="text-danger">{errors.preparationDate.message}</p>
+                            )}
+                        </div>
 
-                                {/* Description Field */}
-                                <div className="mb-3">
-                                    <label htmlFor="description" className="form-label">Description</label>
-                                    <textarea
-                                        className="form-control"
-                                        id="description"
-                                        placeholder="Optional description"
-                                        {...register("description")}
-                                    />
-                                    {errors.description && (
-                                        <p className="text-danger">
-                                            {errors.description.message} {/* Display appropriate validation message */}
-                                        </p>
-                                    )}
-                                </div>
-                                {/* Preparation Date Field */}
-                                <div className="mb-3">
-                                    <label htmlFor="preparationDate" className="form-label">
-                                        Preparation Date and Time <span style={{color: "red"}}>*</span>
-                                    </label>
-                                    <DatePicker
-                                        format="yyyy-MM-dd HH:mm"
-                                        oneTap
-                                        onChange={(value) => {
-                                            if (value) {
-                                                const localDate = new Date(value);
-                                                localDate.setHours(localDate.getHours() + 1);
-                                                setValue("preparationDate", localDate.toISOString());
-                                            } else {
-                                                setValue("preparationDate", "");
-                                            }
-                                        }}
-                                        placement="auto"
-                                        block
-                                        ranges={[]} // Remove preset ranges if any
-                                        className={`${errors.preparationDate ? "date-picker-error" : ""}`}
-                                    />
-                                    {errors.preparationDate && (
-                                        <p className="text-danger">{errors.preparationDate.message}</p>
-                                    )}
-                                </div>
-                                {/* Date Field */}
-                                <div className="mb-3">
-                                    <label htmlFor="date" className="form-label">
-                                        Date and Time <span style={{color: "red"}}>*</span>
-                                    </label>
-                                    <DatePicker
-                                        format="yyyy-MM-dd HH:mm"
-                                        oneTap
-                                        onChange={(value) => {
-                                            if (value) {
-                                                const localDate = new Date(value);
-                                                localDate.setHours(localDate.getHours() + 1);
-                                                setValue("date", localDate.toISOString());
-                                            } else {
-                                                setValue("date", "");
-                                            }
-                                        }}
-                                        placement="auto"
-                                        block
-                                        ranges={[]} // Remove preset ranges if any
-                                        className={`${errors.date ? "date-picker-error" : ""}`}
-                                    />
-                                    {errors.date && (
-                                        <p className="text-danger">{errors.date.message}</p>
-                                    )}
-                                </div>
+                        <div className="mb-3" >
+                            <label htmlFor="date">Date <span style={{color: "red"}}>*</span></label>
+                            <CustomInput
+                                value={dateValue}
+                                onClear={() => setValue("date", "")}
+                                onClick={() => dateRef.current?.focus()}
+                            />
+                            <DateTimePickerTime
+                                ref={dateRef}
+                                value={dateValue}
+                                onChange={(value) => setValue("date", value || "")}
+                            />
+                            {errors.date && <p className="text-danger">{errors.date.message}</p>}
+                        </div>
 
+                        <div className="mb-3" style={{
 
-
-
-                                {/* Photo URL Field */}
-                                {/*<div className="mb-3">*/}
-                                {/*    <label htmlFor="photo" className="form-label">Photo URL</label>*/}
-                                {/*    <input*/}
-                                {/*        type="text"*/}
-                                {/*        className="form-control"*/}
-                                {/*        id="photo"*/}
-                                {/*        placeholder="Optional photo URL"*/}
-                                {/*        {...register("photo")}*/}
-                                {/*    />*/}
-                                {/*    <p className="text-danger">{errors.photo?.message}</p>*/}
-                                {/*</div>*/}
-
-                                {/* Location Field */}
-                                <div className="mb-3">
-                                    <label htmlFor="location" className="form-label">Location</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="location"
-                                        placeholder="Optional location"
-                                        {...register("location")}
-                                    />
-                                    <p className="text-danger">{errors.location?.message}</p>
-                                </div>
-
-                                {/* Buttons */}
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <Button
-                                        appearance="primary"
-                                        type="submit"
-                                        style={{backgroundColor: "#000000", color: "white"}}
-                                    >
-                                        Create Party
-                                    </Button>
-                                    <Button
-                                        onClick={handleClose}
-                                        appearance="subtle"
-                                        style={{backgroundColor: "#000000", color: "white"}}
-                                    >
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </form>
-                        </Modal.Body>
-
-                </Modal>
-
+                        }}>
+                            <label htmlFor="location">Location</label>
+                            <input
+                                placeholder=" Party Location"
+                                type="text"
+                                className="form-control"
+                                {...register("location")}
+                            />
+                        </div>
+                        {/* Buttons */}
+                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                            <Button
+                                appearance="primary"
+                                type="submit"
+                                style={{backgroundColor: "#000000", color: "white"}}
+                            >
+                                Create Party
+                            </Button>
+                            <Button
+                                onClick={handleClose}
+                                appearance="subtle"
+                                style={{backgroundColor: "#000000", color: "white"}}
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    </form>
+                </Modal.Body>
+            </Modal>
         </>
     );
 };

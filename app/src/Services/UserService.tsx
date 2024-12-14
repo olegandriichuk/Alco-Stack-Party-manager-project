@@ -150,4 +150,22 @@ export const DeleteAccountAPI = async (username: string, authToken: string | nul
         throw error;
     }
 };
-
+export const GetUsersByPartyIdAPI = async (
+    partyId: string | undefined,
+    authToken?: string | null
+) => {
+    try {
+        const response = await axios.get<UserProfile[]>(
+            `${api}account/${partyId}/users`,
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        }
+    );
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
