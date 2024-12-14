@@ -3,7 +3,7 @@ import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {AlcoholGet} from "../Models/Alcohol.tsx";
 import {SliderAlcoholPatch} from "../Models/Alcohol.tsx";
 
-const api = "http://localhost:5131/api/";
+const api = "https://alcostack.azurewebsites.net/api/";
 
 export const GetAlcoholRankListAPI = async (partyId: string, rankLink: number, authToken?: string | null) => {
     try {

@@ -2,8 +2,7 @@
 
 import { UserProfileToken } from "../Models/User.tsx";
 import { Address } from "../Models/User.tsx";
-import {toast,  Bounce} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+
 const api = "http://localhost:5131/api/";
 
 
@@ -14,24 +13,10 @@ export const loginAPI = async (username: string, password: string) => {
             username: username,
             password: password,
         });
-
         return data;
     } catch (error) {
-console.log("sdfsdfdsf");
         if (axios.isAxiosError(error)) {
-            toast.error('🦄 Wow so easy!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-                style: { zIndex: 10055 },
-            });
-            console.log("aaaaaaaa");
+            window.alert("Username or password are incorrect!");
         } else {
             // Handle non-Axios errors
             window.alert("Unexpected error");

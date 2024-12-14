@@ -2,7 +2,7 @@
 import { handleError } from "../Helpers/ErrorHandler.tsx";
 import {PartyListGet, PartyPost, PartyDetailGet, PartyUserAlcohol} from "../Models/Party.tsx";
 import { toast } from "react-toastify";
-const api = "http://localhost:5131/api/";
+const api = "https://alcostack.azurewebsites.net/api/";
 
 export const CreatePartyAPI = async (
     name: string, description: string, date: string, preparationDate:string, photo: string, location: string, creatorUserName?: string, authToken?: string | null) => {

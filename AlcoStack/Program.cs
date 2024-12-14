@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using AlcoStack.Data;
 using AlcoStack;
@@ -11,13 +12,15 @@ using AlcoStack.Repositories;
 using AlcoStack.Service;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Listen(IPAddress.Loopback, 5131);  
+});
 // Add services to the container.
+
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     {
@@ -26,6 +29,12 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<Seed>();
+
+// Add services for SPA static files
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot";  // Point to your SPA folder (can also point to a separate folder like "ClientApp" if you're using React, Angular, etc.)
+});
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -93,31 +102,33 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Other service registrations...
+// Add your repository and service registrations here
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAlcoholRepository, AlcoholRepository>();
 builder.Services.AddScoped<IUserAlcoholRepository, UserAlcoholRepository>();
 builder.Services.AddScoped<IPartyRepository, PartyRepository>();
 builder.Services.AddScoped<IUserPartyRepository, UserPartyRepository>();
-builder.Services.AddScoped<IPartyUserAlcoholRepository, PartyUserAlcoholRepository>();
 builder.Services.AddScoped<IPartyAlcoholRepository, PartyAlcoholRepository>();
-builder.Services.AddScoped<IPartyAlcoholVolumeService, PartyAlcoholVolumeService>();
 builder.Services.AddScoped<IAlcoholRankingService, AlcoholRankingService>();
 builder.Services.AddHttpClient<ICocktailService, CocktailService>();
 builder.Services.AddScoped<IFileService, FileService>();
 
-
-
-
 var app = builder.Build();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-    RequestPath = "/Uploads"
-});
+// Serve static files from wwwroot
+app.UseStaticFiles();  // This will serve files like images, CSS, JS from wwwroot
 
+// Use the registered SPA static files configuration
+app.UseSpaStaticFiles();
+
+app.UseSpa(spa =>
+{
+    // Point this to your SPA directory if you're using a separate SPA app (e.g., React, Angular)
+    spa.Options.SourcePath = "wwwroot";  // Update this if you're using a separate folder for the SPA
+});
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
     SeedData(app);
@@ -132,6 +143,7 @@ void SeedData(IHost app)
         service.SeedData();
     }
 }
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -141,9 +153,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-
-// Ensure CORS policy is correctly set
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
@@ -154,6 +163,6 @@ app.UseCors(x => x
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers(); 
+app.MapControllers();
 
 app.Run();
