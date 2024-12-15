@@ -13,8 +13,10 @@ export const loginAPI = async (username: string, password: string) => {
             username: username,
             password: password,
         });
+
         return data;
     } catch (error) {
+console.log("sdfsdfdsf");
         if (axios.isAxiosError(error)) {
             toast.error(' Username or password may be incorrect', {
                 position: "top-center",
@@ -100,7 +102,7 @@ export const registerAPI = async (
                 theme: "colored",
                 transition: Bounce,
             });
-          
+
         }
     }
 };
