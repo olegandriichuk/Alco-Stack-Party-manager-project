@@ -1,1 +1,1 @@
-# VUT-FIT-ITU-Alco-Stack-Party-manager-project-
+#Alco-Stack-Party-manager-project-
